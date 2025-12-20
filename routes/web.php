@@ -48,6 +48,7 @@ use App\Http\Controllers\Vendor\SupportController as VendorSupportController;
 use App\Http\Controllers\Vendor\UpgradeController;
 use App\Http\Controllers\Vendor\OnboardingController;
 use App\Http\Controllers\Vendor\VendorTrainingController;
+use App\Http\Controllers\Vendor\VoucherRedemptionController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\Artisan;
@@ -291,6 +292,14 @@ Route::middleware(['auth', 'vendor', 'vendor.onboarded'])->prefix('vendor')->nam
     Route::post('/deals/{deal}/pause', [VendorDealController::class, 'pause'])->name('deals.pause');
     Route::post('/deals/{deal}/resume', [VendorDealController::class, 'resume'])->name('deals.resume');
     Route::delete('/deals/{deal}', [VendorDealController::class, 'destroy'])->name('deals.destroy');
+
+    // Voucher Redemption System
+    Route::get('/vouchers', [VoucherRedemptionController::class, 'index'])->name('vouchers.index');
+    Route::get('/vouchers/redeem', [VoucherRedemptionController::class, 'showRedeemForm'])->name('vouchers.redeem');
+    Route::post('/vouchers/lookup', [VoucherRedemptionController::class, 'lookup'])->name('vouchers.lookup');
+    Route::post('/vouchers/{id}/mark-redeemed', [VoucherRedemptionController::class, 'markRedeemed'])->name('vouchers.mark-redeemed');
+    Route::get('/vouchers/{id}', [VoucherRedemptionController::class, 'show'])->name('vouchers.show-single');
+    Route::post('/vouchers/ajax-lookup', [VoucherRedemptionController::class, 'ajaxLookup'])->name('vouchers.ajax-lookup');
 
     // AI Insights (Pro/Enterprise only)
     Route::middleware(['subscription.feature:ai_scoring_enabled'])->group(function () {
