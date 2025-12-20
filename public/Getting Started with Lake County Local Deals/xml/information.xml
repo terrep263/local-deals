@@ -1,0 +1,878 @@
+<?xml version="1.0"?>
+<screens>
+	<background src="VirtualGalleryTest.swf">
+		<menu>
+			<item item_url="1" item_label="Learning Goals" item_url_target="_self" thumbnail="images/thumbs/1.jpg"/>
+			<item item_url="2" item_label="Welcome to Lake County Local Deals" item_url_target="_self" thumbnail="images/thumbs/1.jpg"/>
+			<item item_url="3" item_label="Understanding Lake County Local Deals" item_url_target="_self" thumbnail="images/thumbs/1.jpg"/>
+			<item item_url="4" item_label="A Dedicated Local Deal Marketplace" item_url_target="_self" thumbnail="images/thumbs/1.jpg"/>
+			<item item_url="5" item_label="Supporting Small Businesses, Not Just a Platform" item_url_target="_self" thumbnail="images/thumbs/1.jpg"/>
+			<item item_url="6" item_label="Subscription Model: How it Works" item_url_target="_self" thumbnail="images/thumbs/1.jpg"/>
+			<item item_url="7" item_label="Key Benefit: Keep 100% of Revenue" item_url_target="_self" thumbnail="images/thumbs/1.jpg"/>
+			<item item_url="8" item_label="No Commission, Just Subscription" item_url_target="_self" thumbnail="images/thumbs/1.jpg"/>
+			<item item_url="9" item_label="Community Focus: Lake County Only" item_url_target="_self" thumbnail="images/thumbs/1.jpg"/>
+			<item item_url="10" item_label="Serving Lake County's Diverse Cities" item_url_target="_self" thumbnail="images/thumbs/1.jpg"/>
+			<item item_url="11" item_label="Spotlight: Clermont, Leesburg, Eustis" item_url_target="_self" thumbnail="images/thumbs/1.jpg"/>
+			<item item_url="12" item_label="Spotlight: Mount Dora, The Villages" item_url_target="_self" thumbnail="images/thumbs/1.jpg"/>
+			<item item_url="13" item_label="Getting Started: Your Next Steps" item_url_target="_self" thumbnail="images/thumbs/1.jpg"/>
+			<item item_url="14" item_label="Quiz" item_url_target="_self" thumbnail="images/thumbs/1.jpg"/>
+			<item item_url="15" item_label="Summary" item_url_target="_self" thumbnail="images/thumbs/1.jpg"/>
+		</menu>
+	</background>
+
+	<screen>
+		<screen_id x="0" y="0">1</screen_id>
+		<Template>4</Template>
+		<Section>Learning Goals</Section>
+		<Content height="569" width="666" x="363" y="32" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 28px; margin-bottom: 16px; color:#404448"><b>Learning Goals</b></p>
+			<p style="font-family: SANS-SERIF; font-size: 24px; margin-bottom: 16px; color:#404448">Welcome to this learning session on <b>Getting Started with Lake County Local Deals</b> In this course we shall address:</p><ul style="font-family: SANS-SERIF; font-size: 24px; margin-bottom: 16px; color:#404448"><li>Welcome to Lake County Local Deals</li><li>Understanding Lake County Local Deals</li><li>A Dedicated Local Deal Marketplace</li><li>Supporting Small Businesses, Not Just a Platform</li><li>Subscription Model: How it Works</li><li>Key Benefit: Keep 100% of Revenue</li><li>No Commission, Just Subscription</li><li>Community Focus: Lake County Only</li><li>Serving Lake County's Diverse Cities</li><li>Spotlight: Clermont, Leesburg, Eustis</li><li>Spotlight: Mount Dora, The Villages</li><li>Getting Started: Your Next Steps</li></ul><p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">There will be a quiz at the end to test your knowledge.</p>]]>
+		</Content>
+		<Flash x="" y="" width="" height="" targetId="" text="" textColor="#000000">swf/empty_1.swf</Flash>
+		<Narrator x="0" y="105" start="0" stop="400" width="365" height="544" mirror="false">video/woman20s_Hello.webm</Narrator>
+		
+		
+		<Video/>
+		<Background>images/main_wall15.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">2</screen_id>
+		<Template>4</Template>
+		<Section>Welcome to Lake County Local Deals</Section>
+		<Content height="253" width="462" x="567" y="173" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 28px; margin-bottom: 16px; color:#404448"><b>Welcome to Lake County Local Deals</b></p>
+			<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Welcome to Lake County Local Deals, your premier destination for connecting with local businesses and discovering fantastic offers. This platform is specifically designed to serve the vibrant communities within Lake County, Florida.</p>]]>
+		</Content>
+		<Flash x="" y="" width="" height="" targetId="" text="" textColor="#000000">swf/empty_1.swf</Flash>
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013779-691.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">201</screen_id>
+		<Template>4</Template>
+		
+		<Content height="230" width="407" x="585" y="177" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">We aim to create a thriving ecosystem where local businesses can showcase their products and services directly to residents. Our goal is to foster economic growth and community engagement through exclusive deals and promotions.</p>]]>
+		</Content>
+		
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013772-156.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">3</screen_id>
+		<Template>4</Template>
+		<Section>Understanding Lake County Local Deals</Section>
+		<Content height="289" width="462" x="567" y="154" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 28px; margin-bottom: 16px; color:#404448"><b>Understanding Lake County Local Deals</b></p>
+			<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Lake County Local Deals is an online marketplace exclusively for businesses operating within Lake County, Florida. It serves as a dedicated space for local merchants to offer special deals and promotions to their community.</p>]]>
+		</Content>
+		<Flash x="" y="" width="" height="" targetId="" text="" textColor="#000000">swf/empty_1.swf</Flash>
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013793-706.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">301</screen_id>
+		<Template>4</Template>
+		
+		<Content height="138" width="779" x="250" y="302" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">This platform simplifies the process for residents to find and support local businesses, ensuring that money circulates within the local economy. It's a win-win for both consumers seeking value and businesses looking to expand their reach.</p>]]>
+		</Content>
+		
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013786-407.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">4</screen_id>
+		<Template>4</Template>
+		<Section>A Dedicated Local Deal Marketplace</Section>
+		<Content height="191" width="779" x="0" y="305" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 28px; margin-bottom: 16px; color:#404448"><b>A Dedicated Local Deal Marketplace</b></p>
+			<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Our platform functions as a specialized local deal marketplace, focusing solely on businesses and consumers within Lake County, Florida. This hyper-local approach ensures that all promotions are highly relevant to the community.</p>]]>
+		</Content>
+		<Flash x="" y="" width="" height="" targetId="" text="" textColor="#000000">swf/empty_1.swf</Flash>
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013806-58.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">401</screen_id>
+		<Template>4</Template>
+		
+		<Content height="230" width="462" x="0" y="168" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Unlike broader platforms, we curate a selection of deals that directly benefit local residents and support the unique character of Lake County's business landscape. This targeted strategy maximizes engagement and impact for everyone involved.</p>]]>
+		</Content>
+		
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013800-207.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">5</screen_id>
+		<Template>4</Template>
+		<Section>Supporting Small Businesses, Not Just a Platform</Section>
+		<Content height="191" width="779" x="0" y="305" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 28px; margin-bottom: 16px; color:#404448"><b>Supporting Small Businesses, Not Just a Platform</b></p>
+			<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Lake County Local Deals is more than just a platform; it's a dedicated support system for small businesses. We understand the unique challenges faced by local entrepreneurs and strive to provide tools that genuinely help them thrive.</p>]]>
+		</Content>
+		<Flash x="" y="" width="" height="" targetId="" text="" textColor="#000000">swf/empty_1.swf</Flash>
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013821-977.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">501</screen_id>
+		<Template>4</Template>
+		
+		<Content height="200" width="462" x="0" y="183" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Our mission extends beyond simply listing deals; we aim to foster a community where businesses feel empowered and connected. We offer resources and visibility designed to help local enterprises grow and succeed in their own backyard.</p>]]>
+		</Content>
+		
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013815-964.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">502</screen_id>
+		<Template>4</Template>
+		<Section>Knowledge check</Section>
+		<Content height="340" width="370" x="60" y="95" padding="25" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95"><![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448; margin-bottom: 16px;"><strong>Knowledge check!</strong></p>
+	<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448;">What defines Lake County Local Deals as a 'local deal marketplace'?</p>]]></Content>
+		<Content_1 x="480" y="95" width="500" height="350" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95" alpha="1"><![CDATA[<p>&nbsp;</p>]]></Content_1>
+		<Narrator/>
+		<Video/>
+		<Background>images/kcheck-6.jpg</Background>
+		<navigation delay=""/>
+		<Quizes>
+			<settings><quiz_identifier/></settings>
+			<Quiz Type="inline" x="517" y="168">
+				<Question QuestionID="MI04" QuestionType="inline" Title="Checkbox Form question" CommentBox="0" qType="MC">
+					<Text>Enter question here...</Text>
+					<Answers>
+						<Answer AnswerID="1" Correct="0" Score="0" Order="1" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[It offers deals on local produce only]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Not quite. Revisit the sections on the platform's core concept and focus. Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="2" Correct="0" Score="0" Order="2" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[It only supports businesses with physical storefronts]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Not quite. Revisit the sections on the platform's core concept and focus. Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="3" Correct="1" Score="1" Order="3" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[It focuses exclusively on businesses and residents within Lake County, Florida]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Correct! The platform's exclusive focus on Lake County businesses and residents makes it truly local.]]></Feedback>
+						</Answer>
+					</Answers>
+				</Question>
+			</Quiz>
+		</Quizes>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">503</screen_id>
+		<Template>4</Template>
+		<Section>Knowledge check</Section>
+		<Content height="340" width="370" x="60" y="95" padding="25" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95"><![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448; margin-bottom: 16px;"><strong>Knowledge check!</strong></p>
+	<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448;">How does Lake County Local Deals support small businesses beyond just listing deals?</p>]]></Content>
+		<Content_1 x="480" y="95" width="500" height="350" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95" alpha="1"><![CDATA[<p>&nbsp;</p>]]></Content_1>
+		<Narrator/>
+		<Video/>
+		<Background>images/kcheck-6.jpg</Background>
+		<navigation delay=""/>
+		<Quizes>
+			<settings><quiz_identifier/></settings>
+			<Quiz Type="inline" x="517" y="168">
+				<Question QuestionID="MI05" QuestionType="inline" Title="Checkbox Form question" CommentBox="0" qType="MC">
+					<Text>Enter question here...</Text>
+					<Answers>
+						<Answer AnswerID="1" Correct="0" Score="0" Order="1" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[It offers international marketing services]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Incorrect. Think about the platform's mission and how it positions itself. Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="2" Correct="0" Score="0" Order="2" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[It provides free legal advice]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Incorrect. Think about the platform's mission and how it positions itself. Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="3" Correct="1" Score="1" Order="3" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[It acts as a dedicated support system providing resources and visibility]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[That's right! It functions as a dedicated support system, not just a listing service.]]></Feedback>
+						</Answer>
+					</Answers>
+				</Question>
+			</Quiz>
+		</Quizes>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">504</screen_id>
+		<Template>4</Template>
+		<Section>Knowledge check</Section>
+		<Content height="340" width="370" x="60" y="95" padding="25" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95"><![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448; margin-bottom: 16px;"><strong>Knowledge check!</strong></p>
+	<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448;">What is the primary financial model for businesses using Lake County Local Deals?</p>]]></Content>
+		<Content_1 x="480" y="95" width="500" height="350" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95" alpha="1"><![CDATA[<p>&nbsp;</p>]]></Content_1>
+		<Narrator/>
+		<Video/>
+		<Background>images/kcheck-6.jpg</Background>
+		<navigation delay=""/>
+		<Quizes>
+			<settings><quiz_identifier/></settings>
+			<Quiz Type="inline" x="517" y="168">
+				<Question QuestionID="MI06" QuestionType="inline" Title="Checkbox Form question" CommentBox="0" qType="MC">
+					<Text>Enter question here...</Text>
+					<Answers>
+						<Answer AnswerID="1" Correct="0" Score="0" Order="1" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[A commission on every sale]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Close, but not quite. Remember how the platform ensures businesses maximize their earnings. Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="2" Correct="1" Score="1" Order="2" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[A flat subscription fee with 100% revenue retention]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Excellent! Businesses pay a subscription and keep all their deal revenue.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="3" Correct="0" Score="0" Order="3" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[A percentage of their monthly profits]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Close, but not quite. Remember how the platform ensures businesses maximize their earnings. Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+					</Answers>
+				</Question>
+			</Quiz>
+		</Quizes>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">6</screen_id>
+		<Template>4</Template>
+		<Section>Subscription Model: How it Works</Section>
+		<Content height="160" width="871" x="79" y="223" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 28px; margin-bottom: 16px; color:#404448"><b>Subscription Model: How it Works</b></p>
+			<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Our operational model is straightforward: we charge a flat subscription fee, not commissions. This approach ensures transparency and predictability for our business partners.</p>]]>
+		</Content>
+		<Flash x="" y="" width="" height="" targetId="" text="" textColor="#000000">swf/empty_1.swf</Flash>
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013836-65.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">601</screen_id>
+		<Template>4</Template>
+		
+		<Content height="108" width="859" x="86" y="89" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Businesses pay a set monthly or annual fee to list their deals and access our platform's features. This allows them to budget effectively and maximize their returns without unexpected deductions.</p>]]>
+		</Content>
+		
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013829-756.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">7</screen_id>
+		<Template>4</Template>
+		<Section>Key Benefit: Keep 100% of Revenue</Section>
+		<Content height="222" width="566" x="221" y="235" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 28px; margin-bottom: 16px; color:#404448"><b>Key Benefit: Keep 100% of Revenue</b></p>
+			<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">One of the most significant advantages for businesses using Lake County Local Deals is retaining 100% of their deal revenue. When a customer purchases a deal, the full amount goes directly to the business.</p>]]>
+		</Content>
+		<Flash x="" y="" width="" height="" targetId="" text="" textColor="#000000">swf/empty_1.swf</Flash>
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013849-369.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">701</screen_id>
+		<Template>4</Template>
+		
+		<Content height="230" width="407" x="585" y="177" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">This model stands in stark contrast to commission-based platforms that often take a percentage of each sale. Our approach ensures that every dollar generated from a deal directly benefits the local business, enhancing their profitability.</p>]]>
+		</Content>
+		
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013843-871.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">8</screen_id>
+		<Template>4</Template>
+		<Section>No Commission, Just Subscription</Section>
+		<Content height="160" width="859" x="170" y="125" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 28px; margin-bottom: 16px; color:#404448"><b>No Commission, Just Subscription</b></p>
+			<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Our commitment to supporting local businesses is reflected in our 'no commission' policy. We believe businesses should keep their hard-earned money, which is why we only charge a simple subscription fee.</p>]]>
+		</Content>
+		<Flash x="" y="" width="" height="" targetId="" text="" textColor="#000000">swf/empty_1.swf</Flash>
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013863-544.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">801</screen_id>
+		<Template>4</Template>
+		
+		<Content height="169" width="566" x="221" y="262" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">This model empowers businesses to offer competitive deals without worrying about hidden costs or reduced profit margins. It's a transparent and fair system designed with the success of local entrepreneurs in mind.</p>]]>
+		</Content>
+		
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013857-71.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">9</screen_id>
+		<Template>4</Template>
+		<Section>Community Focus: Lake County Only</Section>
+		<Content height="253" width="462" x="0" y="157" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 28px; margin-bottom: 16px; color:#404448"><b>Community Focus: Lake County Only</b></p>
+			<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Lake County Local Deals maintains a strict community focus, serving only businesses and residents within Lake County, Florida. This dedication ensures that our efforts directly benefit the local economy and community.</p>]]>
+		</Content>
+		<Flash x="" y="" width="" height="" targetId="" text="" textColor="#000000">swf/empty_1.swf</Flash>
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013877-537.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">901</screen_id>
+		<Template>4</Template>
+		
+		<Content height="200" width="407" x="585" y="193" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">By concentrating our resources, we can provide more tailored support and highly relevant deals to our specific geographic area. This localized approach strengthens community bonds and promotes a 'buy local' culture.</p>]]>
+		</Content>
+		
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013870-501.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">902</screen_id>
+		<Template>4</Template>
+		<Section>Knowledge check</Section>
+		<Content height="340" width="370" x="60" y="95" padding="25" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95"><![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448; margin-bottom: 16px;"><strong>Knowledge check!</strong></p>
+	<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448;">What is a key advantage for businesses regarding revenue on the platform?</p>]]></Content>
+		<Content_1 x="480" y="95" width="500" height="350" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95" alpha="1"><![CDATA[<p>&nbsp;</p>]]></Content_1>
+		<Narrator/>
+		<Video/>
+		<Background>images/kcheck-4.jpg</Background>
+		<navigation delay=""/>
+		<Quizes>
+			<settings><quiz_identifier/></settings>
+			<Quiz Type="inline" x="517" y="168">
+				<Question QuestionID="MI07" QuestionType="inline" Title="Checkbox Form question" CommentBox="0" qType="MC">
+					<Text>Enter question here...</Text>
+					<Answers>
+						<Answer AnswerID="1" Correct="1" Score="1" Order="1" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[They retain 100% of their deal revenue]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[You got it! Keeping 100% of revenue is a major benefit.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="2" Correct="0" Score="0" Order="2" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[They share revenue with the platform]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Consider how the platform's financial model directly impacts business earnings. Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="3" Correct="0" Score="0" Order="3" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[They receive a small bonus per deal]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Consider how the platform's financial model directly impacts business earnings. Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+					</Answers>
+				</Question>
+			</Quiz>
+		</Quizes>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">903</screen_id>
+		<Template>4</Template>
+		<Section>Knowledge check</Section>
+		<Content height="340" width="370" x="60" y="95" padding="25" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95"><![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448; margin-bottom: 16px;"><strong>Knowledge check!</strong></p>
+	<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448;">What is the geographic scope of Lake County Local Deals?</p>]]></Content>
+		<Content_1 x="480" y="95" width="500" height="350" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95" alpha="1"><![CDATA[<p>&nbsp;</p>]]></Content_1>
+		<Narrator/>
+		<Video/>
+		<Background>images/kcheck-4.jpg</Background>
+		<navigation delay=""/>
+		<Quizes>
+			<settings><quiz_identifier/></settings>
+			<Quiz Type="inline" x="517" y="168">
+				<Question QuestionID="MI08" QuestionType="inline" Title="Checkbox Form question" CommentBox="0" qType="MC">
+					<Text>Enter question here...</Text>
+					<Answers>
+						<Answer AnswerID="1" Correct="0" Score="0" Order="1" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[National coverage]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Think about the 'Lake County' in the name. What does that imply? Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="2" Correct="0" Score="0" Order="2" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[State-wide across Florida]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Think about the 'Lake County' in the name. What does that imply? Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="3" Correct="1" Score="1" Order="3" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[Exclusively Lake County, Florida]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[That's correct! It's hyper-focused on Lake County, Florida.]]></Feedback>
+						</Answer>
+					</Answers>
+				</Question>
+			</Quiz>
+		</Quizes>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">904</screen_id>
+		<Template>4</Template>
+		<Section>Knowledge check</Section>
+		<Content height="340" width="370" x="60" y="95" padding="25" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95"><![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448; margin-bottom: 16px;"><strong>Knowledge check!</strong></p>
+	<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448;">Which of these cities is served by Lake County Local Deals?</p>]]></Content>
+		<Content_1 x="480" y="95" width="500" height="350" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95" alpha="1"><![CDATA[<p>&nbsp;</p>]]></Content_1>
+		<Narrator/>
+		<Video/>
+		<Background>images/kcheck-4.jpg</Background>
+		<navigation delay=""/>
+		<Quizes>
+			<settings><quiz_identifier/></settings>
+			<Quiz Type="inline" x="517" y="168">
+				<Question QuestionID="MI09" QuestionType="inline" Title="Checkbox Form question" CommentBox="0" qType="MC">
+					<Text>Enter question here...</Text>
+					<Answers>
+						<Answer AnswerID="1" Correct="0" Score="0" Order="1" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[Tampa]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Review the sections that highlight the specific cities within Lake County. Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="2" Correct="1" Score="1" Order="2" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[Mount Dora]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Right! Mount Dora is one of the vibrant communities we serve.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="3" Correct="0" Score="0" Order="3" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[Miami]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Review the sections that highlight the specific cities within Lake County. Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+					</Answers>
+				</Question>
+			</Quiz>
+		</Quizes>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">10</screen_id>
+		<Template>4</Template>
+		<Section>Serving Lake County's Diverse Cities</Section>
+		<Content height="160" width="859" x="170" y="125" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 28px; margin-bottom: 16px; color:#404448"><b>Serving Lake County&apos;s Diverse Cities</b></p>
+			<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Lake County is home to a diverse array of cities, each with its own unique charm and business landscape. Lake County Local Deals proudly serves all these communities, ensuring widespread local support.</p>]]>
+		</Content>
+		<Flash x="" y="" width="" height="" targetId="" text="" textColor="#000000">swf/empty_1.swf</Flash>
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013890-886.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">1001</screen_id>
+		<Template>4</Template>
+		
+		<Content height="230" width="407" x="585" y="177" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Our platform is designed to connect businesses in every corner of the county with their local customer base. This includes well-known cities and smaller, emerging communities, all contributing to the rich tapestry of Lake County.</p>]]>
+		</Content>
+		
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013883-762.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">11</screen_id>
+		<Template>4</Template>
+		<Section>Spotlight: Clermont, Leesburg, Eustis</Section>
+		<Content height="259" width="407" x="585" y="163" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 28px; margin-bottom: 16px; color:#404448"><b>Spotlight: Clermont, Leesburg, Eustis</b></p>
+			<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Clermont, known for its rolling hills and outdoor activities, is a key area we serve. Businesses here can reach residents seeking adventure and unique local experiences.</p>]]>
+		</Content>
+		<Flash x="" y="" width="" height="" targetId="" text="" textColor="#000000">swf/empty_1.swf</Flash>
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013905-453.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">1101</screen_id>
+		<Template>4</Template>
+		
+		<Content height="230" width="462" x="567" y="184" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Leesburg, with its rich history and vibrant downtown, offers a strong community for local businesses to thrive. Eustis, famous for its beautiful lakefront and cultural events, provides another vital hub for local commerce. Our platform connects these distinct cities.</p>]]>
+		</Content>
+		
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013897-906.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">12</screen_id>
+		<Template>4</Template>
+		<Section>Spotlight: Mount Dora, The Villages</Section>
+		<Content height="160" width="779" x="250" y="291" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 28px; margin-bottom: 16px; color:#404448"><b>Spotlight: Mount Dora, The Villages</b></p>
+			<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Mount Dora, renowned for its charming downtown, antique shops, and arts scene, is a cultural gem within Lake County. Businesses here attract both residents and tourists seeking unique finds.</p>]]>
+		</Content>
+		<Flash x="" y="" width="" height="" targetId="" text="" textColor="#000000">swf/empty_1.swf</Flash>
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013920-922.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">1201</screen_id>
+		<Template>4</Template>
+		
+		<Content height="138" width="871" x="79" y="234" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">The Villages, a large and active retirement community, represents a significant market for local businesses. Our platform helps businesses in and around these areas connect with a broad and engaged customer base, fostering economic vitality across the county.</p>]]>
+		</Content>
+		
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013913-538.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">13</screen_id>
+		<Template>4</Template>
+		<Section>Getting Started: Your Next Steps</Section>
+		<Content height="222" width="462" x="0" y="172" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 28px; margin-bottom: 16px; color:#404448"><b>Getting Started: Your Next Steps</b></p>
+			<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Ready to join the Lake County Local Deals community? Getting started is simple and designed to get your business visible quickly. Our team is here to guide you through every step of the process.</p>]]>
+		</Content>
+		<Flash x="" y="" width="" height="" targetId="" text="" textColor="#000000">swf/empty_1.swf</Flash>
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013934-28.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">1301</screen_id>
+		<Template>4</Template>
+		
+		<Content height="169" width="462" x="0" y="198" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9" auto_narrator="true">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Visit our website to sign up, create your business profile, and start listing your amazing deals. Embrace the power of local connection and watch your business flourish within Lake County!</p>]]>
+		</Content>
+		
+		<Narrator/>
+
+		
+		
+		<Video/>
+		<Background>images/ai-1766013927-652.jpg</Background>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">1302</screen_id>
+		<Template>4</Template>
+		<Section>Knowledge check</Section>
+		<Content height="340" width="370" x="60" y="95" padding="25" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95"><![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448; margin-bottom: 16px;"><strong>Knowledge check!</strong></p>
+	<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448;">What is the final step for a business to start listing deals?</p>]]></Content>
+		<Content_1 x="480" y="95" width="500" height="350" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95" alpha="1"><![CDATA[<p>&nbsp;</p>]]></Content_1>
+		<Narrator/>
+		<Video/>
+		<Background>images/kcheck-7.jpg</Background>
+		<navigation delay=""/>
+		<Quizes>
+			<settings><quiz_identifier/></settings>
+			<Quiz Type="inline" x="517" y="168">
+				<Question QuestionID="MI010" QuestionType="inline" Title="Checkbox Form question" CommentBox="0" qType="MC">
+					<Text>Enter question here...</Text>
+					<Answers>
+						<Answer AnswerID="1" Correct="1" Score="1" Order="1" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[Visiting the website to sign up and create a profile]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Exactly! Signing up and creating a profile are the first steps.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="2" Correct="0" Score="0" Order="2" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[Waiting for an invitation]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Think about the initial actions a business needs to take to get active on the platform. Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="3" Correct="0" Score="0" Order="3" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[Attending a mandatory seminar]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Think about the initial actions a business needs to take to get active on the platform. Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+					</Answers>
+				</Question>
+			</Quiz>
+		</Quizes>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">1303</screen_id>
+		<Template>4</Template>
+		<Section>Knowledge check</Section>
+		<Content height="340" width="370" x="60" y="95" padding="25" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95"><![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448; margin-bottom: 16px;"><strong>Knowledge check!</strong></p>
+	<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448;">What kind of community is The Villages known for in Lake County?</p>]]></Content>
+		<Content_1 x="480" y="95" width="500" height="350" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95" alpha="1"><![CDATA[<p>&nbsp;</p>]]></Content_1>
+		<Narrator/>
+		<Video/>
+		<Background>images/kcheck-7.jpg</Background>
+		<navigation delay=""/>
+		<Quizes>
+			<settings><quiz_identifier/></settings>
+			<Quiz Type="inline" x="517" y="168">
+				<Question QuestionID="MI011" QuestionType="inline" Title="Checkbox Form question" CommentBox="0" qType="MC">
+					<Text>Enter question here...</Text>
+					<Answers>
+						<Answer AnswerID="1" Correct="1" Score="1" Order="1" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[A large and active retirement community]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Correct! It's a significant active retirement community.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="2" Correct="0" Score="0" Order="2" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[A college student hub]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Recall the descriptions of the specific cities and their demographics. Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="3" Correct="0" Score="0" Order="3" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[A bustling industrial zone]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Recall the descriptions of the specific cities and their demographics. Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+					</Answers>
+				</Question>
+			</Quiz>
+		</Quizes>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">1304</screen_id>
+		<Template>4</Template>
+		<Section>Knowledge check</Section>
+		<Content height="340" width="370" x="60" y="95" padding="25" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95"><![CDATA[<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448; margin-bottom: 16px;"><strong>Knowledge check!</strong></p>
+	<p style="font-family: SANS-SERIF; font-size: 24px; color: #404448;">How does the platform's focus on Lake County benefit the community?</p>]]></Content>
+		<Content_1 x="480" y="95" width="500" height="350" hasBackground="true" bgColor="#ffffff" bgAlpha="0.95" alpha="1"><![CDATA[<p>&nbsp;</p>]]></Content_1>
+		<Narrator/>
+		<Video/>
+		<Background>images/kcheck-7.jpg</Background>
+		<navigation delay=""/>
+		<Quizes>
+			<settings><quiz_identifier/></settings>
+			<Quiz Type="inline" x="517" y="168">
+				<Question QuestionID="MI012" QuestionType="inline" Title="Checkbox Form question" CommentBox="0" qType="MC">
+					<Text>Enter question here...</Text>
+					<Answers>
+						<Answer AnswerID="1" Correct="0" Score="0" Order="1" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[It allows for global expansion]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Consider the advantages of a highly localized approach for both businesses and residents. Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="2" Correct="0" Score="0" Order="2" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[It attracts international investors]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[Consider the advantages of a highly localized approach for both businesses and residents. Use the menu to review the previous topics before continuing.]]></Feedback>
+						</Answer>
+						<Answer AnswerID="3" Correct="1" Score="1" Order="3" TaskSeverity="0" ActionByID="0">
+							<Text><![CDATA[It strengthens community bonds and promotes a 'buy local' culture]]></Text>
+							<TaskName/>
+							<TaskDescription/>
+							<Feedback><![CDATA[That's right! It strengthens local bonds and promotes buying local.]]></Feedback>
+						</Answer>
+					</Answers>
+				</Question>
+			</Quiz>
+		</Quizes>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">14</screen_id>
+		<Template>1</Template>
+		<Section>Quiz</Section>
+		<Content>Please answer these questions and pass the quiz in order to continue.</Content>
+		<Quizes>
+			<settings>
+				<quiz_title/>
+				<OK>OK</OK>
+				<Issue_Detected>Issue detected</Issue_Detected>
+				<Retake_Test>You have reached the end of the test.</Retake_Test>
+				<Ratio>Your score is</Ratio>
+				<No_Issues>Congratulations! You have scored 100%!</No_Issues>
+				<Few_Issues>Congratulations! You have passed the quiz.</Few_Issues>
+				<Some_Issues>You have not reached the pass mark required.</Some_Issues>
+				<Many_Issues>You have got many questions wrong.</Many_Issues>
+				<Most_Issues>Select below</Most_Issues>
+				<Random>1</Random>
+				<Show_Intro>1</Show_Intro>
+				<Show_Results>1</Show_Results>
+				<QuizType>0</QuizType>
+				<LoadsQuizatScreenLevel>0</LoadsQuizatScreenLevel>
+				<ShowFeedback>1</ShowFeedback>
+				<PassMark>70</PassMark>
+				<Show_Answers>1</Show_Answers>
+			</settings>
+		</Quizes>
+		<Background/>
+		<navigation/>
+	</screen>
+	<screen>
+		<screen_id x="0" y="0">15</screen_id>
+		<Template>4</Template>
+		<Section>Summary</Section>
+		<Content height="599" width="837" x="192" y="32" padding="20" hasBackground="true" bgColor="#ffffff" bgAlpha="0.9">
+			<![CDATA[<p style="font-family: SANS-SERIF; font-size: 28px; margin-bottom: 16px; color:#404448"><b>Summary</b></p>
+			<p style="font-family: SANS-SERIF; font-size: 24px; margin-bottom: 16px; color:#404448">Well done you have completed the course <b>Getting Started with Lake County Local Deals</b> You should now be familiar with:</p><ul style="font-family: SANS-SERIF; font-size: 24px; margin-bottom: 16px; color:#404448"><li>Welcome to Lake County Local Deals</li><li>Understanding Lake County Local Deals</li><li>A Dedicated Local Deal Marketplace</li><li>Supporting Small Businesses, Not Just a Platform</li><li>Subscription Model: How it Works</li><li>Key Benefit: Keep 100% of Revenue</li><li>No Commission, Just Subscription</li><li>Community Focus: Lake County Only</li><li>Serving Lake County's Diverse Cities</li><li>Spotlight: Clermont, Leesburg, Eustis</li><li>Spotlight: Mount Dora, The Villages</li><li>Getting Started: Your Next Steps</li></ul><p style="font-family: SANS-SERIF; font-size: 24px; color:#404448">Should you need to revisit any of the topics in this course, please use the menu at the bottom of the screen.</p>]]>
+		</Content>
+		<Flash x="" y="" width="" height="" targetId="" text="" textColor="#000000">swf/empty_1.swf</Flash>
+		<Narrator x="0" y="144" start="0" stop="400" width="339" height="505" mirror="false">video/woman20s_well_done.webm</Narrator>
+		
+		
+		<Video/>
+		<Background>images/main_wall14.jpg</Background>
+		<navigation/>
+	</screen>
+	<video>
+		<vid/>
+		<video_file_visible>true</video_file_visible>
+		<time_visible>false</time_visible>
+		<video_streaming>false</video_streaming>
+		<server/>
+		<video_slides_in>false</video_slides_in>
+	</video>
+	<scorm>
+		<scorm_format>SVGA_1905s</scorm_format>
+		<screen_scorm_finish>15</screen_scorm_finish>
+		<scorm_frame>14</scorm_frame>
+		<xmlversion>null</xmlversion>
+		<scorm_2004>1024012</scorm_2004>
+		<scorm_2005>1144484</scorm_2005>
+		<course_name><![CDATA[Getting Started with Lake County Local Deals]]></course_name>
+	</scorm>
+	<settings>
+		<status_set_to_passed>true</status_set_to_passed>
+		<show_background>false</show_background>
+		<title_color>26367</title_color>
+		<default_thumb>1.jpg</default_thumb>
+		<show_second_menu>false</show_second_menu>
+		<show_text_toggle_button>true</show_text_toggle_button>
+	<accessibility/></settings>
+	<introduction>
+		<show_intro>true</show_intro>
+	</introduction>
+	<navigation>
+		<button name="next" x="982.5" y="590" width="75" height="60"/>
+		<button name="prev" x="77.5" y="590" width="55" height="44" visible="true"/>
+		<button name="yes" x="903.6" y="576.55" width="75" height="60" visible="false"/>
+		<button name="no" x="996.95" y="576.55" width="75" height="60" visible="false"/>
+	</navigation>
+	<nav_blocks>
+		<button name="skip" asset="next" x="982.5" y="590" width="75" height="60"/>
+	</nav_blocks>
+</screens>

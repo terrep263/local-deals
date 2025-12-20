@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Invaders - Educational Version!</title>
+    <script>
+        // Audio system
+        let audioContext;
+        
+        function initAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.warn('Audio not supported');
+            }
+        }
+        
+        function createTone(frequency, duration, type = 'square', volume = 0.1) {
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+        
+        function playShootSound() {
+            createTone(800, 0.1, 'square', 0.05);
+            setTimeout(() => createTone(1000, 0.05, 'square', 0.03), 50);
+        }
+        
+        function playHitSound() {
+            createTone(400, 0.1, 'square', 0.08);
+            setTimeout(() => createTone(300, 0.1, 'square', 0.06), 100);
+            setTimeout(() => createTone(200, 0.15, 'triangle', 0.05), 200);
+        }
+        
+        function playCorrectSound() {
+            createTone(523, 0.15, 'sine', 0.1); // C5
+            setTimeout(() => createTone(659, 0.15, 'sine', 0.1), 150); // E5
+            setTimeout(() => createTone(784, 0.3, 'sine', 0.1), 300); // G5
+        }
+        
+        function playWrongSound() {
+            createTone(200, 0.5, 'sawtooth', 0.2);
+            setTimeout(() => createTone(150, 0.5, 'sawtooth', 0.15), 200);
+        }
+        
+        function playGameOverSound() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    createTone(400 - i * 20, 0.1, 'sine', 0.05);
+                }, i * 50);
+            }
+        }
+
+        // Visual feedback system
+        function showAnswerFeedback(isCorrect) {
+            const feedback = document.createElement('div');
+            feedback.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 60px;
+                font-weight: bold;
+                color: white;
+                z-index: 10000;
+                pointer-events: none;
+                animation: feedbackFade 800ms ease-out forwards;
+                ${isCorrect ? 'background: #4CAF50; box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);' : 'background: #F44336; box-shadow: 0 0 20px rgba(244, 67, 54, 0.6);'}
+            `;
+            feedback.textContent = isCorrect ? '✓' : '✗';
+
+            // Add CSS animation if not already present
+            if (!document.querySelector('#feedback-style')) {
+                const style = document.createElement('style');
+                style.id = 'feedback-style';
+                style.textContent = `
+                    @keyframes feedbackFade {
+                        0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+                        50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+                        100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(feedback);
+            setTimeout(() => feedback.remove(), 800);
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #0f0f23 0%, #1a1a3a 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .game-container {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 3px solid #00ff00;
+        }
+
+        h1 {
+            color: #00ff00;
+            text-align: center;
+            margin: 0 0 20px 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 255, 0, 0.5);
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .score {
+            color: #00ff00;
+        }
+
+        .lives {
+            color: #ff6b6b;
+        }
+
+        .shots {
+            color: #ffdd00;
+        }
+
+        #gameCanvas {
+            border: 3px solid #fff;
+            border-radius: 5px;
+            background: #000;
+            display: block;
+        }
+
+        .controls {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .start-btn {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .start-btn:hover {
+            background: #00cc00;
+            transform: scale(1.05);
+        }
+
+        .start-btn:disabled {
+            background: #666;
+            color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Instructions Modal */
+        .instructions {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .instructions-box {
+            background: rgba(15, 15, 35, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            text-align: center;
+            border: 3px solid #00ff00;
+        }
+
+        .instructions h2 {
+            color: #00ff00;
+            margin-bottom: 20px;
+        }
+
+        .instructions ul {
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        /* Question Modal */
+        .question-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .question-box {
+            background: rgba(15, 15, 35, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            border: 3px solid #00ff00;
+        }
+
+        .question-text {
+            color: white;
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .keyboard-hint {
+            color: #00ff00;
+            font-size: 0.9em;
+            text-align: center;
+            margin-bottom: 20px;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        .answer-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .answer-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid #00ff00;
+            padding: 15px 20px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .answer-btn:hover {
+            background: rgba(0, 255, 0, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.3);
+        }
+
+        .answer-btn:active {
+            transform: translateY(0);
+        }
+
+        .answer-btn.focused {
+            background: rgba(0, 255, 0, 0.3);
+            border-color: #fff;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .question-timer {
+            text-align: center;
+            color: #ff6b6b;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Game Over Modal */
+        .game-over {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .game-over-box {
+            background: rgba(15, 15, 35, 0.95);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            border: 3px solid #ff6b6b;
+        }
+
+        .game-over h2 {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .controls-info {
+            margin-top: 10px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Space Invaders</h1>
+        
+        <div class="game-info">
+            <div class="score">Score: <span id="scoreValue">0</span></div>
+            <div class="shots">Shots: <span id="shotCount">0</span>/10</div>
+            <div class="lives">Lives: <span id="livesValue">3</span></div>
+        </div>
+        
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        
+        <div class="controls">
+            <button id="startBtn" class="start-btn" onclick="startGame()">Start Game</button>
+            <div class="controls-info">
+                Use ← → arrows or A/D to move, SPACE to shoot
+            </div>
+        </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructionsModal" class="instructions">
+        <div class="instructions-box">
+            <h2>How to Play Space Invaders</h2>
+            <ul>
+                <li>Use arrow keys or A/D to move your spaceship</li>
+                <li>Press SPACE to shoot at invaders</li>
+                <li>Every 10 shots, a question will appear</li>
+                <li>Answer questions correctly to maintain normal speed</li>
+                <li>Wrong answers make the game faster!</li>
+                <li>Destroy all invaders to advance to the next wave</li>
+                <li>Don't let invaders reach the bottom!</li>
+            </ul>
+            <button class="start-btn" onclick="closeInstructions()">Got it!</button>
+        </div>
+    </div>
+
+    <!-- Question Modal -->
+    <div id="questionModal" class="question-modal hidden">
+        <div class="question-box">
+            <div id="questionTimer" class="question-timer">Time: <span id="timerValue">30</span>s</div>
+            <div id="questionText" class="question-text"></div>
+            <div class="keyboard-hint">Use ↑↓←→ to navigate answers, ENTER to select</div>
+            <div class="answer-options">
+                <button class="answer-btn" onclick="selectAnswer(0)" id="answer0"></button>
+                <button class="answer-btn" onclick="selectAnswer(1)" id="answer1"></button>
+                <button class="answer-btn" onclick="selectAnswer(2)" id="answer2"></button>
+                <button class="answer-btn" onclick="selectAnswer(3)" id="answer3"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div id="gameOverModal" class="game-over hidden">
+        <div class="game-over-box">
+            <h2 id="gameOverText">Game Over!</h2>
+            <p>Final Score: <span id="finalScore">0</span></p>
+            <button class="start-btn" onclick="resetGame()">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Game state
+        let gameRunning = false;
+        let gamePaused = false;
+        let score = 0;
+        let lives = 3;
+        let shotsFired = 0;
+        let wave = 1;
+        let gameSpeed = 1;
+        
+        // Game objects
+        let player = {
+            x: canvas.width / 2 - 25,
+            y: canvas.height - 60,
+            width: 50,
+            height: 30,
+            speed: 8
+        };
+        
+        let bullets = [];
+        let invaders = [];
+        let invaderBullets = [];
+        let defensiveBlocks = [];
+        
+        // Question system
+        let questionPool = [];
+        let currentQuestion = null;
+        let usedQuestions = [];
+        let selectedAnswerIndex = 0;
+        let questionTimer = 30;
+        let questionInterval = null;
+        let gameDataLoaded = false;
+        
+        // Game timing
+        let lastTime = 0;
+        let invaderMoveTime = 0;
+        let invaderShootTime = 0;
+        let invaderDirection = 1; // 1 for right, -1 for left
+        
+        // Initialize defensive blocks
+        function createDefensiveBlocks() {
+            defensiveBlocks = [];
+            const blockWidth = 80;
+            const blockHeight = 60;
+            const blockCount = 4;
+            const spacing = (canvas.width - (blockCount * blockWidth)) / (blockCount + 1);
+            const blockY = canvas.height - 200;
+
+            for (let i = 0; i < blockCount; i++) {
+                const blockX = spacing + i * (blockWidth + spacing);
+                const block = [];
+
+                // Create block structure (classic bunker shape)
+                for (let row = 0; row < 12; row++) {
+                    block[row] = [];
+                    for (let col = 0; col < 16; col++) {
+                        // Create bunker shape with hollow center at bottom
+                        let hasBlock = true;
+
+                        // Top rounded corners
+                        if ((row < 3 && col < 3) || (row < 3 && col > 12)) {
+                            hasBlock = false;
+                        }
+                        // Hollow entrance at bottom
+                        if (row > 7 && col > 4 && col < 11) {
+                            hasBlock = false;
+                        }
+                        // Slanted entrance sides
+                        if (row === 7 && (col === 5 || col === 10)) {
+                            hasBlock = false;
+                        }
+                        if (row === 8 && (col === 4 || col === 11)) {
+                            hasBlock = false;
+                        }
+
+                        block[row][col] = hasBlock ? 1 : 0;
+                    }
+                }
+
+                defensiveBlocks.push({
+                    x: blockX,
+                    y: blockY,
+                    width: blockWidth,
+                    height: blockHeight,
+                    blocks: block,
+                    blockSize: 5
+                });
+            }
+        }
+
+        // Initialize invaders
+        function createInvaders() {
+            invaders = [];
+            const rows = 5;
+            const cols = 10;
+            const invaderWidth = 40;
+            const invaderHeight = 30;
+            const spacing = 60;
+            const startX = 100;
+            const startY = 50;
+            
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    invaders.push({
+                        x: startX + col * spacing,
+                        y: startY + row * spacing,
+                        width: invaderWidth,
+                        height: invaderHeight,
+                        alive: true,
+                        type: row // Different types for different rows
+                    });
+                }
+            }
+        }
+        
+        // Game initialization
+        function initGame() {
+            score = 0;
+            lives = 3;
+            shotsFired = 0;
+            wave = 1;
+            gameSpeed = 1;
+            bullets = [];
+            invaderBullets = [];
+            invaderDirection = 1; // Reset direction
+            player.x = canvas.width / 2 - 25;
+            createInvaders();
+            createDefensiveBlocks();
+            updateUI();
+        }
+        
+        // Update UI elements
+        function updateUI() {
+            document.getElementById('scoreValue').textContent = score;
+            document.getElementById('livesValue').textContent = lives;
+            document.getElementById('shotCount').textContent = shotsFired % 10;
+        }
+        
+        // Draw functions
+        function drawPlayer() {
+            const centerX = player.x + player.width / 2;
+            const centerY = player.y + player.height / 2;
+            
+            // Draw ship body with gradient effect
+            ctx.fillStyle = '#00ff00';
+            ctx.beginPath();
+            ctx.moveTo(centerX, player.y); // Top point
+            ctx.lineTo(player.x + 10, player.y + player.height); // Bottom left
+            ctx.lineTo(player.x + player.width - 10, player.y + player.height); // Bottom right
+            ctx.closePath();
+            ctx.fill();
+            
+            // Draw ship details
+            ctx.fillStyle = '#00cc00';
+            ctx.fillRect(player.x + 15, player.y + 15, 20, 8);
+            
+            // Draw cannon
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(centerX - 2, player.y - 8, 4, 12);
+            
+            // Draw engine glow
+            ctx.fillStyle = '#0088ff';
+            ctx.beginPath();
+            ctx.arc(player.x + 8, player.y + player.height + 2, 3, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(player.x + player.width - 8, player.y + player.height + 2, 3, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        function drawInvaders() {
+            invaders.forEach(invader => {
+                if (invader.alive) {
+                    const centerX = invader.x + invader.width / 2;
+                    const centerY = invader.y + invader.height / 2;
+                    
+                    // Different colors for different types
+                    const colors = ['#ff0080', '#ff8000', '#ffff00', '#80ff00', '#00ffff'];
+                    const baseColor = colors[invader.type] || '#ffffff';
+                    
+                    // Draw invader body with more organic shape
+                    ctx.fillStyle = baseColor;
+                    ctx.beginPath();
+                    ctx.ellipse(centerX, centerY, invader.width / 2 - 2, invader.height / 2 - 2, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Draw invader tentacles/legs
+                    ctx.strokeStyle = baseColor;
+                    ctx.lineWidth = 2;
+                    for (let i = 0; i < 4; i++) {
+                        const legX = invader.x + 8 + i * 8;
+                        ctx.beginPath();
+                        ctx.moveTo(legX, invader.y + invader.height - 5);
+                        ctx.lineTo(legX + (i % 2 === 0 ? -4 : 4), invader.y + invader.height + 3);
+                        ctx.stroke();
+                    }
+                    
+                    // Draw eyes with animation
+                    const eyeOffset = Math.sin(Date.now() * 0.01 + invader.x * 0.01) * 1;
+                    ctx.fillStyle = '#ff0000';
+                    ctx.beginPath();
+                    ctx.arc(centerX - 8 + eyeOffset, centerY - 3, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(centerX + 8 + eyeOffset, centerY - 3, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Draw pupils
+                    ctx.fillStyle = '#000';
+                    ctx.beginPath();
+                    ctx.arc(centerX - 8 + eyeOffset, centerY - 3, 1, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(centerX + 8 + eyeOffset, centerY - 3, 1, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+        }
+        
+        function drawBullets() {
+            // Player bullets with glow effect
+            bullets.forEach(bullet => {
+                // Glow effect
+                ctx.fillStyle = 'rgba(0, 255, 0, 0.3)';
+                ctx.fillRect(bullet.x - 1, bullet.y - 2, 5, 14);
+                
+                // Main bullet
+                ctx.fillStyle = '#00ff00';
+                ctx.fillRect(bullet.x, bullet.y, 3, 10);
+                
+                // Bright core
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(bullet.x + 1, bullet.y + 2, 1, 6);
+            });
+            
+            // Invader bullets with glow effect
+            invaderBullets.forEach(bullet => {
+                // Glow effect
+                ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+                ctx.fillRect(bullet.x - 1, bullet.y - 2, 5, 14);
+                
+                // Main bullet
+                ctx.fillStyle = '#ff0000';
+                ctx.fillRect(bullet.x, bullet.y, 3, 10);
+                
+                // Bright core
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(bullet.x + 1, bullet.y + 2, 1, 6);
+            });
+        }
+        
+        function drawBackground() {
+            // Enhanced starfield effect
+            const time = Date.now() * 0.001;
+            for (let i = 0; i < 100; i++) {
+                const x = (i * 37) % canvas.width;
+                const y = ((i * 73) + (time * 10 * (1 + i % 3))) % canvas.height;
+                const brightness = 0.3 + Math.sin(time + i * 0.1) * 0.3;
+
+                ctx.fillStyle = `rgba(255, 255, 255, ${brightness})`;
+                const size = i % 3 === 0 ? 2 : 1;
+                ctx.fillRect(x, y, size, size);
+            }
+        }
+
+        function drawDefensiveBlocks() {
+            ctx.fillStyle = '#00aa00';
+            defensiveBlocks.forEach(bunker => {
+                for (let row = 0; row < bunker.blocks.length; row++) {
+                    for (let col = 0; col < bunker.blocks[row].length; col++) {
+                        if (bunker.blocks[row][col] === 1) {
+                            const x = bunker.x + col * bunker.blockSize;
+                            const y = bunker.y + row * bunker.blockSize;
+                            ctx.fillRect(x, y, bunker.blockSize, bunker.blockSize);
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update player movement
+        function updatePlayer(deltaTime) {
+            // Smooth movement based on key states
+            const moveSpeed = player.speed * (deltaTime / 16.67); // Normalize for 60fps
+            
+            if (keys.left && player.x > 0) {
+                player.x -= moveSpeed;
+                if (player.x < 0) player.x = 0;
+            }
+            if (keys.right && player.x < canvas.width - player.width) {
+                player.x += moveSpeed;
+                if (player.x > canvas.width - player.width) player.x = canvas.width - player.width;
+            }
+        }
+        
+        // Update game objects
+        function updateBullets() {
+            // Update player bullets - NOT affected by game speed
+            bullets.forEach((bullet, index) => {
+                bullet.y -= 10;
+                if (bullet.y < 0) {
+                    bullets.splice(index, 1);
+                }
+            });
+            
+            // Update invader bullets - affected by game speed
+            invaderBullets.forEach((bullet, index) => {
+                bullet.y += 5 * gameSpeed;
+                if (bullet.y > canvas.height) {
+                    invaderBullets.splice(index, 1);
+                }
+            });
+        }
+        
+        function updateInvaders(deltaTime) {
+            invaderMoveTime += deltaTime;
+            invaderShootTime += deltaTime;
+            
+            // Move invaders
+            if (invaderMoveTime > 1000 / gameSpeed) {
+                let moveDown = false;
+                
+                // Check if any invader hits the edge
+                invaders.forEach(invader => {
+                    if (invader.alive) {
+                        if ((invaderDirection === 1 && invader.x >= canvas.width - invader.width) ||
+                            (invaderDirection === -1 && invader.x <= 0)) {
+                            moveDown = true;
+                        }
+                    }
+                });
+                
+                if (moveDown) {
+                    // Move all invaders down and reverse direction
+                    invaders.forEach(invader => {
+                        if (invader.alive) {
+                            invader.y += 20;
+                        }
+                    });
+                    invaderDirection *= -1; // Reverse direction
+                } else {
+                    // Move all invaders horizontally
+                    invaders.forEach(invader => {
+                        if (invader.alive) {
+                            invader.x += invaderDirection * 20;
+                        }
+                    });
+                }
+                
+                invaderMoveTime = 0;
+            }
+            
+            // Invaders shoot
+            if (invaderShootTime > 2000 / gameSpeed) {
+                const aliveInvaders = invaders.filter(inv => inv.alive);
+                if (aliveInvaders.length > 0) {
+                    const shooter = aliveInvaders[Math.floor(Math.random() * aliveInvaders.length)];
+                    invaderBullets.push({
+                        x: shooter.x + shooter.width / 2,
+                        y: shooter.y + shooter.height
+                    });
+                }
+                invaderShootTime = 0;
+            }
+        }
+        
+        // Helper function to check and destroy blocks
+        function checkBlockCollision(bullet, bulletIndex, bulletArray) {
+            for (let bunkerIndex = 0; bunkerIndex < defensiveBlocks.length; bunkerIndex++) {
+                const bunker = defensiveBlocks[bunkerIndex];
+
+                // Check if bullet is in bunker area
+                if (bullet.x >= bunker.x && bullet.x <= bunker.x + bunker.width &&
+                    bullet.y >= bunker.y && bullet.y <= bunker.y + bunker.height) {
+
+                    // Calculate block position within bunker
+                    const blockCol = Math.floor((bullet.x - bunker.x) / bunker.blockSize);
+                    const blockRow = Math.floor((bullet.y - bunker.y) / bunker.blockSize);
+
+                    // Check bounds
+                    if (blockRow >= 0 && blockRow < bunker.blocks.length &&
+                        blockCol >= 0 && blockCol < bunker.blocks[0].length &&
+                        bunker.blocks[blockRow][blockCol] === 1) {
+
+                        // Destroy block and surrounding blocks for realistic damage
+                        const destroyRadius = 1;
+                        for (let dr = -destroyRadius; dr <= destroyRadius; dr++) {
+                            for (let dc = -destroyRadius; dc <= destroyRadius; dc++) {
+                                const r = blockRow + dr;
+                                const c = blockCol + dc;
+                                if (r >= 0 && r < bunker.blocks.length &&
+                                    c >= 0 && c < bunker.blocks[0].length) {
+                                    bunker.blocks[r][c] = 0;
+                                }
+                            }
+                        }
+
+                        // Remove bullet
+                        bulletArray.splice(bulletIndex, 1);
+                        return true; // Collision occurred
+                    }
+                }
+            }
+            return false; // No collision
+        }
+
+        // Collision detection
+        function checkCollisions() {
+            // Player bullets vs invaders
+            bullets.forEach((bullet, bulletIndex) => {
+                // Check defensive blocks first
+                if (checkBlockCollision(bullet, bulletIndex, bullets)) {
+                    return; // Bullet was destroyed by block
+                }
+
+                invaders.forEach((invader, invaderIndex) => {
+                    if (invader.alive &&
+                        bullet.x < invader.x + invader.width &&
+                        bullet.x + 3 > invader.x &&
+                        bullet.y < invader.y + invader.height &&
+                        bullet.y + 10 > invader.y) {
+
+                        // Hit!
+                        invader.alive = false;
+                        bullets.splice(bulletIndex, 1);
+                        score += (invader.type + 1) * 10;
+                        playHitSound();
+                        updateUI();
+                    }
+                });
+            });
+            
+            // Invader bullets vs player and defensive blocks
+            invaderBullets.forEach((bullet, index) => {
+                // Check defensive blocks first
+                if (checkBlockCollision(bullet, index, invaderBullets)) {
+                    return; // Bullet was destroyed by block
+                }
+
+                // Check player collision
+                if (bullet.x < player.x + player.width &&
+                    bullet.x + 3 > player.x &&
+                    bullet.y < player.y + player.height &&
+                    bullet.y + 10 > player.y) {
+
+                    // Player hit!
+                    invaderBullets.splice(index, 1);
+                    lives--;
+                    updateUI();
+
+                    if (lives <= 0) {
+                        gameOver("No lives remaining!");
+                    }
+                }
+            });
+            
+            // Check if invaders reached bottom
+            invaders.forEach(invader => {
+                if (invader.alive && invader.y + invader.height >= player.y) {
+                    gameOver("Invaders reached your position!");
+                }
+            });
+            
+            // Check if all invaders destroyed
+            if (invaders.filter(inv => inv.alive).length === 0) {
+                nextWave();
+            }
+        }
+        
+        // Next wave
+        function nextWave() {
+            wave++;
+            gameSpeed += 0.2;
+            createInvaders();
+            // Move invaders down a bit for each wave
+            invaders.forEach(invader => {
+                invader.y += 20;
+            });
+        }
+        
+        // Shoot bullet
+        function shoot() {
+            bullets.push({
+                x: player.x + player.width / 2,
+                y: player.y
+            });
+            shotsFired++;
+            updateUI();
+            playShootSound();
+            
+            // Check for question every 10 shots
+            if (shotsFired % 10 === 0) {
+                showQuestion();
+            }
+        }
+        
+        // Main game loop
+        function gameLoop(currentTime) {
+            if (!gameRunning) return;
+            
+            const deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+            
+            if (!gamePaused) {
+                // Clear canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw everything
+                drawBackground();
+                drawDefensiveBlocks();
+                drawPlayer();
+                drawInvaders();
+                drawBullets();
+                
+                // Update game objects
+                updatePlayer(deltaTime);
+                updateBullets();
+                updateInvaders(deltaTime);
+                checkCollisions();
+            }
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Question system
+        function showQuestion() {
+            gamePaused = true;
+            
+            // Get random unused question
+            const availableQuestions = questionPool.filter(q => !usedQuestions.includes(q));
+            if (availableQuestions.length === 0) {
+                // Reset if all questions used
+                usedQuestions = [];
+                currentQuestion = questionPool[Math.floor(Math.random() * questionPool.length)];
+            } else {
+                currentQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+            }
+            
+            usedQuestions.push(currentQuestion);
+            
+            // Display question
+            document.getElementById('questionText').textContent = currentQuestion.question;
+            for (let i = 0; i < 4; i++) {
+                document.getElementById(`answer${i}`).textContent = `${String.fromCharCode(65 + i)}) ${currentQuestion.options[i]}`;
+            }
+            
+            // Initialize answer selection
+            selectedAnswerIndex = 0;
+            updateAnswerFocus();
+            
+            document.getElementById('questionModal').classList.remove('hidden');
+            
+            // Start timer
+            questionTimer = 30;
+            questionInterval = setInterval(updateQuestionTimer, 1000);
+            updateQuestionTimer();
+        }
+        
+        // Update visual focus on answer buttons
+        function updateAnswerFocus() {
+            for (let i = 0; i < 4; i++) {
+                const button = document.getElementById(`answer${i}`);
+                if (i === selectedAnswerIndex) {
+                    button.classList.add('focused');
+                } else {
+                    button.classList.remove('focused');
+                }
+            }
+        }
+        
+        // Update question timer
+        function updateQuestionTimer() {
+            document.getElementById('timerValue').textContent = questionTimer;
+            questionTimer--;
+            
+            if (questionTimer < 0) {
+                clearInterval(questionInterval);
+                selectAnswer(-1); // Time's up - wrong answer
+            }
+        }
+        
+        // Handle answer selection
+        function selectAnswer(answerIndex) {
+            clearInterval(questionInterval);
+            document.getElementById('questionModal').classList.add('hidden');
+
+            const isCorrect = answerIndex === currentQuestion.correct;
+            showAnswerFeedback(isCorrect);
+
+            if (isCorrect) {
+                // Correct answer - continue at normal speed
+                setTimeout(() => {
+                    gamePaused = false;
+                    score += 200; // Bonus for correct answer
+                    playCorrectSound();
+                    updateUI();
+                }, 350);
+            } else {
+                // Wrong answer - increase game speed
+                setTimeout(() => {
+                    gameSpeed += 0.5;
+                    gamePaused = false;
+                    score = Math.max(0, score - 50); // Penalty for wrong answer
+                    playWrongSound();
+                    updateUI();
+                }, 350);
+            }
+        }
+        
+        // Game over
+        function gameOver(reason) {
+            gameRunning = false;
+            playGameOverSound();
+            document.getElementById('gameOverText').textContent = reason;
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('gameOverModal').classList.remove('hidden');
+        }
+        
+        // Reset game
+        function resetGame() {
+            document.getElementById('gameOverModal').classList.add('hidden');
+            document.getElementById('questionModal').classList.add('hidden');
+            clearInterval(questionInterval);
+            initGame();
+        }
+        
+        // Start game
+        async function startGame() {
+            // Ensure game data is loaded before starting
+            if (!gameDataLoaded) {
+                document.getElementById('startBtn').textContent = 'Loading...';
+                document.getElementById('startBtn').disabled = true;
+                
+                try {
+                    await loadGameData();
+                } catch (error) {
+                    console.error('Failed to load game data:', error);
+                    alert('Failed to load game data. Using fallback questions.');
+                }
+            }
+            
+            gameRunning = true;
+            gamePaused = false;
+            initAudio(); // Initialize audio context
+            document.getElementById('startBtn').textContent = 'Restart Game';
+            document.getElementById('startBtn').disabled = false;
+            lastTime = performance.now();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Close instructions
+        function closeInstructions() {
+            document.getElementById('instructionsModal').classList.add('hidden');
+        }
+        
+        // Load game data
+        async function loadGameData() {
+            try {
+                const response = await fetch('data.json?'+Math.round(Math.random()*1000));
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.fact_man_data && Array.isArray(data.fact_man_data)) {
+                        questionPool = data.fact_man_data;
+                        gameDataLoaded = true;
+                        console.log('Loaded', questionPool.length, 'questions from data.json');
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading game data:', error);
+            }
+            
+            // Fallback questions if loading fails
+            questionPool = [
+                {
+                    'question': 'What is the main purpose of education?',
+                    'options': ['Entertainment', 'Learning', 'Sleeping', 'Gaming'],
+                    'correct': 1
+                },
+                {
+                    'question': 'Which helps develop skills?',
+                    'options': ['Luck', 'Practice', 'Magic', 'Guessing'],
+                    'correct': 1
+                },
+                {
+                    'question': 'Knowledge should be applied how?',
+                    'options': ['Never', 'Rarely', 'Practically', 'Theoretically only'],
+                    'correct': 2
+                }
+            ];
+            gameDataLoaded = true;
+            console.log('Using fallback questions');
+        }
+        
+        // Variables for question navigation
+        let questionNavigationEnabled = false;
+        
+        // Key state tracking
+        let spaceKeyPressed = false;
+        let keys = {
+            left: false,
+            right: false,
+            up: false,
+            down: false
+        };
+        
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            // Prevent key repeat for space key
+            if (e.key === ' ' && e.repeat) {
+                e.preventDefault();
+                return;
+            }
+            
+            // Check if it's a game movement key
+            const isGameKey = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'w', 'W', 'a', 'A', 's', 'S', 'd', 'D', ' '].includes(e.key);
+            
+            // If game isn't running and player presses a game key, start the game
+            if (!gameRunning && isGameKey) {
+                startGame();
+                return;
+            }
+            
+            // Handle question answering with keyboard when game is paused for questions
+            if (gamePaused && !document.getElementById('questionModal').classList.contains('hidden')) {
+                switch (e.key) {
+                    case 'ArrowUp':
+                        // Toggle between A/C (0↔2) or B/D (1↔3)
+                        selectedAnswerIndex = selectedAnswerIndex < 2 ? selectedAnswerIndex + 2 : selectedAnswerIndex - 2;
+                        updateAnswerFocus();
+                        break;
+                    case 'ArrowDown':
+                        // Toggle between A/C (0↔2) or B/D (1↔3)
+                        selectedAnswerIndex = selectedAnswerIndex < 2 ? selectedAnswerIndex + 2 : selectedAnswerIndex - 2;
+                        updateAnswerFocus();
+                        break;
+                    case 'ArrowLeft':
+                        // Toggle between A/B (top row) or C/D (bottom row)
+                        selectedAnswerIndex = selectedAnswerIndex % 2 === 0 ? selectedAnswerIndex + 1 : selectedAnswerIndex - 1;
+                        updateAnswerFocus();
+                        break;
+                    case 'ArrowRight':
+                        // Toggle between A/B (top row) or C/D (bottom row)
+                        selectedAnswerIndex = selectedAnswerIndex % 2 === 0 ? selectedAnswerIndex + 1 : selectedAnswerIndex - 1;
+                        updateAnswerFocus();
+                        break;
+                    // Space key removed for question answering to prevent conflicts with shooting
+                    case 'Enter':
+                        if (!e.repeat) {
+                            selectAnswer(selectedAnswerIndex);
+                        }
+                        break;
+                }
+                e.preventDefault();
+                return;
+            }
+            
+            if (!gameRunning || gamePaused) return;
+            
+            // Game controls - set key states
+            switch (e.key) {
+                case 'ArrowLeft':
+                case 'a':
+                case 'A':
+                    keys.left = true;
+                    break;
+                case 'ArrowRight':
+                case 'd':
+                case 'D':
+                    keys.right = true;
+                    break;
+                case ' ':
+                    if (!spaceKeyPressed) {
+                        spaceKeyPressed = true;
+                        shoot();
+                    }
+                    break;
+            }
+            e.preventDefault();
+        });
+        
+        // Handle key release
+        document.addEventListener('keyup', (e) => {
+            switch (e.key) {
+                case ' ':
+                    spaceKeyPressed = false;
+                    break;
+                case 'ArrowLeft':
+                case 'a':
+                case 'A':
+                    keys.left = false;
+                    break;
+                case 'ArrowRight':
+                case 'd':
+                case 'D':
+                    keys.right = false;
+                    break;
+            }
+        });
+        
+        // Initialize the game on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initGame();
+            // Preload game data
+            loadGameData().catch(error => {
+                console.error('Failed to preload game data:', error);
+            });
+        });
+    </script>
+</body>
+</html>

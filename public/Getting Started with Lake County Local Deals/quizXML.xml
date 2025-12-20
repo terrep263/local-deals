@@ -1,0 +1,202 @@
+<Quizes>
+	<Quiz identifier="MI00" Type="exam">
+	<Question QuestionID="MI01" QuestionType="exam" Title="" CommentBox="0" qType="MC" image="">
+		<Text>What is the primary focus of Lake County Local Deals?</Text>
+		<Answers>
+			<Answer AnswerID="1" Correct="0" Score="0" Order="1" TaskSeverity="0" ActionByID="0">
+				<Text>Selling products globally</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="2" Correct="0" Score="0" Order="2" TaskSeverity="0" ActionByID="0">
+				<Text>Providing national discounts</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="3" Correct="1" Score="10" Order="3" TaskSeverity="0" ActionByID="0">
+				<Text>Connecting local businesses with local customers in Lake County, Florida</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="4" Correct="0" Score="0" Order="4" TaskSeverity="0" ActionByID="0">
+				<Text>Offering international travel packages</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+		</Answers>
+	</Question>
+	<Question QuestionID="MI02" QuestionType="exam" Title="" CommentBox="0" qType="MC" image="">
+		<Text>What is the key financial benefit for businesses using Lake County Local Deals?</Text>
+		<Answers>
+			<Answer AnswerID="1" Correct="0" Score="0" Order="1" TaskSeverity="0" ActionByID="0">
+				<Text>They pay high commissions on every sale</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="2" Correct="0" Score="0" Order="2" TaskSeverity="0" ActionByID="0">
+				<Text>They receive a fixed monthly payment from the platform</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="3" Correct="1" Score="10" Order="3" TaskSeverity="0" ActionByID="0">
+				<Text>They keep 100% of their deal revenue</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="4" Correct="0" Score="0" Order="4" TaskSeverity="0" ActionByID="0">
+				<Text>They are reimbursed for marketing expenses</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+		</Answers>
+	</Question>
+	<Question QuestionID="MI03" QuestionType="exam" Title="" CommentBox="0" qType="MC" image="">
+		<Text>How does Lake County Local Deals generate revenue?</Text>
+		<Answers>
+			<Answer AnswerID="1" Correct="0" Score="0" Order="1" TaskSeverity="0" ActionByID="0">
+				<Text>By taking a percentage of each deal sold</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="2" Correct="1" Score="10" Order="2" TaskSeverity="0" ActionByID="0">
+				<Text>Through a flat subscription fee from businesses</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="3" Correct="0" Score="0" Order="3" TaskSeverity="0" ActionByID="0">
+				<Text>By selling user data to third parties</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="4" Correct="0" Score="0" Order="4" TaskSeverity="0" ActionByID="0">
+				<Text>Through government grants</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+		</Answers>
+	</Question>
+	<Question QuestionID="MI04" QuestionType="exam" Title="" CommentBox="0" qType="MC" image="">
+		<Text>Which of the following is NOT a city specifically mentioned as being served by Lake County Local Deals?</Text>
+		<Answers>
+			<Answer AnswerID="1" Correct="0" Score="0" Order="1" TaskSeverity="0" ActionByID="0">
+				<Text>Clermont</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="2" Correct="0" Score="0" Order="2" TaskSeverity="0" ActionByID="0">
+				<Text>Leesburg</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="3" Correct="0" Score="0" Order="3" TaskSeverity="0" ActionByID="0">
+				<Text>Mount Dora</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="4" Correct="1" Score="10" Order="4" TaskSeverity="0" ActionByID="0">
+				<Text>Orlando</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+		</Answers>
+	</Question>
+	<Question QuestionID="MI05" QuestionType="exam" Title="" CommentBox="0" qType="MC" image="">
+		<Text>What is the main purpose of Lake County Local Deals beyond just listing offers?</Text>
+		<Answers>
+			<Answer AnswerID="1" Correct="0" Score="0" Order="1" TaskSeverity="0" ActionByID="0">
+				<Text>To compete with national retailers</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="2" Correct="0" Score="0" Order="2" TaskSeverity="0" ActionByID="0">
+				<Text>To provide international shipping services</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="3" Correct="1" Score="10" Order="3" TaskSeverity="0" ActionByID="0">
+				<Text>To act as a dedicated support system for small businesses</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="4" Correct="0" Score="0" Order="4" TaskSeverity="0" ActionByID="0">
+				<Text>To offer investment opportunities for local residents</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+		</Answers>
+	</Question>
+	<Question QuestionID="MI06" QuestionType="exam" Title="" CommentBox="0" qType="MC" image="">
+		<Text>What type of community is The Villages primarily known for?</Text>
+		<Answers>
+			<Answer AnswerID="1" Correct="0" Score="0" Order="1" TaskSeverity="0" ActionByID="0">
+				<Text>A bustling tech hub</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="2" Correct="0" Score="0" Order="2" TaskSeverity="0" ActionByID="0">
+				<Text>A college town</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="3" Correct="1" Score="10" Order="3" TaskSeverity="0" ActionByID="0">
+				<Text>A large and active retirement community</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+			<Answer AnswerID="4" Correct="0" Score="0" Order="4" TaskSeverity="0" ActionByID="0">
+				<Text>A fishing village</Text>
+				<TaskName/>
+				<Feedback></Feedback>
+				<Match/>
+				<TaskDescription/>
+			</Answer>
+		</Answers>
+	</Question>
+	</Quiz>
+</Quizes>

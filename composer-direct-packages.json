@@ -1,0 +1,166 @@
+﻿{
+    "installed": [
+        {
+            "name": "fakerphp/faker",
+            "direct-dependency": true,
+            "homepage": null,
+            "source": "https://github.com/FakerPHP/Faker/tree/v1.21.0",
+            "version": "v1.21.0",
+            "description": "Faker is a PHP library that generates fake data for you.",
+            "abandoned": false
+        },
+        {
+            "name": "guzzlehttp/guzzle",
+            "direct-dependency": true,
+            "homepage": null,
+            "source": "https://github.com/guzzle/guzzle/tree/7.5.0",
+            "version": "7.5.0",
+            "description": "Guzzle is a PHP HTTP client library",
+            "abandoned": false
+        },
+        {
+            "name": "intervention/image",
+            "direct-dependency": true,
+            "homepage": "http://image.intervention.io/",
+            "source": "https://github.com/Intervention/image/tree/master",
+            "version": "dev-master 54934ae",
+            "description": "Image handling and manipulation library with support for Laravel integration",
+            "abandoned": false
+        },
+        {
+            "name": "laravel/framework",
+            "direct-dependency": true,
+            "homepage": "https://laravel.com",
+            "source": "https://github.com/laravel/framework",
+            "version": "v9.48.0",
+            "description": "The Laravel Framework.",
+            "abandoned": false
+        },
+        {
+            "name": "laravel/pint",
+            "direct-dependency": true,
+            "homepage": "https://laravel.com",
+            "source": "https://github.com/laravel/pint",
+            "version": "v1.4.0",
+            "description": "An opinionated code formatter for PHP.",
+            "abandoned": false
+        },
+        {
+            "name": "laravel/sail",
+            "direct-dependency": true,
+            "homepage": null,
+            "source": "https://github.com/laravel/sail",
+            "version": "v1.18.1",
+            "description": "Docker files for running a basic Laravel application.",
+            "abandoned": false
+        },
+        {
+            "name": "laravel/sanctum",
+            "direct-dependency": true,
+            "homepage": null,
+            "source": "https://github.com/laravel/sanctum",
+            "version": "v3.2.1",
+            "description": "Laravel Sanctum provides a featherweight authentication system for SPAs and simple APIs.",
+            "abandoned": false
+        },
+        {
+            "name": "laravel/socialite",
+            "direct-dependency": true,
+            "homepage": "https://laravel.com",
+            "source": "https://github.com/laravel/socialite",
+            "version": "dev-master c3d7e85",
+            "description": "Laravel wrapper around OAuth 1 & OAuth 2 libraries.",
+            "abandoned": false
+        },
+        {
+            "name": "laravel/tinker",
+            "direct-dependency": true,
+            "homepage": null,
+            "source": "https://github.com/laravel/tinker/tree/v2.8.0",
+            "version": "v2.8.0",
+            "description": "Powerful REPL for the Laravel framework.",
+            "abandoned": false
+        },
+        {
+            "name": "laravelcollective/html",
+            "direct-dependency": true,
+            "homepage": "https://laravelcollective.com",
+            "source": "https://github.com/LaravelCollective/html",
+            "version": "v6.3.0",
+            "description": "HTML and Form Builders for the Laravel Framework",
+            "abandoned": false
+        },
+        {
+            "name": "mockery/mockery",
+            "direct-dependency": true,
+            "homepage": "https://github.com/mockery/mockery",
+            "source": "https://github.com/mockery/mockery/tree/1.5.1",
+            "version": "1.5.1",
+            "description": "Mockery is a simple yet flexible PHP mock object framework",
+            "abandoned": false
+        },
+        {
+            "name": "nunomaduro/collision",
+            "direct-dependency": true,
+            "homepage": null,
+            "source": "https://github.com/nunomaduro/collision",
+            "version": "v6.4.0",
+            "description": "Cli error handling for console/command-line PHP applications.",
+            "abandoned": false
+        },
+        {
+            "name": "phpunit/phpunit",
+            "direct-dependency": true,
+            "homepage": "https://phpunit.de/",
+            "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.28",
+            "version": "9.5.28",
+            "description": "The PHP Unit Testing framework.",
+            "abandoned": false
+        },
+        {
+            "name": "razorpay/razorpay",
+            "direct-dependency": true,
+            "homepage": "https://docs.razorpay.com",
+            "source": "https://github.com/Razorpay/razorpay-php",
+            "version": "2.8.5",
+            "description": "Razorpay PHP Client Library",
+            "abandoned": false
+        },
+        {
+            "name": "spatie/laravel-cookie-consent",
+            "direct-dependency": true,
+            "homepage": "https://github.com/spatie/cookie-consent",
+            "source": "https://github.com/spatie/laravel-cookie-consent/tree/3.2.0",
+            "version": "3.2.0",
+            "description": "Make your Laravel app comply with the crazy EU cookie law",
+            "abandoned": false
+        },
+        {
+            "name": "spatie/laravel-ignition",
+            "direct-dependency": true,
+            "homepage": "https://flareapp.io/ignition",
+            "source": "https://github.com/spatie/laravel-ignition",
+            "version": "1.6.4",
+            "description": "A beautiful error page for Laravel applications.",
+            "abandoned": false
+        },
+        {
+            "name": "srmklive/paypal",
+            "direct-dependency": true,
+            "homepage": null,
+            "source": "https://github.com/srmklive/laravel-paypal/tree/3.0.16",
+            "version": "3.0.16",
+            "description": "Laravel plugin For Processing Payments Through Paypal Express Checkout. Can Be Used Independently With Other Applications.",
+            "abandoned": false
+        },
+        {
+            "name": "werneckbh/laravel-qr-code",
+            "direct-dependency": true,
+            "homepage": null,
+            "source": "https://github.com/werneckbh/laravel-qr-code/tree/0.1.3",
+            "version": "dev-master df38750",
+            "description": "QR Code Generator for PHP wrapper for Laravel",
+            "abandoned": false
+        }
+    ]
+}

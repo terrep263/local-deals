@@ -1,0 +1,405 @@
+﻿C:\laragon\bin\php\php-8.3.28-Win32-vs16-x64\php.exe : Loading composer repositories with package information
+At C:\Users\terre\AppData\Local\Temp\ps-script-77db1b25-6ba1-46a2-ad8c-d5e0ac59974f.ps1:84 char:32
++ ... ocal-deals; C:\laragon\bin\php\php-8.3.28-Win32-vs16-x64\php.exe C:\l ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Loading compose...age information:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Updating dependencies
+Lock file operations: 13 installs, 105 updates, 8 removals
+  - Removing cartalyst/stripe (v2.4.6)
+  - Removing cartalyst/stripe-laravel (v14.0.0)
+  - Removing doctrine/deprecations (v1.0.0)
+  - Removing doctrine/instantiator (1.5.0)
+  - Removing sebastian/resource-operations (3.0.3)
+  - Removing symfony/polyfill-php72 (v1.27.0)
+  - Removing symfony/polyfill-php81 (v1.27.0)
+  - Removing webmozart/assert (1.11.0)
+  - Upgrading brick/math (0.10.2 => 0.12.3)
+  - Locking carbonphp/carbon-doctrine-types (2.1.0)
+  - Upgrading dflydev/dot-access-data (v3.0.2 => v3.0.3)
+  - Upgrading doctrine/inflector (2.0.6 => 2.1.0)
+  - Upgrading doctrine/lexer (2.1.0 => 3.0.1)
+  - Upgrading dragonmantank/cron-expression (v3.3.2 => v3.6.0)
+  - Upgrading egulias/email-validator (3.2.5 => 4.0.4)
+  - Upgrading fakerphp/faker (v1.21.0 => v1.24.1)
+  - Upgrading filp/whoops (2.14.6 => 2.18.4)
+  - Locking firebase/php-jwt (v6.11.1)
+  - Upgrading fruitcake/php-cors (v1.2.0 => v1.4.0)
+  - Upgrading graham-campbell/result-type (v1.1.0 => v1.1.3)
+  - Upgrading guzzlehttp/guzzle (7.5.0 => 7.10.0)
+  - Upgrading guzzlehttp/promises (1.5.2 => 2.3.0)
+  - Upgrading guzzlehttp/psr7 (2.4.3 => 2.8.0)
+  - Locking guzzlehttp/uri-template (v1.0.5)
+  - Upgrading hamcrest/hamcrest-php (v2.0.1 => v2.1.1)
+  - Downgrading intervention/image (dev-master 54934ae => 2.7.2)
+  - Upgrading laravel/framework (v9.48.0 => v10.50.0)
+  - Upgrading laravel/pint (v1.4.0 => v1.26.0)
+  - Locking laravel/prompts (v0.1.25)
+  - Upgrading laravel/sail (v1.18.1 => v1.51.0)
+  - Upgrading laravel/sanctum (v3.2.1 => v3.3.3)
+  - Upgrading laravel/serializable-closure (v1.2.2 => v1.3.7)
+  - Downgrading laravel/socialite (dev-master c3d7e85 => v5.24.0)
+  - Upgrading laravel/tinker (v2.8.0 => v2.10.2)
+  - Upgrading laravelcollective/html (v6.3.0 => v6.4.1)
+  - Upgrading league/commonmark (2.3.8 => 2.8.0)
+  - Upgrading league/flysystem (3.12.2 => 3.30.2)
+  - Locking league/flysystem-local (3.30.2)
+  - Upgrading league/mime-type-detection (1.11.0 => 1.16.0)
+  - Upgrading league/oauth1-client (v1.10.1 => v1.11.0)
+  - Upgrading mockery/mockery (1.5.1 => 1.6.12)
+  - Upgrading monolog/monolog (2.8.0 => 3.9.0)
+  - Upgrading myclabs/deep-copy (1.11.0 => 1.13.4)
+  - Upgrading nesbot/carbon (2.66.0 => 2.73.0)
+  - Upgrading nette/schema (v1.2.3 => v1.3.3)
+  - Upgrading nette/utils (v3.2.9 => v4.1.0)
+  - Upgrading nikic/php-parser (v4.15.3 => v5.7.0)
+  - Upgrading nunomaduro/collision (v6.4.0 => v7.12.0)
+  - Upgrading nunomaduro/termwind (v1.15.0 => v1.17.0)
+  - Locking paragonie/constant_time_encoding (v3.1.3)
+  - Locking paragonie/random_compat (v9.99.100)
+  - Upgrading phar-io/manifest (2.0.3 => 2.0.4)
+  - Upgrading phpoption/phpoption (1.9.0 => 1.9.4)
+  - Locking phpseclib/phpseclib (3.0.48)
+  - Upgrading phpunit/php-code-coverage (9.2.24 => 10.1.16)
+  - Upgrading phpunit/php-file-iterator (3.0.6 => 4.1.0)
+  - Upgrading phpunit/php-invoker (3.1.1 => 4.0.0)
+  - Upgrading phpunit/php-text-template (2.0.4 => 3.0.1)
+  - Upgrading phpunit/php-timer (5.0.3 => 6.0.0)
+  - Upgrading phpunit/phpunit (9.5.28 => 10.5.60)
+  - Locking psr/clock (1.0.0)
+  - Upgrading psr/http-client (1.0.1 => 1.0.3)
+  - Upgrading psr/http-factory (1.0.1 => 1.1.0)
+  - Upgrading psr/http-message (1.0.1 => 2.0)
+  - Upgrading psr/log (3.0.0 => 3.0.2)
+  - Upgrading psy/psysh (v0.11.12 => v0.12.18)
+  - Upgrading ramsey/collection (1.3.0 => 2.1.1)
+  - Upgrading ramsey/uuid (4.7.3 => 4.9.2)
+  - Upgrading razorpay/razorpay (2.8.5 => 2.9.2)
+  - Upgrading rmccue/requests (v2.0.5 => v2.0.17)
+  - Upgrading sebastian/cli-parser (1.0.1 => 2.0.1)
+  - Upgrading sebastian/code-unit (1.0.8 => 2.0.0)
+  - Upgrading sebastian/code-unit-reverse-lookup (2.0.3 => 3.0.0)
+  - Upgrading sebastian/comparator (4.0.8 => 5.0.4)
+  - Upgrading sebastian/complexity (2.0.2 => 3.2.0)
+  - Upgrading sebastian/diff (4.0.4 => 5.1.1)
+  - Upgrading sebastian/environment (5.1.4 => 6.1.0)
+  - Upgrading sebastian/exporter (4.0.5 => 5.1.4)
+  - Upgrading sebastian/global-state (5.0.5 => 6.0.2)
+  - Upgrading sebastian/lines-of-code (1.0.3 => 2.0.2)
+  - Upgrading sebastian/object-enumerator (4.0.4 => 5.0.0)
+  - Upgrading sebastian/object-reflector (2.0.4 => 3.0.0)
+  - Upgrading sebastian/recursion-context (4.0.4 => 5.0.1)
+  - Upgrading sebastian/type (3.2.0 => 4.0.0)
+  - Upgrading sebastian/version (3.0.2 => 4.0.1)
+  - Upgrading spatie/backtrace (1.2.1 => 1.8.1)
+  - Locking spatie/error-solutions (1.1.3)
+  - Upgrading spatie/flare-client-php (1.3.5 => 1.10.1)
+  - Upgrading spatie/ignition (1.4.3 => 1.15.1)
+  - Upgrading spatie/laravel-cookie-consent (3.2.0 => 3.3.3)
+  - Upgrading spatie/laravel-ignition (1.6.4 => 2.9.1)
+  - Upgrading spatie/laravel-package-tools (1.14.1 => 1.92.7)
+  - Upgrading srmklive/paypal (3.0.16 => 3.0.40)
+  - Locking stripe/stripe-php (v13.18.0)
+  - Upgrading symfony/console (v6.0.19 => v6.4.30)
+  - Upgrading symfony/css-selector (v6.0.19 => v7.4.0)
+  - Upgrading symfony/deprecation-contracts (v3.0.2 => v3.6.0)
+  - Upgrading symfony/error-handler (v6.0.19 => v6.4.26)
+  - Upgrading symfony/event-dispatcher (v6.0.19 => v7.4.0)
+  - Upgrading symfony/event-dispatcher-contracts (v3.0.2 => v3.6.0)
+  - Upgrading symfony/finder (v6.0.19 => v6.4.27)
+  - Upgrading symfony/http-foundation (v6.0.19 => v6.4.30)
+  - Upgrading symfony/http-kernel (v6.0.19 => v6.4.30)
+  - Upgrading symfony/mailer (v6.0.19 => v6.4.27)
+  - Upgrading symfony/mime (v6.0.19 => v6.4.30)
+  - Upgrading symfony/polyfill-ctype (v1.27.0 => v1.33.0)
+  - Upgrading symfony/polyfill-intl-grapheme (v1.27.0 => v1.33.0)
+  - Upgrading symfony/polyfill-intl-idn (v1.27.0 => v1.33.0)
+  - Upgrading symfony/polyfill-intl-normalizer (v1.27.0 => v1.33.0)
+  - Upgrading symfony/polyfill-mbstring (v1.27.0 => v1.33.0)
+  - Upgrading symfony/polyfill-php80 (v1.27.0 => v1.33.0)
+  - Locking symfony/polyfill-php83 (v1.33.0)
+  - Upgrading symfony/polyfill-uuid (v1.27.0 => v1.33.0)
+  - Upgrading symfony/process (v6.0.19 => v6.4.26)
+  - Upgrading symfony/routing (v6.0.19 => v6.4.30)
+  - Upgrading symfony/service-contracts (v3.0.2 => v3.6.1)
+  - Upgrading symfony/string (v6.0.19 => v7.4.0)
+  - Upgrading symfony/translation (v6.0.19 => v6.4.30)
+  - Upgrading symfony/translation-contracts (v3.0.2 => v3.6.1)
+  - Upgrading symfony/uid (v6.0.19 => v6.4.24)
+  - Upgrading symfony/var-dumper (v6.0.19 => v6.4.26)
+  - Locking symfony/yaml (v7.4.1)
+  - Upgrading theseer/tokenizer (1.2.1 => 1.3.1)
+  - Upgrading tijsverkoyen/css-to-inline-styles (2.2.6 => v2.4.0)
+  - Upgrading vlucas/phpdotenv (v5.5.0 => v5.6.2)
+  - Upgrading voku/portable-ascii (2.0.1 => 2.0.3)
+Writing lock file
+Installing dependencies from lock file (including require-dev)
+Package operations: 13 installs, 105 updates, 8 removals
+  - Downloading carbonphp/carbon-doctrine-types (2.1.0)
+  - Downloading symfony/http-foundation (v6.4.30)
+  - Downloading intervention/image (2.7.2)
+  - Downloading symfony/string (v7.4.0)
+  - Downloading symfony/console (v6.4.30)
+  - Downloading symfony/css-selector (v7.4.0)
+  - Downloading symfony/var-dumper (v6.4.26)
+  - Downloading symfony/uid (v6.4.24)
+  - Downloading symfony/routing (v6.4.30)
+  - Downloading symfony/process (v6.4.26)
+  - Downloading symfony/mime (v6.4.30)
+  - Downloading symfony/event-dispatcher (v7.4.0)
+  - Downloading symfony/mailer (v6.4.27)
+  - Downloading symfony/error-handler (v6.4.26)
+  - Downloading symfony/http-kernel (v6.4.30)
+  - Downloading symfony/finder (v6.4.27)
+  - Downloading brick/math (0.12.3)
+  - Downloading nunomaduro/termwind (v1.17.0)
+  - Downloading symfony/translation (v6.4.30)
+  - Downloading nesbot/carbon (2.73.0)
+  - Downloading laravel/serializable-closure (v1.3.7)
+  - Downloading laravel/prompts (v0.1.25)
+  - Downloading laravel/framework (v10.50.0)
+  - Downloading laravel/sanctum (v3.3.3)
+  - Downloading paragonie/random_compat (v9.99.100)
+  - Downloading paragonie/constant_time_encoding (v3.1.3)
+  - Downloading phpseclib/phpseclib (3.0.48)
+  - Downloading league/oauth1-client (v1.11.0)
+  - Downloading firebase/php-jwt (v6.11.1)
+  - Downloading laravel/socialite (v5.24.0)
+  - Downloading psy/psysh (v0.12.18)
+  - Downloading laravelcollective/html (v6.4.1)
+  - Downloading nunomaduro/collision (v7.12.0)
+  - Downloading sebastian/version (4.0.1)
+  - Downloading sebastian/type (4.0.0)
+  - Downloading sebastian/recursion-context (5.0.1)
+  - Downloading sebastian/object-reflector (3.0.0)
+  - Downloading sebastian/object-enumerator (5.0.0)
+  - Downloading sebastian/global-state (6.0.2)
+  - Downloading sebastian/exporter (5.1.4)
+  - Downloading sebastian/environment (6.1.0)
+  - Downloading sebastian/diff (5.1.1)
+  - Downloading sebastian/comparator (5.0.4)
+  - Downloading sebastian/code-unit (2.0.0)
+  - Downloading sebastian/cli-parser (2.0.1)
+  - Downloading phpunit/php-timer (6.0.0)
+  - Downloading phpunit/php-text-template (3.0.1)
+  - Downloading phpunit/php-invoker (4.0.0)
+  - Downloading phpunit/php-file-iterator (4.1.0)
+  - Downloading sebastian/lines-of-code (2.0.2)
+  - Downloading sebastian/complexity (3.2.0)
+  - Downloading sebastian/code-unit-reverse-lookup (3.0.0)
+  - Downloading phpunit/php-code-coverage (10.1.16)
+  - Downloading phpunit/phpunit (10.5.60)
+  - Downloading rmccue/requests (v2.0.17)
+  - Downloading razorpay/razorpay (2.9.2)
+  - Downloading spatie/error-solutions (1.1.3)
+  - Downloading spatie/backtrace (1.8.1)
+  - Downloading spatie/flare-client-php (1.10.1)
+  - Downloading spatie/laravel-package-tools (1.92.7)
+  - Downloading spatie/laravel-cookie-consent (3.3.3)
+  - Downloading spatie/ignition (1.15.1)
+  - Downloading spatie/laravel-ignition (2.9.1)
+  - Downloading srmklive/paypal (3.0.40)
+  - Downloading stripe/stripe-php (v13.18.0)
+  0/65 [>---------------------------]   0%
+ 11/65 [====>-----------------------]  16%
+ 17/65 [=======>--------------------]  26%
+ 26/65 [===========>----------------]  40%
+ 35/65 [===============>------------]  53%
+ 39/65 [================>-----------]  60%
+ 49/65 [=====================>------]  75%
+ 53/65 [======================>-----]  81%
+ 61/65 [==========================>-]  93%
+ 65/65 [============================] 100%
+  - Removing webmozart/assert (1.11.0)
+  - Removing symfony/polyfill-php81 (v1.27.0)
+  - Removing symfony/polyfill-php72 (v1.27.0)
+  - Removing sebastian/resource-operations (3.0.3)
+  - Removing doctrine/instantiator (1.5.0)
+  - Removing doctrine/deprecations (v1.0.0)
+  - Removing cartalyst/stripe-laravel (v14.0.0)
+  - Removing cartalyst/stripe (v2.4.6)
+  - Installing carbonphp/carbon-doctrine-types (2.1.0): Extracting archive
+  - Upgrading doctrine/inflector (2.0.6 => 2.1.0): Extracting archive
+  - Upgrading doctrine/lexer (2.1.0 => 3.0.1): Extracting archive
+  - Upgrading dragonmantank/cron-expression (v3.3.2 => v3.6.0): Extracting archive
+  - Upgrading symfony/deprecation-contracts (v3.0.2 => v3.6.0): Extracting archive
+  - Upgrading fakerphp/faker (v1.21.0 => v1.24.1): Extracting archive
+  - Installing symfony/polyfill-php83 (v1.33.0): Extracting archive
+  - Upgrading symfony/polyfill-mbstring (v1.27.0 => v1.33.0): Extracting archive
+  - Upgrading symfony/http-foundation (v6.0.19 => v6.4.30): Extracting archive
+  - Upgrading fruitcake/php-cors (v1.2.0 => v1.4.0): Extracting archive
+  - Upgrading guzzlehttp/promises (1.5.2 => 2.3.0): Extracting archive
+  - Upgrading symfony/polyfill-php80 (v1.27.0 => v1.33.0): Extracting archive
+  - Installing guzzlehttp/uri-template (v1.0.5): Extracting archive
+  - Upgrading psr/http-message (1.0.1 => 2.0): Extracting archive
+  - Upgrading psr/http-factory (1.0.1 => 1.1.0): Extracting archive
+  - Upgrading guzzlehttp/psr7 (2.4.3 => 2.8.0): Extracting archive
+  - Downgrading intervention/image (dev-master 54934ae => 2.7.2): Extracting archive
+  - Upgrading laravel/pint (v1.4.0 => v1.26.0): Extracting archive
+  - Upgrading symfony/polyfill-intl-normalizer (v1.27.0 => v1.33.0): Extracting archive
+  - Upgrading symfony/polyfill-intl-grapheme (v1.27.0 => v1.33.0): Extracting archive
+  - Upgrading symfony/polyfill-ctype (v1.27.0 => v1.33.0): Extracting archive
+  - Upgrading symfony/string (v6.0.19 => v7.4.0): Extracting archive
+  - Upgrading symfony/service-contracts (v3.0.2 => v3.6.1): Extracting archive
+  - Upgrading symfony/console (v6.0.19 => v6.4.30): Extracting archive
+  - Upgrading voku/portable-ascii (2.0.1 => 2.0.3): Extracting archive
+  - Upgrading phpoption/phpoption (1.9.0 => 1.9.4): Extracting archive
+  - Upgrading graham-campbell/result-type (v1.1.0 => v1.1.3): Extracting archive
+  - Upgrading vlucas/phpdotenv (v5.5.0 => v5.6.2): Extracting archive
+  - Upgrading symfony/css-selector (v6.0.19 => v7.4.0): Extracting archive
+  - Upgrading tijsverkoyen/css-to-inline-styles (2.2.6 => v2.4.0): Extracting archive
+  - Upgrading symfony/var-dumper (v6.0.19 => v6.4.26): Extracting archive
+  - Upgrading symfony/polyfill-uuid (v1.27.0 => v1.33.0): Extracting archive
+  - Upgrading symfony/uid (v6.0.19 => v6.4.24): Extracting archive
+  - Upgrading symfony/routing (v6.0.19 => v6.4.30): Extracting archive
+  - Upgrading symfony/process (v6.0.19 => v6.4.26): Extracting archive
+  - Upgrading symfony/polyfill-intl-idn (v1.27.0 => v1.33.0): Extracting archive
+  - Upgrading symfony/mime (v6.0.19 => v6.4.30): Extracting archive
+  - Upgrading symfony/event-dispatcher-contracts (v3.0.2 => v3.6.0): Extracting archive
+  - Upgrading symfony/event-dispatcher (v6.0.19 => v7.4.0): Extracting archive
+  - Upgrading psr/log (3.0.0 => 3.0.2): Extracting archive
+  - Upgrading egulias/email-validator (3.2.5 => 4.0.4): Extracting archive
+  - Upgrading symfony/mailer (v6.0.19 => v6.4.27): Extracting archive
+  - Upgrading symfony/error-handler (v6.0.19 => v6.4.26): Extracting archive
+  - Upgrading symfony/http-kernel (v6.0.19 => v6.4.30): Extracting archive
+  - Upgrading symfony/finder (v6.0.19 => v6.4.27): Extracting archive
+  - Upgrading ramsey/collection (1.3.0 => 2.1.1): Extracting archive
+  - Upgrading brick/math (0.10.2 => 0.12.3): Extracting archive
+  - Upgrading ramsey/uuid (4.7.3 => 4.9.2): Extracting archive
+  - Upgrading nunomaduro/termwind (v1.15.0 => v1.17.0): Extracting archive
+  - Upgrading symfony/translation-contracts (v3.0.2 => v3.6.1): Extracting archive
+  - Upgrading symfony/translation (v6.0.19 => v6.4.30): Extracting archive
+  - Installing psr/clock (1.0.0): Extracting archive
+  - Upgrading nesbot/carbon (2.66.0 => 2.73.0): Extracting archive
+  - Upgrading monolog/monolog (2.8.0 => 3.9.0): Extracting archive
+  - Upgrading league/mime-type-detection (1.11.0 => 1.16.0): Extracting archive
+  - Upgrading league/flysystem (3.12.2 => 3.30.2): Extracting archive
+  - Installing league/flysystem-local (3.30.2): Extracting archive
+  - Upgrading nette/utils (v3.2.9 => v4.1.0): Extracting archive
+  - Upgrading nette/schema (v1.2.3 => v1.3.3): Extracting archive
+  - Upgrading dflydev/dot-access-data (v3.0.2 => v3.0.3): Extracting archive
+  - Upgrading league/commonmark (2.3.8 => 2.8.0): Extracting archive
+  - Upgrading laravel/serializable-closure (v1.2.2 => v1.3.7): Extracting archive
+  - Installing laravel/prompts (v0.1.25): Extracting archive
+  - Upgrading laravel/framework (v9.48.0 => v10.50.0): Extracting archive
+  - Installing symfony/yaml (v7.4.1): Extracting archive
+  - Upgrading laravel/sail (v1.18.1 => v1.51.0): Extracting archive
+  - Upgrading laravel/sanctum (v3.2.1 => v3.3.3): Extracting archive
+  - Installing paragonie/random_compat (v9.99.100): Extracting archive
+  - Installing paragonie/constant_time_encoding (v3.1.3): Extracting archive
+  - Installing phpseclib/phpseclib (3.0.48): Extracting archive
+  - Upgrading psr/http-client (1.0.1 => 1.0.3): Extracting archive
+  - Upgrading guzzlehttp/guzzle (7.5.0 => 7.10.0): Extracting archive
+  - Upgrading league/oauth1-client (v1.10.1 => v1.11.0): Extracting archive
+  - Installing firebase/php-jwt (v6.11.1): Extracting archive
+  - Downgrading laravel/socialite (dev-master c3d7e85 => v5.24.0): Extracting archive
+  - Upgrading nikic/php-parser (v4.15.3 => v5.7.0): Extracting archive
+  - Upgrading psy/psysh (v0.11.12 => v0.12.18): Extracting archive
+  - Upgrading laravel/tinker (v2.8.0 => v2.10.2): Extracting archive
+  - Upgrading laravelcollective/html (v6.3.0 => v6.4.1): Extracting archive
+  - Upgrading hamcrest/hamcrest-php (v2.0.1 => v2.1.1): Extracting archive
+  - Upgrading mockery/mockery (1.5.1 => 1.6.12): Extracting archive
+  - Upgrading filp/whoops (2.14.6 => 2.18.4): Extracting archive
+  - Upgrading nunomaduro/collision (v6.4.0 => v7.12.0): Extracting archive
+  - Upgrading sebastian/version (3.0.2 => 4.0.1): Extracting archive
+  - Upgrading sebastian/type (3.2.0 => 4.0.0): Extracting archive
+  - Upgrading sebastian/recursion-context (4.0.4 => 5.0.1): Extracting archive
+  - Upgrading sebastian/object-reflector (2.0.4 => 3.0.0): Extracting archive
+  - Upgrading sebastian/object-enumerator (4.0.4 => 5.0.0): Extracting archive
+  - Upgrading sebastian/global-state (5.0.5 => 6.0.2): Extracting archive
+  - Upgrading sebastian/exporter (4.0.5 => 5.1.4): Extracting archive
+  - Upgrading sebastian/environment (5.1.4 => 6.1.0): Extracting archive
+  - Upgrading sebastian/diff (4.0.4 => 5.1.1): Extracting archive
+  - Upgrading sebastian/comparator (4.0.8 => 5.0.4): Extracting archive
+  - Upgrading sebastian/code-unit (1.0.8 => 2.0.0): Extracting archive
+  - Upgrading sebastian/cli-parser (1.0.1 => 2.0.1): Extracting archive
+  - Upgrading phpunit/php-timer (5.0.3 => 6.0.0): Extracting archive
+  - Upgrading phpunit/php-text-template (2.0.4 => 3.0.1): Extracting archive
+  - Upgrading phpunit/php-invoker (3.1.1 => 4.0.0): Extracting archive
+  - Upgrading phpunit/php-file-iterator (3.0.6 => 4.1.0): Extracting archive
+  - Upgrading theseer/tokenizer (1.2.1 => 1.3.1): Extracting archive
+  - Upgrading sebastian/lines-of-code (1.0.3 => 2.0.2): Extracting archive
+  - Upgrading sebastian/complexity (2.0.2 => 3.2.0): Extracting archive
+  - Upgrading sebastian/code-unit-reverse-lookup (2.0.3 => 3.0.0): Extracting archive
+  - Upgrading phpunit/php-code-coverage (9.2.24 => 10.1.16): Extracting archive
+  - Upgrading phar-io/manifest (2.0.3 => 2.0.4): Extracting archive
+  - Upgrading myclabs/deep-copy (1.11.0 => 1.13.4): Extracting archive
+  - Upgrading phpunit/phpunit (9.5.28 => 10.5.60): Extracting archive
+  - Upgrading rmccue/requests (v2.0.5 => v2.0.17): Extracting archive
+  - Upgrading razorpay/razorpay (2.8.5 => 2.9.2): Extracting archive
+  - Installing spatie/error-solutions (1.1.3): Extracting archive
+  - Upgrading spatie/backtrace (1.2.1 => 1.8.1): Extracting archive
+  - Upgrading spatie/flare-client-php (1.3.5 => 1.10.1): Extracting archive
+  - Upgrading spatie/laravel-package-tools (1.14.1 => 1.92.7): Extracting archive
+  - Upgrading spatie/laravel-cookie-consent (3.2.0 => 3.3.3): Extracting archive
+  - Upgrading spatie/ignition (1.4.3 => 1.15.1): Extracting archive
+  - Upgrading spatie/laravel-ignition (1.6.4 => 2.9.1): Extracting archive
+  - Upgrading srmklive/paypal (3.0.16 => 3.0.40): Extracting archive
+  - Installing stripe/stripe-php (v13.18.0): Extracting archive
+   0/118 [>---------------------------]   0%
+   9/118 [==>-------------------------]   7%
+  12/118 [==>-------------------------]  10%
+  16/118 [===>------------------------]  13%
+  21/118 [====>-----------------------]  17%
+  25/118 [=====>----------------------]  21%
+  31/118 [=======>--------------------]  26%
+  38/118 [=========>------------------]  32%
+  43/118 [==========>-----------------]  36%
+  47/118 [===========>----------------]  39%
+  50/118 [===========>----------------]  42%
+  55/118 [=============>--------------]  46%
+  58/118 [=============>--------------]  49%
+  59/118 [==============>-------------]  50%
+  61/118 [==============>-------------]  51%
+  63/118 [==============>-------------]  53%
+  67/118 [===============>------------]  56%
+  70/118 [================>-----------]  59%
+  71/118 [================>-----------]  60%
+  74/118 [=================>----------]  62%
+  76/118 [==================>---------]  64%
+  77/118 [==================>---------]  65%
+  80/118 [==================>---------]  67%
+  81/118 [===================>--------]  68%
+  84/118 [===================>--------]  71%
+  89/118 [=====================>------]  75%
+  94/118 [======================>-----]  79%
+  95/118 [======================>-----]  80%
+ 101/118 [=======================>----]  85%
+ 105/118 [========================>---]  88%
+ 107/118 [=========================>--]  90%
+ 109/118 [=========================>--]  92%
+ 112/118 [==========================>-]  94%
+ 115/118 [===========================>]  97%
+ 117/118 [===========================>]  99%
+ 118/118 [============================] 100%
+8 package suggestions were added by new dependencies, use `composer suggest` to see details.
+Package laravelcollective/html is abandoned, you should avoid using it. Use spatie/laravel-html instead.
+Package werneckbh/qr-code is abandoned, you should avoid using it. No replacement was suggested.
+Generating optimized autoload files
+> Illuminate\Foundation\ComposerScripts::postAutoloadDump
+> @php artisan package:discover --ansi
+
+  [37;44m INFO [39;49m Discovering packages.  
+
+  intervention/image [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m [32;1mDONE[39;22m
+  laravel/sail [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m [32;1mDONE[39;22m
+  laravel/sanctum [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m [32;1mDONE[39;22m
+  laravel/socialite [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m [32;1mDONE[39;22m
+  laravel/tinker [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m [32;1mDONE[39;22m
+  laravelcollective/html [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m [32;1mDONE[39;22m
+  nesbot/carbon [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m [32;1mDONE[39;22m
+  nunomaduro/collision [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m [32;1mDONE[39;22m
+  nunomaduro/termwind [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m [32;1mDONE[39;22m
+  spatie/laravel-cookie-consent [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m [32;1mDONE[39;22m
+  spatie/laravel-ignition [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m [32;1mDONE[39;22m
+  srmklive/paypal [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m [32;1mDONE[39;22m
+  werneckbh/laravel-qr-code [90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m[90m.[39m [32;1mDONE[39;22m
+
+84 packages you are using are looking for funding.
+Use the `composer fund` command to find out more!
+> @php artisan vendor:publish --tag=laravel-assets --ansi --force
+
+  [37;44m INFO [39;49m No publishable resources for tag [1m[laravel-assets][22m.  
+
+No security vulnerability advisories found.

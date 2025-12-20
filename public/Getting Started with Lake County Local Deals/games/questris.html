@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questris - Question-Based Tetris</title>
+    <script>
+        // Audio system
+        let audioContext;
+        
+        function initAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.warn('Audio not supported');
+            }
+        }
+        
+        function createTone(frequency, duration, type = 'square', volume = 0.1) {
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+        
+        function playPlacePieceSound() {
+            createTone(300, 0.1, 'square', 0.05);
+        }
+        
+        function playCorrectPlacementSound() {
+            createTone(523, 0.15, 'sine', 0.1); // C5
+            setTimeout(() => createTone(659, 0.15, 'sine', 0.1), 150); // E5
+            setTimeout(() => createTone(784, 0.3, 'sine', 0.1), 300); // G5
+        }
+        
+        function playWrongPlacementSound() {
+            createTone(200, 0.5, 'sawtooth', 0.2);
+            setTimeout(() => createTone(150, 0.5, 'sawtooth', 0.15), 200);
+        }
+        
+        function playLineClearSound() {
+            createTone(800, 0.2, 'sine', 0.1);
+            setTimeout(() => createTone(1000, 0.2, 'sine', 0.1), 100);
+            setTimeout(() => createTone(1200, 0.3, 'sine', 0.1), 200);
+        }
+        
+        function playGameOverSound() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    createTone(400 - i * 20, 0.1, 'sine', 0.05);
+                }, i * 50);
+            }
+        }
+        
+        function playNewQuestionSound() {
+            createTone(440, 0.15, 'sine', 0.08);
+            setTimeout(() => createTone(554, 0.15, 'sine', 0.08), 150);
+        }
+        
+        function playMoveSound() {
+            createTone(400, 0.05, 'square', 0.03);
+        }
+        
+        function playRotateSound() {
+            createTone(600, 0.08, 'triangle', 0.04);
+        }
+        
+        function playDropSound() {
+            createTone(300, 0.12, 'square', 0.06);
+        }
+        
+        function playTetrisSound() {
+            // Special sound for clearing 4 lines (Tetris)
+            createTone(523, 0.2, 'sine', 0.12); // C5
+            setTimeout(() => createTone(659, 0.2, 'sine', 0.12), 200); // E5
+            setTimeout(() => createTone(784, 0.2, 'sine', 0.12), 400); // G5
+            setTimeout(() => createTone(1047, 0.4, 'sine', 0.15), 600); // C6
+        }
+
+        // Visual feedback system
+        function showAnswerFeedback(isCorrect) {
+            const feedback = document.createElement('div');
+            feedback.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 60px;
+                font-weight: bold;
+                color: white;
+                z-index: 10000;
+                pointer-events: none;
+                animation: feedbackFade 800ms ease-out forwards;
+                ${isCorrect ? 'background: #4CAF50; box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);' : 'background: #F44336; box-shadow: 0 0 20px rgba(244, 67, 54, 0.6);'}
+            `;
+            feedback.textContent = isCorrect ? '✓' : '✗';
+
+            // Add CSS animation if not already present
+            if (!document.querySelector('#feedback-style')) {
+                const style = document.createElement('style');
+                style.id = 'feedback-style';
+                style.textContent = `
+                    @keyframes feedbackFade {
+                        0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+                        50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+                        100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(feedback);
+            setTimeout(() => feedback.remove(), 800);
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        h3 {
+            margin: 0;
+            margin-bottom: .5rem;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .game-board {
+            position: relative;
+            border: 3px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+            width: min-content;
+        }
+
+        #gameCanvas {
+            display: block;
+            background: #f0f0f0;
+        }
+
+        .info-panel {
+            width: 300px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            border: 2px solid #ddd;
+        }
+
+        .score-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            font-weight: bold;
+        }
+
+        .final-score {
+            color: #007bff;
+            font-size: 1.2em;
+            border-top: 2px solid #ddd;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        .question-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff3cd;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            line-height: 1.4;
+            color: #df5d00;
+        }
+
+        .answer-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex: 1;
+        }
+
+        .btn-true {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-true:hover {
+            background: #218838;
+        }
+
+        .btn-false {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-false:hover {
+            background: #c82333;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .start-btn {
+            background: #007bff;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .start-btn:hover {
+            background: #0056b3;
+        }
+
+        .instructions {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 8px;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .instructions h4 {
+            margin: 0;
+            padding: 0;
+        }
+
+        .instructions ul {
+            margin: .5rem 0;
+            padding: 0 1rem;
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            z-index: 10;
+        }
+
+        .side-indicator {
+            position: absolute;
+            top: 10px;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .true-side {
+            left: 10px;
+            background: rgba(40, 167, 69, 0.8);
+        }
+
+        .false-side {
+            right: 10px;
+            background: rgba(220, 53, 69, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="game-container">
+            <div class="game-board">
+                <canvas id="gameCanvas"></canvas>
+                <div class="side-indicator true-side">TRUE</div>
+                <div class="side-indicator false-side">FALSE</div>
+                <div id="gameOver" class="game-over" style="display: none;">
+                    <h2>Game Over!</h2>
+                    <p id="finalScoreText"></p>
+                    <button onclick="startGame()" class="start-btn">Play Again</button>
+                </div>
+            </div>
+            <div class="info-panel">
+                <div class="score-section">
+                    <h3>Score</h3>
+                    <div class="score-item">
+                        <span>Lines Completed:</span>
+                        <span id="linesCompleted">0</span>
+                    </div>
+                    <div class="score-item">
+                        <span>Penalty Points:</span>
+                        <span id="penaltyPoints">0</span>
+                    </div>
+                    <div class="score-item final-score">
+                        <span>Final Score:</span>
+                        <span id="finalScore">0</span>
+                    </div>
+                </div>
+    
+                <div class="question-section">
+                    <h3>Current Question</h3>
+                    <div class="question-text" id="questionText">Press Start to begin!</div>
+                </div>
+    
+                <div class="controls">
+                    <button id="startBtn" class="start-btn" onclick="startGame()">Start Game</button>
+                </div>
+            </div>
+        </div>
+        <div class="instructions">
+            <h4>How to Play:</h4>
+            <ul>
+                <li>Read each True/False question that appears</li>
+                <li>Move pieces with Arrow Keys or WASD</li>
+                <li>Rotate with Up Arrow or W, Drop fast with Space</li>
+                <li>Answer by placing pieces: Green side = TRUE, Red side = FALSE</li>
+                <li>Your answer = where majority of piece lands</li>
+                <li>Each cell on wrong side adds 1 penalty point</li>
+                <li>Score = Lines Completed - Penalty Points</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        const BOARD_WIDTH = 16;
+        const BOARD_HEIGHT = 24;
+        const CELL_SIZE = 20;
+
+        canvas.width = BOARD_WIDTH * CELL_SIZE;
+        canvas.height = BOARD_HEIGHT * CELL_SIZE;
+        
+        let gameBoard = [];
+        let currentPiece = null;
+        let gameRunning = false;
+        let currentQuestion = null;
+        let dropTimer = 0;
+        let dropSpeed = 500;
+        let level = 1;
+        
+        let linesCompleted = 0;
+        let penaltyPoints = 0;
+        let questionPool = [];
+        let gameDataLoaded = false;
+        let lastQuestions = []; // Track last 3 questions to avoid repetition
+
+        const tetrisPieces = [
+            { shape: [[1,1,1,1]], color: '#667de8' }, // I
+            { shape: [[1,1],[1,1]], color: '#6874dc' }, // O
+            { shape: [[0,1,0],[1,1,1]], color: '#6d6acd' }, // T
+            { shape: [[0,1,1],[1,1,0]], color: '#6f61c2' }, // S
+            { shape: [[1,1,0],[0,1,1]], color: '#715cba' }, // Z
+            { shape: [[1,0,0],[1,1,1]], color: '#7453ad' }, // L
+            { shape: [[0,0,1],[1,1,1]], color: '#754ba2' }  // J
+        ];
+
+        function initGame() {
+            gameBoard = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
+            linesCompleted = 0;
+            penaltyPoints = 0;
+            dropSpeed = 500;
+            level = 1;
+            lastQuestions = []; // Reset question history for new game
+            updateScore();
+        }
+
+        // Function to load game data from data.json
+        async function loadGameData() {
+            try {
+                const response = await fetch('./data.json?'+Math.round(Math.random()*1000));
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const gameData = await response.json();
+                
+                if (gameData && gameData.questris_data && Array.isArray(gameData.questris_data)) {
+                    questionPool = gameData.questris_data;
+                    gameDataLoaded = true;
+                    console.log(`Loaded ${questionPool.length} questions from data.json`);
+                } else {
+                    console.warn('No questris_data found in data.json, using fallback questions');
+                    // Fallback questions if none found in data.json
+                    questionPool = [
+                        { question: "This course contains educational content.", answer: true },
+                        { question: "Learning is important for growth.", answer: true },
+                        { question: "Knowledge should be applied practically.", answer: true },
+                        { question: "Understanding concepts requires practice.", answer: true },
+                        { question: "Education helps develop skills.", answer: true },
+                        { question: "This course has no educational value.", answer: false },
+                        { question: "Learning is always effortless.", answer: false },
+                        { question: "Knowledge should never be shared.", answer: false },
+                        { question: "Practice makes concepts more confusing.", answer: false },
+                        { question: "Education has no practical applications.", answer: false }
+                    ];
+                    gameDataLoaded = true;
+                }
+            } catch (error) {
+                console.error('Error loading game data:', error);
+                // Use fallback questions on error
+                questionPool = [
+                    { question: "This course contains educational content.", answer: true },
+                    { question: "Learning is important for growth.", answer: true },
+                    { question: "Knowledge should be applied practically.", answer: true },
+                    { question: "Understanding concepts requires practice.", answer: true },
+                    { question: "Education helps develop skills.", answer: true },
+                    { question: "This course has no educational value.", answer: false },
+                    { question: "Learning is always effortless.", answer: false },
+                    { question: "Knowledge should never be shared.", answer: false },
+                    { question: "Practice makes concepts more confusing.", answer: false },
+                    { question: "Education has no practical applications.", answer: false }
+                ];
+                gameDataLoaded = true;
+            }
+        }
+
+        function getRandomQuestion() {
+            if (questionPool.length === 0) {
+                return { question: "Loading questions...", answer: true };
+            }
+            
+            // If we have 3 or fewer total questions, just pick randomly to avoid infinite loops
+            if (questionPool.length <= 3) {
+                return questionPool[Math.floor(Math.random() * questionPool.length)];
+            }
+            
+            // Filter out the last 3 questions to avoid repetition
+            const availableQuestions = questionPool.filter(question => {
+                return !lastQuestions.some(lastQ => lastQ.question === question.question);
+            });
+            
+            // If we've somehow filtered out everything (shouldn't happen), reset and use full pool
+            if (availableQuestions.length === 0) {
+                lastQuestions = [];
+                return questionPool[Math.floor(Math.random() * questionPool.length)];
+            }
+            
+            // Select randomly from available questions
+            const selectedQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+            
+            // Add to last questions list and keep only the most recent 3
+            lastQuestions.push(selectedQuestion);
+            if (lastQuestions.length > 3) {
+                lastQuestions.shift(); // Remove the oldest question
+            }
+            
+            return selectedQuestion;
+        }
+
+        function displayQuestion() {
+            currentQuestion = getRandomQuestion();
+            document.getElementById('questionText').textContent = currentQuestion.question;
+            playNewQuestionSound();
+        }
+
+        function createNewPiece() {
+            const pieceTemplate = tetrisPieces[Math.floor(Math.random() * tetrisPieces.length)];
+            currentPiece = {
+                shape: pieceTemplate.shape.map(row => [...row]),
+                color: pieceTemplate.color,
+                x: Math.floor(BOARD_WIDTH / 2) - Math.floor(pieceTemplate.shape[0].length / 2),
+                y: 0
+            };
+            displayQuestion();
+        }
+
+        function rotatePiece(piece) {
+            const rotated = [];
+            const rows = piece.shape.length;
+            const cols = piece.shape[0].length;
+            
+            for (let i = 0; i < cols; i++) {
+                rotated[i] = [];
+                for (let j = 0; j < rows; j++) {
+                    rotated[i][j] = piece.shape[rows - 1 - j][i];
+                }
+            }
+            return rotated;
+        }
+
+        function isValidPosition(piece, offsetX = 0, offsetY = 0, shape = null) {
+            const currentShape = shape || piece.shape;
+            const newX = piece.x + offsetX;
+            const newY = piece.y + offsetY;
+            
+            for (let y = 0; y < currentShape.length; y++) {
+                for (let x = 0; x < currentShape[y].length; x++) {
+                    if (currentShape[y][x]) {
+                        const boardX = newX + x;
+                        const boardY = newY + y;
+                        
+                        if (boardX < 0 || boardX >= BOARD_WIDTH || 
+                            boardY >= BOARD_HEIGHT || 
+                            (boardY >= 0 && gameBoard[boardY][boardX])) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        function placePiece() {
+            if (!currentPiece) return;
+            
+            let penalties = 0;
+            let leftSideCells = 0;
+            let rightSideCells = 0;
+            
+            // Play piece placement sound
+            playPlacePieceSound();
+            
+            // First, place the piece and count which side each cell is on
+            for (let y = 0; y < currentPiece.shape.length; y++) {
+                for (let x = 0; x < currentPiece.shape[y].length; x++) {
+                    if (currentPiece.shape[y][x]) {
+                        const boardX = currentPiece.x + x;
+                        const boardY = currentPiece.y + y;
+                        
+                        if (boardY >= 0) {
+                            gameBoard[boardY][boardX] = currentPiece.color;
+                            
+                            // Count which side this cell is on
+                            if (boardX < BOARD_WIDTH / 2) {
+                                leftSideCells++;
+                            } else {
+                                rightSideCells++;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Determine player's answer based on where majority of piece landed
+            const playerAnsweredTrue = leftSideCells > rightSideCells;
+            const correctAnswer = currentQuestion.answer;
+            
+            // Calculate penalties: each cell on the wrong side adds 1 penalty
+            const isCorrectAnswer = playerAnsweredTrue === correctAnswer;
+            if (isCorrectAnswer) {
+                // Correct answer: penalty for cells on wrong side
+                penalties = playerAnsweredTrue ? rightSideCells : leftSideCells;
+                // Show visual feedback and play sound if perfect placement
+                if (penalties === 0) {
+                    showAnswerFeedback(true);
+                    setTimeout(() => playCorrectPlacementSound(), 100);
+                }
+            } else {
+                // Wrong answer: penalty for cells on correct side
+                penalties = playerAnsweredTrue ? leftSideCells : rightSideCells;
+                // Show visual feedback and play wrong sound
+                showAnswerFeedback(false);
+                setTimeout(() => playWrongPlacementSound(), 100);
+            }
+            
+            penaltyPoints += penalties;
+            clearLines();
+            updateScore();
+            
+            if (isGameOver()) {
+                endGame();
+                return;
+            }
+            
+            createNewPiece();
+        }
+
+        function clearLines() {
+            let linesCleared = 0;
+            for (let y = BOARD_HEIGHT - 1; y >= 0; y--) {
+                if (gameBoard[y].every(cell => cell !== 0)) {
+                    gameBoard.splice(y, 1);
+                    gameBoard.unshift(Array(BOARD_WIDTH).fill(0));
+                    linesCleared++;
+                    y++;
+                }
+            }
+            linesCompleted += linesCleared;
+            
+            if (linesCleared > 0) {
+                level = Math.floor(linesCompleted / 10) + 1;
+                dropSpeed = Math.max(50, 500 - (level - 1) * 50);
+                
+                // Play appropriate line clear sound
+                if (linesCleared === 4) {
+                    playTetrisSound(); // Special Tetris sound for 4 lines
+                } else {
+                    playLineClearSound(); // Regular line clear sound
+                }
+            }
+        }
+
+        function isGameOver() {
+            return gameBoard[0].some(cell => cell !== 0);
+        }
+
+        function updateScore() {
+            document.getElementById('linesCompleted').textContent = linesCompleted;
+            document.getElementById('penaltyPoints').textContent = penaltyPoints;
+            document.getElementById('finalScore').textContent = Math.max(0, linesCompleted - penaltyPoints);
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = 'rgba(220, 53, 69, 0.3)';
+            ctx.fillRect(canvas.width / 2, 0, canvas.width / 2, canvas.height);
+
+            ctx.fillStyle = 'rgba(40, 167, 69, 0.3)';
+            ctx.fillRect(0, 0, canvas.width / 2, canvas.height);
+                        
+            // Draw placed pieces
+            for (let y = 0; y < BOARD_HEIGHT; y++) {
+                for (let x = 0; x < BOARD_WIDTH; x++) {
+                    if (gameBoard[y][x]) {
+                        ctx.fillStyle = gameBoard[y][x];
+                        ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE - 1, CELL_SIZE - 1);
+                    }
+                }
+            }
+            
+            // Draw current piece
+            if (currentPiece) {
+                ctx.fillStyle = currentPiece.color;
+                for (let y = 0; y < currentPiece.shape.length; y++) {
+                    for (let x = 0; x < currentPiece.shape[y].length; x++) {
+                        if (currentPiece.shape[y][x]) {
+                            const drawX = (currentPiece.x + x) * CELL_SIZE;
+                            const drawY = (currentPiece.y + y) * CELL_SIZE;
+                            ctx.fillRect(drawX, drawY, CELL_SIZE - 1, CELL_SIZE - 1);
+                        }
+                    }
+                }
+            }
+            
+            // Draw grid
+            ctx.strokeStyle = '#FFFFFF55';
+            ctx.lineWidth = 1;
+            for (let x = 0; x <= BOARD_WIDTH; x++) {
+                ctx.beginPath();
+                ctx.moveTo(x * CELL_SIZE, 0);
+                ctx.lineTo(x * CELL_SIZE, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = 0; y <= BOARD_HEIGHT; y++) {
+                ctx.beginPath();
+                ctx.moveTo(0, y * CELL_SIZE);
+                ctx.lineTo(canvas.width, y * CELL_SIZE);
+                ctx.stroke();
+            }
+
+            // Draw center line
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2, 0);
+            ctx.lineTo(canvas.width / 2, canvas.height);
+            ctx.stroke();
+
+        }
+
+        function gameLoop(timestamp) {
+            if (!gameRunning) return;
+            
+            if (timestamp - dropTimer > dropSpeed) {
+                if (currentPiece) {
+                    if (isValidPosition(currentPiece, 0, 1)) {
+                        currentPiece.y++;
+                    } else {
+                        placePiece();
+                    }
+                }
+                dropTimer = timestamp;
+            }
+            
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        async function startGame() {
+            // Ensure game data is loaded before starting
+            if (!gameDataLoaded) {
+                document.getElementById('startBtn').textContent = 'Loading...';
+                document.getElementById('startBtn').disabled = true;
+                await loadGameData();
+                document.getElementById('startBtn').disabled = false;
+            }
+            
+            gameRunning = true;
+            initAudio(); // Initialize audio on game start
+            document.getElementById('startBtn').textContent = 'Restart Game';
+            document.getElementById('gameOver').style.display = 'none';
+            
+            initGame();
+            createNewPiece();
+            dropTimer = performance.now();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function endGame() {
+            gameRunning = false;
+            playGameOverSound();
+            const finalScore = Math.max(0, linesCompleted - penaltyPoints);
+            document.getElementById('finalScoreText').textContent = 
+                `Lines: ${linesCompleted}, Penalties: ${penaltyPoints}, Final Score: ${finalScore}`;
+            document.getElementById('gameOver').style.display = 'block';
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (!gameRunning || !currentPiece) return;
+            
+            switch(e.code) {
+                case 'ArrowLeft':
+                case 'KeyA':
+                    if (isValidPosition(currentPiece, -1, 0)) {
+                        currentPiece.x--;
+                        playMoveSound();
+                    }
+                    break;
+                case 'ArrowRight':
+                case 'KeyD':
+                    if (isValidPosition(currentPiece, 1, 0)) {
+                        currentPiece.x++;
+                        playMoveSound();
+                    }
+                    break;
+                case 'ArrowDown':
+                case 'KeyS':
+                    if (isValidPosition(currentPiece, 0, 1)) {
+                        currentPiece.y++;
+                        playMoveSound();
+                    }
+                    break;
+                case 'ArrowUp':
+                case 'KeyW':
+                    const rotated = rotatePiece(currentPiece);
+                    if (isValidPosition(currentPiece, 0, 0, rotated)) {
+                        currentPiece.shape = rotated;
+                        playRotateSound();
+                    }
+                    break;
+                case 'Space':
+                    while (isValidPosition(currentPiece, 0, 1)) {
+                        currentPiece.y++;
+                    }
+                    playDropSound();
+                    break;
+            }
+            e.preventDefault();
+        });
+
+        // Initialize the game on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            draw();
+            // Preload game data
+            loadGameData().catch(error => {
+                console.error('Failed to preload game data:', error);
+            });
+        });
+        
+        draw();
+    </script>
+</body>
+</html>

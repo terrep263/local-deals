@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style class="vjs-styles-defaults">
+      .video-js {
+        width: 300px;
+        height: 150px;
+      }
+
+      .vjs-fluid {
+        padding-top: 56.25%
+      }
+    </style>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/png" href="./favicon.png">
+    <style type="text/css">
+
+        html,body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+        #openfl-content { background: #fff; width: 100%; height: 100%; }
+        #openfl-content { margin: 0 auto; }
+        #openfl-content > div { width: 100% !important; height: 100% !important; }
+        #openfl-content p { margin-top: 0; margin-bottom: 0; line-height: 1.3; min-height: 1em; }
+        .content-element { font-family: Arial; cursor: default; }
+        .video-js video:focus, .vjs-poster:focus, .vjs-text-track-display:focus { outline: none; }
+        .inside-jackdaw .vjs-youtube .vjs-iframe-blocker { display: block !important; }
+        .vjs-modal-dialog { display: none !important }
+        /* .vjs-control-bar { display: none !important } */
+        .is-ios #openfl-content, .is-ios #openfl-content * { cursor: pointer !important; }
+        .visually-hidden { opacity: 0 }
+
+    /*    #openfl-content div div { clip: unset !important; } /* to solve mysterious textfield cliping issue */
+
+        @font-face {
+            font-family: 'Arial Bold';
+            src: url('fonts/Arial Bold.eot');
+            src: url('fonts/Arial Bold.eot?#iefix') format('embedded-opentype'),
+            url('fonts/Arial Bold.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Arial';
+            src: url('fonts/Arial.eot');
+            src: url('fonts/Arial.eot?#iefix') format('embedded-opentype'),
+            url('fonts/Arial.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Arial Black';
+            src: url('fonts/Arial Black.eot');
+            src: url('fonts/Arial Black.eot?#iefix') format('embedded-opentype'),
+            url('fonts/Arial Black.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Roboto Medium';
+            src: url('fonts/Roboto/Roboto-Medium.eot');
+            src: url('fonts/Roboto/Roboto-Medium.eot?#iefix') format('embedded-opentype'),
+            url('fonts/Roboto/Roboto-Medium.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Roboto Light';
+            src: url('fonts/Roboto/Roboto-Light.eot');
+            src: url('fonts/Roboto/Roboto-Light.eot?#iefix') format('embedded-opentype'),
+            url('fonts/Roboto/Roboto-Light.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Roboto';
+            src: url('fonts/Roboto/Roboto-Regular.eot');
+            src: url('fonts/Roboto/Roboto-Regular.eot?#iefix') format('embedded-opentype'),
+            url('fonts/Roboto/Roboto-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Roboto Bold';
+            src: url('fonts/Roboto/Roboto-Bold.eot');
+            src: url('fonts/Roboto/Roboto-Bold.eot?#iefix') format('embedded-opentype'),
+            url('fonts/Roboto/Roboto-Bold.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Roboto Thin';
+            src: url('fonts/Roboto/Roboto-Thin.eot');
+            src: url('fonts/Roboto/Roboto-Thin.eot?#iefix') format('embedded-opentype'),
+            url('fonts/Roboto/Roboto-Thin.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Roboto Black';
+            src: url('fonts/Roboto/Roboto-Black.eot');
+            src: url('fonts/Roboto/Roboto-Black.eot?#iefix') format('embedded-opentype'),
+            url('fonts/Roboto/Roboto-Black.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+    </style>
+
+    <script>
+        var iPadApp = (navigator.userAgent.match(/(iPad)/) ||  /* iOS pre 13 */
+            (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) && /* iPad OS 13 */
+            location.protocol === 'app:';
+        if (!iPadApp) {
+            var head = document.head;
+            var style = document.createElement('style');
+            var css = "@font-face {\n" +
+                "                font-family: 'Arial Bold';\n" +
+                "                src: url('fonts/Arial Bold.svg#my-font-family') format('svg'),\n" +
+                "                url('fonts/Arial Bold.woff') format('woff');\n" +
+                "                font-weight: normal;\n" +
+                "                font-style: normal;\n" +
+                "            }\n" +
+                "@font-face {\n" +
+                "                font-family: 'Arial';\n" +
+                "                src: url('fonts/Arial.svg#my-font-family') format('svg'),\n" +
+                "                url('fonts/Arial.woff') format('woff');\n" +
+                "                font-weight: normal;\n" +
+                "                font-style: normal;\n" +
+                "            }\n" +
+                "@font-face {\n" +
+                "                font-family: 'Arial Black';\n" +
+                "                src: url('fonts/Arial Black.svg#my-font-family') format('svg'),\n" +
+                "                url('fonts/Arial Black.woff') format('woff');\n" +
+                "                font-weight: normal;\n" +
+                "                font-style: normal;\n" +
+                "            }\n" +
+                "@font-face {\n" +
+                "                font-family: 'Roboto Medium';\n" +
+                "                src: url('fonts/Roboto/Roboto-Medium.svg#my-font-family') format('svg'),\n" +
+                "                url('fonts/Roboto/Roboto-Medium.woff') format('woff');\n" +
+                "                font-weight: normal;\n" +
+                "                font-style: normal;\n" +
+                "            }\n" +
+                "@font-face {\n" +
+                "                font-family: 'Roboto Light';\n" +
+                "                src: url('fonts/Roboto/Roboto-Light.svg#my-font-family') format('svg'),\n" +
+                "                url('fonts/Roboto/Roboto-Light.woff') format('woff');\n" +
+                "                font-weight: normal;\n" +
+                "                font-style: normal;\n" +
+                "            }\n" +
+                "@font-face {\n" +
+                "                font-family: 'Roboto';\n" +
+                "                src: url('fonts/Roboto/Roboto-Regular.svg#my-font-family') format('svg'),\n" +
+                "                url('fonts/Roboto/Roboto-Regular.woff') format('woff');\n" +
+                "                font-weight: normal;\n" +
+                "                font-style: normal;\n" +
+                "            }\n" +
+                "@font-face {\n" +
+                "                font-family: 'Roboto Bold';\n" +
+                "                src: url('fonts/Roboto/Roboto-Bold.svg#my-font-family') format('svg'),\n" +
+                "                url('fonts/Roboto/Roboto-Bold.woff') format('woff');\n" +
+                "                font-weight: normal;\n" +
+                "                font-style: normal;\n" +
+                "            }\n" +
+                "@font-face {\n" +
+                "                font-family: 'Roboto Thin';\n" +
+                "                src: url('fonts/Roboto/Roboto-Thin.svg#my-font-family') format('svg'),\n" +
+                "                url('fonts/Roboto/Roboto-Thin.woff') format('woff');\n" +
+                "                font-weight: normal;\n" +
+                "                font-style: normal;\n" +
+                "            }\n" +
+                "@font-face {\n" +
+                "                font-family: 'Roboto Black';\n" +
+                "                src: url('fonts/Roboto/Roboto-Black.svg#my-font-family') format('svg'),\n" +
+                "                url('fonts/Roboto/Roboto-Black.woff') format('woff');\n" +
+                "                font-weight: normal;\n" +
+                "                font-style: normal;\n" +
+                "            }";
+            head.appendChild(style);
+            style.type = 'text/css';
+            if (style.styleSheet){
+                // This is required for IE8 and below.
+                style.styleSheet.cssText = css;
+            } else {
+                style.appendChild(document.createTextNode(css));
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" type="text/css" href="js/bundle.css">
+    <script src="js/bundle.js" type="text/javascript"></script>
+
+    <title>e-learning WMB</title>
+
+    <script type="text/javascript" name="cmifrag" src="js/fs_scorm.js"></script>
+</head>
+<body onload="onLoadThis();" onunload="SCOFinish()" onbeforeunload="SCOFinish()" id="room-body">
+
+    <div id="autoplay-check" style="display: none;"><video id="testVideo" width="400" controls><source src="data:video/mp4;base64,AAAAHGZ0eXBtcDQyAAAAAGlzb21tcDQyAAAC2G1vb3YAAABsbXZoZAAAAAB8AAABsAAAFIBAAAB0gAAAAAAABAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAIVdHJhawAAAFx0a2hkAAAAB3wAAAGwAABUAQAAAAABAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAABAAAAAAGdlb2QAAAAAAAAAOXBycAAAAAEAAwACABIAAAABAAEAAABAAAD2AAABAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" type="video/mp4"></video></div>
+    <script>
+        var _IframeAutoplayAvailable = true;
+        const testVideo = document.getElementById('testVideo');
+        testVideo.play().then(() => {
+            _IframeAutoplayAvailable = true;
+        }).catch((error) => {
+            _IframeAutoplayAvailable = false;
+        });
+        const IframeAutoplayDenied = () => !_IframeAutoplayAvailable;
+    </script>
+
+    <div id="openfl-content"></div>
+    <noscript>This webpage makes extensive use of JavaScript. Please enable JavaScript in your web browser to view this page.</noscript>
+
+    <div style="position: absolute; top: 0; right: 0; width: 45px; height: 34px; cursor: pointer;" onclick="closeThis();"></div>
+    <script type="text/javascript" name="earlyInit">
+        <!--
+
+        const onLoadThis = () => {
+            SCOInitialize();
+            let parentIframe = parent.parent.document.getElementById('launch-popup');
+            if (parentIframe) parentIframe.focus();
+        };
+
+        const gainFocus = () =>
+        {
+            setTimeout(() => {
+                var element2focus = document.getElementById('openfl-content').getElementsByTagName('a').item(0);
+                if (element2focus) element2focus.focus();
+            }, 1000);
+        };
+
+        const srSpeak = (text, priority) => {
+            var el = document.createElement("div");
+            var id = "speak-" + Date.now();
+            el.setAttribute("id", id);
+            el.setAttribute("aria-live", priority || "polite");
+            el.classList.add("visually-hidden");
+            document.body.appendChild(el);
+            window.setTimeout(function () { document.getElementById(id).innerHTML = text; }, 100);
+            window.setTimeout(function () { document.body.removeChild(document.getElementById(id)); }, 1000);
+        }
+
+        const decodeHtmlEntities = (html) =>
+        {
+            var txt = document.createElement("textarea");
+            txt.innerHTML = html;
+            return txt.value;
+        };
+
+        const printSlide = () => parent.document.getElementById('scoframe1').contentWindow.print();
+
+        function setFullScreen()
+        {
+            if (window.screenfull && screenfull.isEnabled && !screenfull.isFullscreen)
+            {
+                screenfull.request();
+                // Awoid locking orientation on unsuported Apple devices
+                if (!(/iPhone|iPad|iPod/i.test(navigator.userAgent))) screen.orientation.lock("landscape");
+            }
+        }
+
+        function closeThis()
+        {
+            if (window.screenfull && screenfull.isFullscreen) {
+                screenfull.exit();
+            }
+            SCOFinish();
+            if (typeof closeRoom === "function") {
+                closeRoom();
+            }
+        }
+
+        var spinner;
+
+        // Determine whether to attempt to initialize API before loading
+        // movie in case there is some ActionScript that fires off before
+        // the rest of the HTML page has finished loading.  This is
+        // configurable by setting the global boolean (g_bInitializeOnLoad)
+        // in the beginning of this file.  Default value is TRUE.
+
+        if (g_bInitializeOnLoad) {
+            SCOInitialize()
+        }
+
+        function html5Actions() {
+            var room,
+                afterJsLoad = function () {
+                    setTimeout(function () {
+                        if (typeof lime !== "undefined") {
+                            lime.embed('room', 'openfl-content', 1070, 650, {parameters: {}});
+                            if (spinner) {
+                                spinner.stop();
+                            }
+                        }
+                    }, 500);
+                };
+
+            if (typeof Spinner !== 'undefined') {
+                spinner = new Spinner({}).spin(document.body);
+            }
+
+            room = document.createElement("script");
+            room.src = './room.js';
+            document.body.appendChild(room);
+            room.onload = function () {
+                afterJsLoad();
+            };
+
+            window.addEventListener ("touchmove", function (event) { event.preventDefault (); }, { capture: false, passive: false });
+            window.addEventListener("resize", resize);
+            window.addEventListener("load", resize);
+            initialScale();
+            function initialScale() {
+                var scale = window.devicePixelRatio > 2 ? (2 / window.devicePixelRatio) : 1.0;
+                var meta = document.getElementById("viewport");
+                meta.setAttribute ('content', 'width=device-width, initial-scale=' + scale + ', user-scalable=no');
+            }
+            function resize(event) {
+                initialScale();
+                var parentIframe, inJackDaw;
+                try {
+                    parentIframe = parent.parent.document.getElementById('launch-popup');
+                    inJackDaw = parent.document.getElementById('openfl-content') != null;
+                }
+                catch (e) {
+                    // crossdomain
+                }
+                if (parentIframe) parentIframe.style.height = '650px';
+                var el = document.getElementById("openfl-content");
+                var scaleX = window.innerWidth / 1070;
+                var scaleY = window.innerHeight / 650;
+                if (scaleY < scaleX) {
+                    el.style.height = window.innerHeight + "px";
+                    el.style.width = scaleY * 1070 + "px";
+                    el.style.marginTop = "0";
+                    if (parentIframe) parentIframe.style.height = el.style.height;
+                }
+                else {
+                    el.style.width = window.innerWidth + "px";
+                    el.style.height = scaleX * 650 + "px";
+                    if (parentIframe) parentIframe.style.height = el.style.height;
+                    // if (inJackDaw) el.style.marginTop = (window.innerHeight - (scaleX * 650)) / 2 + "px";    // commented out to make room alight to the top in the Jackdaw, requested by Emil (SCOR-4713)
+                }
+            }
+        }
+
+        function getRestUrl() {
+            var getUrl = top.window.location;
+            return getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1] + '/api/index.php';
+        }
+
+        html5Actions(); // Default to HTML5
+
+        //-->
+    </script>
+    <script type="text/javascript" src="./js/rest.js"></script>
+
+    <script type="text/javascript">
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = (location.protocol.indexOf('http:') === -1 ? 'https:' : 'http:') + "//h5p.org/sites/all/modules/h5p/library/js/h5p-resizer.js";
+        document.body.appendChild(script);
+    </script>
+
+</body>
+</html>

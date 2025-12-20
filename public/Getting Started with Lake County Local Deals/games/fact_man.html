@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FactMan - Educational Pac-Man</title>
+    <script>
+        // Audio system
+        let audioContext;
+        
+        function initAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.warn('Audio not supported');
+            }
+        }
+        
+        function createTone(frequency, duration, type = 'square', volume = 0.1) {
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+        
+        function playDotSound() {
+            createTone(400, 0.1, 'sine', 0.05);
+        }
+        
+        function playQuestionSound() {
+            createTone(600, 0.2, 'sine', 0.08);
+            setTimeout(() => createTone(800, 0.2, 'sine', 0.08), 200);
+        }
+        
+        function playCorrectSound() {
+            createTone(523, 0.15, 'sine', 0.1); // C5
+            setTimeout(() => createTone(659, 0.15, 'sine', 0.1), 150); // E5
+            setTimeout(() => createTone(784, 0.3, 'sine', 0.1), 300); // G5
+        }
+        
+        function playWrongSound() {
+            createTone(200, 0.5, 'sawtooth', 0.2);
+            setTimeout(() => createTone(150, 0.5, 'sawtooth', 0.15), 200);
+        }
+        
+        function playGameOverSound() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    createTone(400 - i * 20, 0.1, 'sine', 0.05);
+                }, i * 50);
+            }
+        }
+        
+        function playMoveSound() {
+            createTone(220, 0.05, 'triangle', 0.02);
+        }
+        
+        function playGhostCollisionSound() {
+            createTone(100, 0.8, 'square', 0.15);
+            setTimeout(() => createTone(80, 0.5, 'square', 0.12), 200);
+            setTimeout(() => createTone(60, 0.3, 'square', 0.10), 400);
+        }
+        
+        function playLifeLostSound() {
+            createTone(400, 0.2, 'sine', 0.1);
+            setTimeout(() => createTone(350, 0.2, 'sine', 0.1), 200);
+            setTimeout(() => createTone(300, 0.2, 'sine', 0.1), 400);
+            setTimeout(() => createTone(250, 0.4, 'sine', 0.1), 600);
+        }
+        
+        function playWinGameSound() {
+            const melody = [523, 659, 784, 1047, 1319]; // C-E-G-C-E ascending
+            melody.forEach((note, i) => {
+                setTimeout(() => createTone(note, 0.4, 'sine', 0.15), i * 200);
+            });
+        }
+
+        // Visual feedback system
+        function showAnswerFeedback(isCorrect) {
+            const feedback = document.createElement('div');
+            feedback.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 60px;
+                font-weight: bold;
+                color: white;
+                z-index: 10000;
+                pointer-events: none;
+                animation: feedbackFade 800ms ease-out forwards;
+                ${isCorrect ? 'background: #4CAF50; box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);' : 'background: #F44336; box-shadow: 0 0 20px rgba(244, 67, 54, 0.6);'}
+            `;
+            feedback.textContent = isCorrect ? '✓' : '✗';
+
+            // Add CSS animation if not already present
+            if (!document.querySelector('#feedback-style')) {
+                const style = document.createElement('style');
+                style.id = 'feedback-style';
+                style.textContent = `
+                    @keyframes feedbackFade {
+                        0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+                        50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+                        100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+
+            document.body.appendChild(feedback);
+            setTimeout(() => feedback.remove(), 800);
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-container {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 3px solid #ffdd00;
+        }
+
+        h1 {
+            color: #ffdd00;
+            text-align: center;
+            margin: 0 0 20px 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .score {
+            color: #ffdd00;
+        }
+
+        .lives {
+            color: #ff6b6b;
+        }
+
+        #gameCanvas {
+            border: 3px solid #fff;
+            border-radius: 5px;
+            background: #000;
+            display: block;
+        }
+
+        .controls {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .start-btn {
+            background: #ffdd00;
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .start-btn:hover {
+            background: #ffd700;
+            transform: scale(1.05);
+        }
+
+        .start-btn:disabled {
+            background: #666;
+            color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Question Modal */
+        .question-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .question-box {
+            background: linear-gradient(145deg, #2a5298 0%, #1e3c72 100%);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            border: 3px solid #ffdd00;
+        }
+
+        .question-text {
+            color: white;
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .keyboard-hint {
+            color: #ffdd00;
+            font-size: 0.9em;
+            text-align: center;
+            margin-bottom: 20px;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        .answer-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .answer-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid #ffdd00;
+            padding: 15px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .answer-btn:hover {
+            background: rgba(255, 221, 0, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 221, 0, 0.3);
+        }
+
+        .answer-btn:active {
+            transform: translateY(0);
+        }
+
+        .answer-btn.focused {
+            background: rgba(255, 221, 0, 0.3);
+            border-color: #fff;
+            box-shadow: 0 0 15px rgba(255, 221, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .question-timer {
+            text-align: center;
+            color: #ff6b6b;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Game Over Modal */
+        .game-over {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .game-over-box {
+            background: linear-gradient(145deg, #722a2a 0%, #4a1e1e 100%);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            border: 3px solid #ff6b6b;
+        }
+
+        .game-over-box h2 {
+            color: #ff6b6b;
+            font-size: 2.5em;
+            margin: 0 0 20px 0;
+        }
+
+        .game-over-box p {
+            color: white;
+            font-size: 1.2em;
+            margin-bottom: 25px;
+        }
+
+        .instructions {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .instructions h3 {
+            margin: 0 0 10px 0;
+            color: #ffdd00;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 15px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .question-box {
+                padding: 20px;
+            }
+
+            .answer-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🟡 FactMan</h1>
+        
+        <div class="game-info">
+            <div class="score">Score: <span id="scoreValue">0</span></div>
+            <div class="lives">Lives: <span id="livesValue">3</span></div>
+        </div>
+
+        <canvas id="gameCanvas" width="840" height="840"></canvas>
+
+        <div class="controls">
+            <button id="startBtn" class="start-btn" onclick="startGame()">Start Game</button>
+        </div>
+
+        <div class="instructions">
+            <h3>How to Play:</h3>
+            <ul>
+                <li>Use arrow keys or WASD to move FactMan</li>
+                <li>Eat dots to gain points</li>
+                <li>When you eat a <strong>?</strong> question mark, answer the quiz question correctly</li>
+                <li>Wrong answers end the game!</li>
+                <li>Eat all question marks to win</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Question Modal -->
+    <div id="questionModal" class="question-modal hidden">
+        <div class="question-box">
+            <div id="questionTimer" class="question-timer">Time: <span id="timerValue">30</span>s</div>
+            <div id="questionText" class="question-text"></div>
+            <div class="keyboard-hint">Use ↑↓←→ to navigate answers, SPACE to select</div>
+            <div class="answer-options">
+                <button class="answer-btn" onclick="selectAnswer(0)" id="answer0"></button>
+                <button class="answer-btn" onclick="selectAnswer(1)" id="answer1"></button>
+                <button class="answer-btn" onclick="selectAnswer(2)" id="answer2"></button>
+                <button class="answer-btn" onclick="selectAnswer(3)" id="answer3"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div id="gameOverModal" class="game-over hidden">
+        <div class="game-over-box">
+            <h2>Game Over!</h2>
+            <p id="gameOverText"></p>
+            <p>Final Score: <span id="finalScore">0</span></p>
+            <button class="start-btn" onclick="resetGame()">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Game constants
+        const CELL_SIZE = 40;
+        const MAZE_WIDTH = 21;
+        const MAZE_HEIGHT = 21;
+        
+        // Game state
+        let gameRunning = false;
+        let gamePaused = false;
+        let score = 0;
+        let lives = 3;
+        let currentQuestion = null;
+        let questionTimer = 30;
+        let questionInterval = null;
+        let gameDataLoaded = false;
+        
+        // Player state
+        let player = {
+            x: 1,
+            y: 1,
+            pixelX: 1 * CELL_SIZE,
+            pixelY: 1 * CELL_SIZE,
+            direction: 'right',
+            nextDirection: 'right',
+            animationFrame: 0,
+            isMoving: false,
+            moveProgress: 0,
+            animationCounter: 0
+        };
+        
+        // Game objects
+        let maze = [];
+        let dots = [];
+        let questionMarks = [];
+        let usedQuestions = [];
+        let ghosts = [];
+
+        // Game constants
+        const MOVE_SPEED = 0.05; // Slightly faster player movement
+        const GHOST_SPEED = 0.04; // Ghost movement (slightly slower than player)
+        const GHOST_COLORS = ['#ff0000', '#ffb8ff', '#00ffff', '#ffb852'];
+        
+        // Question pool - loaded from data.json
+        let questionPool = [];
+        
+        // Initialize maze - simple maze pattern
+        function createMaze() {
+            // Create empty maze
+            maze = Array(MAZE_HEIGHT).fill().map(() => Array(MAZE_WIDTH).fill(0));
+            
+            // Create walls around the border
+            for (let y = 0; y < MAZE_HEIGHT; y++) {
+                for (let x = 0; x < MAZE_WIDTH; x++) {
+                    if (x === 0 || x === MAZE_WIDTH - 1 || y === 0 || y === MAZE_HEIGHT - 1) {
+                        maze[y][x] = 1; // Wall
+                    }
+                }
+            }
+            
+            // Add some internal walls to make it more maze-like
+            for (let y = 2; y < MAZE_HEIGHT - 2; y += 4) {
+                for (let x = 2; x < MAZE_WIDTH - 2; x += 4) {
+                    // Skip the center area where ghosts spawn
+                    const centerX = Math.floor(MAZE_WIDTH / 2);
+                    const centerY = Math.floor(MAZE_HEIGHT / 2);
+                    if (Math.abs(x - centerX) <= 3 && Math.abs(y - centerY) <= 3) {
+                        continue;
+                    }
+                    
+                    // Create cross-shaped wall patterns
+                    maze[y][x] = 1;
+                    maze[y][x + 1] = 1;
+                    maze[y][x - 1] = 1;
+                    maze[y + 1][x] = 1;
+                    maze[y - 1][x] = 1;
+                }
+            }
+            
+            // Ensure player starting position is clear
+            maze[1][1] = 0;
+            maze[1][2] = 0;
+            maze[2][1] = 0;
+            
+            // Ensure ghost starting area is completely clear
+            const centerX = Math.floor(MAZE_WIDTH / 2);
+            const centerY = Math.floor(MAZE_HEIGHT / 2);
+            for (let y = centerY - 2; y <= centerY + 2; y++) {
+                for (let x = centerX - 2; x <= centerX + 2; x++) {
+                    if (x >= 0 && x < MAZE_WIDTH && y >= 0 && y < MAZE_HEIGHT) {
+                        maze[y][x] = 0;
+                    }
+                }
+            }
+        }
+        
+        // Create dots and question marks
+        function createGameObjects() {
+            dots = [];
+            questionMarks = [];
+            
+            for (let y = 1; y < MAZE_HEIGHT - 1; y++) {
+                for (let x = 1; x < MAZE_WIDTH - 1; x++) {
+                    if (maze[y][x] === 0) {
+                        // Skip player starting area
+                        if (x === 1 && y === 1) continue;
+                        
+                        // Skip ghost starting areas (center of maze)
+                        const centerX = Math.floor(MAZE_WIDTH / 2);
+                        const centerY = Math.floor(MAZE_HEIGHT / 2);
+                        if (Math.abs(x - centerX) <= 2 && Math.abs(y - centerY) <= 2) continue;
+                        
+                        // Randomly place question marks (about 15% chance)
+                        if (Math.random() < 0.12) {
+                            questionMarks.push({ x, y });
+                        } else {
+                            dots.push({ x, y });
+                        }
+                    }
+                }
+            }
+            
+            // Ensure we have at least 4 question marks
+            while (questionMarks.length < 4) {
+                const freeCells = [];
+                for (let y = 2; y < MAZE_HEIGHT - 2; y++) {
+                    for (let x = 2; x < MAZE_WIDTH - 2; x++) {
+                        if (maze[y][x] === 0 && 
+                            !dots.some(d => d.x === x && d.y === y) &&
+                            !questionMarks.some(q => q.x === x && q.y === y)) {
+                            freeCells.push({ x, y });
+                        }
+                    }
+                }
+                
+                if (freeCells.length > 0) {
+                    const randomCell = freeCells[Math.floor(Math.random() * freeCells.length)];
+                    questionMarks.push(randomCell);
+                    
+                    // Remove from dots if it was there
+                    dots = dots.filter(d => !(d.x === randomCell.x && d.y === randomCell.y));
+                }
+            }
+        }
+
+        // Create ghosts
+        function createGhosts() {
+            ghosts = [];
+            const centerX = Math.floor(MAZE_WIDTH / 2);
+            const centerY = Math.floor(MAZE_HEIGHT / 2);
+            
+            // Create 3 ghosts
+            const ghostPositions = [
+                { x: centerX - 1, y: centerY },
+                { x: centerX, y: centerY },
+                { x: centerX + 1, y: centerY }
+            ];
+            
+            for (let i = 0; i < 3; i++) {
+                const pos = ghostPositions[i];
+                ghosts.push({
+                    x: pos.x,
+                    y: pos.y,
+                    pixelX: pos.x * CELL_SIZE,
+                    pixelY: pos.y * CELL_SIZE,
+                    direction: ['up', 'down', 'left', 'right'][Math.floor(Math.random() * 4)],
+                    color: GHOST_COLORS[i],
+                    isMoving: false,
+                    moveProgress: 0,
+                    animationCounter: i * 10, // Offset animations
+                    lastX: -1,
+                    lastY: -1
+                });
+            }
+        }
+        
+        // Initialize game
+        function initGame() {
+            createMaze();
+            createGameObjects();
+            createGhosts();
+            
+            player = {
+                x: 1,
+                y: 1,
+                pixelX: 1 * CELL_SIZE,
+                pixelY: 1 * CELL_SIZE,
+                direction: 'right',
+                nextDirection: 'right',
+                animationFrame: 0,
+                isMoving: false,
+                moveProgress: 0,
+                animationCounter: 0
+            };
+            
+            score = 0;
+            lives = 3;
+            usedQuestions = [];
+            updateUI();
+        }
+        
+        // Function to load game data from data.json
+        async function loadGameData() {
+            try {
+                const response = await fetch('./data.json?'+Math.round(Math.random()*1000));
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const gameData = await response.json();
+                
+                if (gameData && gameData.fact_man_data && Array.isArray(gameData.fact_man_data)) {
+                    questionPool = gameData.fact_man_data;
+                    gameDataLoaded = true;
+                    console.log(`Loaded ${questionPool.length} FactMan questions from data.json`);
+                } else {
+                    console.warn('No fact_man_data found in data.json, using fallback questions');
+                    // Fallback questions if none found in data.json
+                    questionPool = [
+                        {
+                            question: "What is the main topic of this course?",
+                            options: ["Subject matter", "Entertainment", "Sports", "Cooking"],
+                            correct: 0
+                        },
+                        {
+                            question: "Learning helps develop what?",
+                            options: ["Confusion", "Skills", "Problems", "Stress"],
+                            correct: 1
+                        },
+                        {
+                            question: "Knowledge should be applied how?",
+                            options: ["Never", "Rarely", "Practically", "Theoretically only"],
+                            correct: 2
+                        },
+                        {
+                            question: "Education has what kind of value?",
+                            options: ["No value", "Limited value", "Negative value", "High value"],
+                            correct: 3
+                        },
+                        {
+                            question: "Understanding concepts requires what?",
+                            options: ["Practice", "Luck", "Magic", "Nothing"],
+                            correct: 0
+                        },
+                        {
+                            question: "This course contains what type of content?",
+                            options: ["Random", "Educational", "Meaningless", "Harmful"],
+                            correct: 1
+                        },
+                        {
+                            question: "Learning is important for what?",
+                            options: ["Nothing", "Waste time", "Growth", "Confusion"],
+                            correct: 2
+                        },
+                        {
+                            question: "How should knowledge be shared?",
+                            options: ["Never shared", "Rarely shared", "Sometimes shared", "Freely shared"],
+                            correct: 3
+                        }
+                    ];
+                    gameDataLoaded = true;
+                }
+            } catch (error) {
+                console.error('Error loading game data:', error);
+                // Use fallback questions on error
+                questionPool = [
+                    {
+                        question: "What is the main topic of this course?",
+                        options: ["Subject matter", "Entertainment", "Sports", "Cooking"],
+                        correct: 0
+                    },
+                    {
+                        question: "Learning helps develop what?",
+                        options: ["Confusion", "Skills", "Problems", "Stress"],
+                        correct: 1
+                    },
+                    {
+                        question: "Knowledge should be applied how?",
+                        options: ["Never", "Rarely", "Practically", "Theoretically only"],
+                        correct: 2
+                    },
+                    {
+                        question: "Education has what kind of value?",
+                        options: ["No value", "Limited value", "Negative value", "High value"],
+                        correct: 3
+                    },
+                    {
+                        question: "Understanding concepts requires what?",
+                        options: ["Practice", "Luck", "Magic", "Nothing"],
+                        correct: 0
+                    },
+                    {
+                        question: "This course contains what type of content?",
+                        options: ["Random", "Educational", "Meaningless", "Harmful"],
+                        correct: 1
+                    }
+                ];
+                gameDataLoaded = true;
+            }
+        }
+
+        // Update UI elements
+        function updateUI() {
+            document.getElementById('scoreValue').textContent = score;
+            document.getElementById('livesValue').textContent = lives;
+        }
+        
+        // Check if player can move to position
+        function canMoveTo(x, y) {
+            return x >= 0 && x < MAZE_WIDTH && y >= 0 && y < MAZE_HEIGHT && maze[y][x] === 0;
+        }
+        
+        // Move player with smooth animation
+        function movePlayer() {
+            if (gamePaused) return;
+            
+            // Update animation counter for mouth movement
+            player.animationCounter++;
+            
+            // If not currently moving, start a new move
+            if (!player.isMoving) {
+                // Try to change direction if requested
+                let testX = player.x;
+                let testY = player.y;
+                
+                switch (player.nextDirection) {
+                    case 'up': testY--; break;
+                    case 'down': testY++; break;
+                    case 'left': testX--; break;
+                    case 'right': testX++; break;
+                }
+                
+                if (canMoveTo(testX, testY)) {
+                    player.direction = player.nextDirection;
+                }
+                
+                // Try to move in current direction
+                testX = player.x;
+                testY = player.y;
+                
+                switch (player.direction) {
+                    case 'up': testY--; break;
+                    case 'down': testY++; break;
+                    case 'left': testX--; break;
+                    case 'right': testX++; break;
+                }
+                
+                if (canMoveTo(testX, testY)) {
+                    player.isMoving = true;
+                    player.moveProgress = 0;
+                    player.targetX = testX;
+                    player.targetY = testY;
+                }
+            } else {
+                // Continue current move
+                player.moveProgress += MOVE_SPEED;
+                
+                if (player.moveProgress >= 1.0) {
+                    // Move complete
+                    player.x = player.targetX;
+                    player.y = player.targetY;
+                    player.pixelX = player.x * CELL_SIZE;
+                    player.pixelY = player.y * CELL_SIZE;
+                    player.isMoving = false;
+                    player.moveProgress = 0;
+                    player.animationFrame++;
+                    
+                    // Play movement sound when move is complete
+                    playMoveSound();
+                    
+                    checkCollisions();
+                } else {
+                    // Update pixel position for smooth animation
+                    const startX = player.x * CELL_SIZE;
+                    const startY = player.y * CELL_SIZE;
+                    const endX = player.targetX * CELL_SIZE;
+                    const endY = player.targetY * CELL_SIZE;
+                    
+                    player.pixelX = startX + (endX - startX) * player.moveProgress;
+                    player.pixelY = startY + (endY - startY) * player.moveProgress;
+                }
+            }
+        }
+        
+        // Move ghosts with AI
+        function moveGhosts() {
+            if (gamePaused) return;
+            
+            ghosts.forEach(ghost => {
+                // Update animation counter
+                ghost.animationCounter++;
+                
+                if (!ghost.isMoving) {
+                    // Choose new direction
+                    const directions = ['up', 'down', 'left', 'right'];
+                    const possibleMoves = [];
+                    
+                    directions.forEach(dir => {
+                        let testX = ghost.x;
+                        let testY = ghost.y;
+                        
+                        switch (dir) {
+                            case 'up': testY--; break;
+                            case 'down': testY++; break;
+                            case 'left': testX--; break;
+                            case 'right': testX++; break;
+                        }
+                        
+                        if (canMoveTo(testX, testY)) {
+                            possibleMoves.push({dir, x: testX, y: testY});
+                        }
+                    });
+                    
+                    if (possibleMoves.length > 0) {
+                        // Simple AI: sometimes move toward player, sometimes random
+                        let chosenMove;
+                        
+                        // Avoid moving back to the same position (prevent oscillation)
+                        const filteredMoves = possibleMoves.filter(move => {
+                            return !(ghost.lastX === move.x && ghost.lastY === move.y);
+                        });
+                        
+                        const movesToConsider = filteredMoves.length > 0 ? filteredMoves : possibleMoves;
+                        
+                        if (Math.random() < 0.4) {
+                            // Move toward player (increased from 30% to 40%)
+                            const dx = player.x - ghost.x;
+                            const dy = player.y - ghost.y;
+                            
+                            let preferredDir;
+                            if (Math.abs(dx) > Math.abs(dy)) {
+                                preferredDir = dx > 0 ? 'right' : 'left';
+                            } else {
+                                preferredDir = dy > 0 ? 'down' : 'up';
+                            }
+                            
+                            chosenMove = movesToConsider.find(m => m.dir === preferredDir) || 
+                                        movesToConsider[Math.floor(Math.random() * movesToConsider.length)];
+                        } else {
+                            // Random move
+                            chosenMove = movesToConsider[Math.floor(Math.random() * movesToConsider.length)];
+                        }
+                        
+                        // Remember previous position
+                        ghost.lastX = ghost.x;
+                        ghost.lastY = ghost.y;
+                        
+                        ghost.direction = chosenMove.dir;
+                        ghost.targetX = chosenMove.x;
+                        ghost.targetY = chosenMove.y;
+                        ghost.isMoving = true;
+                        ghost.moveProgress = 0;
+                    }
+                } else {
+                    // Continue current move - now faster than player
+                    ghost.moveProgress += GHOST_SPEED;
+                    
+                    if (ghost.moveProgress >= 1.0) {
+                        // Move complete
+                        ghost.x = ghost.targetX;
+                        ghost.y = ghost.targetY;
+                        ghost.pixelX = ghost.x * CELL_SIZE;
+                        ghost.pixelY = ghost.y * CELL_SIZE;
+                        ghost.isMoving = false;
+                        ghost.moveProgress = 0;
+                        
+                        // Check for collision with player when ghost completes move
+                        if (ghost.x === player.x && ghost.y === player.y) {
+                            handleGhostCollision();
+                        }
+                    } else {
+                        // Update pixel position for smooth animation
+                        const startX = ghost.x * CELL_SIZE;
+                        const startY = ghost.y * CELL_SIZE;
+                        const endX = ghost.targetX * CELL_SIZE;
+                        const endY = ghost.targetY * CELL_SIZE;
+                        
+                        ghost.pixelX = startX + (endX - startX) * ghost.moveProgress;
+                        ghost.pixelY = startY + (endY - startY) * ghost.moveProgress;
+                    }
+                }
+            });
+        }
+        
+        // Handle ghost collision with player
+        function handleGhostCollision() {
+            if (gamePaused) return; // Prevent multiple collisions during pause
+            
+            playGhostCollisionSound();
+            lives--;
+            updateUI();
+            
+            if (lives <= 0) {
+                gameOver("Caught by a ghost!");
+            } else {
+                playLifeLostSound();
+                // Reset player position
+                player.x = 1;
+                player.y = 1;
+                player.pixelX = 1 * CELL_SIZE;
+                player.pixelY = 1 * CELL_SIZE;
+                player.isMoving = false;
+                player.moveProgress = 0;
+                player.animationCounter = 0;
+                
+                // Brief pause
+                gamePaused = true;
+                setTimeout(() => {
+                    if (gameRunning) gamePaused = false;
+                }, 1500);
+            }
+        }
+
+        // Check for collisions with dots, question marks, and ghosts
+        function checkCollisions() {
+            // Check dots
+            const dotIndex = dots.findIndex(dot => dot.x === player.x && dot.y === player.y);
+            if (dotIndex !== -1) {
+                dots.splice(dotIndex, 1);
+                score += 10;
+                playDotSound();
+                updateUI();
+            }
+            
+            // Check question marks
+            const questionIndex = questionMarks.findIndex(q => q.x === player.x && q.y === player.y);
+            if (questionIndex !== -1) {
+                questionMarks.splice(questionIndex, 1);
+                playQuestionSound();
+                showQuestion();
+                score += 50; // Bonus for reaching question
+                updateUI();
+            }
+            
+            // Check ghost collisions (when player moves into ghost)
+            const ghostCollision = ghosts.some(ghost => ghost.x === player.x && ghost.y === player.y);
+            if (ghostCollision) {
+                handleGhostCollision();
+            }
+            
+            // Check win condition
+            if (questionMarks.length === 0) {
+                gameWin();
+            }
+        }
+        
+        // Show question modal
+        function showQuestion() {
+            gamePaused = true;
+            
+            // Get random unused question
+            const availableQuestions = questionPool.filter(q => !usedQuestions.includes(q));
+            if (availableQuestions.length === 0) {
+                // Reset if all questions used
+                usedQuestions = [];
+                currentQuestion = questionPool[Math.floor(Math.random() * questionPool.length)];
+            } else {
+                currentQuestion = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+            }
+            
+            usedQuestions.push(currentQuestion);
+            
+            // Display question
+            document.getElementById('questionText').textContent = currentQuestion.question;
+            for (let i = 0; i < 4; i++) {
+                document.getElementById(`answer${i}`).textContent = `${String.fromCharCode(65 + i)}) ${currentQuestion.options[i]}`;
+            }
+            
+            // Initialize answer selection
+            selectedAnswerIndex = 0;
+            updateAnswerFocus();
+            
+            document.getElementById('questionModal').classList.remove('hidden');
+            
+            // Start timer
+            questionTimer = 30;
+            questionInterval = setInterval(updateQuestionTimer, 1000);
+            updateQuestionTimer();
+        }
+        
+        // Update visual focus on answer buttons
+        function updateAnswerFocus() {
+            for (let i = 0; i < 4; i++) {
+                const button = document.getElementById(`answer${i}`);
+                if (i === selectedAnswerIndex) {
+                    button.classList.add('focused');
+                } else {
+                    button.classList.remove('focused');
+                }
+            }
+        }
+        
+        // Update question timer
+        function updateQuestionTimer() {
+            document.getElementById('timerValue').textContent = questionTimer;
+            questionTimer--;
+            
+            if (questionTimer < 0) {
+                clearInterval(questionInterval);
+                selectAnswer(-1); // Time's up - wrong answer
+            }
+        }
+        
+        // Handle answer selection
+        function selectAnswer(answerIndex) {
+            clearInterval(questionInterval);
+            document.getElementById('questionModal').classList.add('hidden');
+
+            const isCorrect = answerIndex === currentQuestion.correct;
+            showAnswerFeedback(isCorrect);
+
+            if (isCorrect) {
+                // Correct answer - continue game
+                setTimeout(() => {
+                    gamePaused = false;
+                    score += 100; // Bonus for correct answer
+                    playCorrectSound();
+                    updateUI();
+                }, 350);
+            } else {
+                // Wrong answer - lose life or end game
+                setTimeout(() => {
+                    lives--;
+                    playWrongSound();
+                    updateUI();
+
+                    if (lives <= 0) {
+                        gameOver("Wrong answer!");
+                    } else {
+                        gamePaused = false;
+                        // Brief pause to show life lost
+                        setTimeout(() => {
+                            if (gameRunning) gamePaused = false;
+                        }, 1000);
+                    }
+                }, 350);
+            }
+        }
+        
+        // Game over
+        function gameOver(reason) {
+            gameRunning = false;
+            playGameOverSound();
+            document.getElementById('gameOverText').textContent = reason;
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('gameOverModal').classList.remove('hidden');
+        }
+        
+        // Game win
+        function gameWin() {
+            gameRunning = false;
+            playWinGameSound();
+            document.getElementById('gameOverText').textContent = "Congratulations! You've answered all questions correctly!";
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('gameOverModal').classList.remove('hidden');
+        }
+        
+        // Reset game
+        function resetGame() {
+            document.getElementById('gameOverModal').classList.add('hidden');
+            document.getElementById('questionModal').classList.add('hidden');
+            clearInterval(questionInterval);
+            initGame();
+        }
+        
+        // Start game
+        async function startGame() {
+            // Ensure game data is loaded before starting
+            if (!gameDataLoaded) {
+                document.getElementById('startBtn').textContent = 'Loading...';
+                document.getElementById('startBtn').disabled = true;
+                await loadGameData();
+                document.getElementById('startBtn').disabled = false;
+            }
+            
+            gameRunning = true;
+            gamePaused = false;
+            initAudio(); // Initialize audio context
+            document.getElementById('startBtn').textContent = 'Restart Game';
+            initGame();
+            gameLoop();
+        }
+        
+        // Main game loop
+        function gameLoop() {
+            if (!gameRunning) return;
+            
+            movePlayer();
+            moveGhosts();
+            draw();
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Draw game
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw maze
+            ctx.fillStyle = '#0000ff';
+            for (let y = 0; y < MAZE_HEIGHT; y++) {
+                for (let x = 0; x < MAZE_WIDTH; x++) {
+                    if (maze[y][x] === 1) {
+                        ctx.fillRect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                    }
+                }
+            }
+            
+            // Draw dots
+            ctx.fillStyle = '#ffdd00';
+            dots.forEach(dot => {
+                ctx.beginPath();
+                ctx.arc(
+                    dot.x * CELL_SIZE + CELL_SIZE / 2,
+                    dot.y * CELL_SIZE + CELL_SIZE / 2,
+                    6, 0, Math.PI * 2
+                );
+                ctx.fill();
+            });
+            
+            // Draw question marks
+            ctx.fillStyle = '#ff6b6b';
+            ctx.font = 'bold 32px Arial';
+            ctx.textAlign = 'center';
+            questionMarks.forEach(q => {
+                ctx.fillText(
+                    '?',
+                    q.x * CELL_SIZE + CELL_SIZE / 2,
+                    q.y * CELL_SIZE + CELL_SIZE / 2 + 12
+                );
+            });
+            
+            // Draw ghosts
+            ghosts.forEach(ghost => {
+                const centerX = ghost.pixelX + CELL_SIZE / 2;
+                const centerY = ghost.pixelY + CELL_SIZE / 2;
+                const radius = CELL_SIZE / 2 - 4;
+                
+                // Ghost body animation (slight bounce)
+                const bounceOffset = Math.sin(ghost.animationCounter * 0.2) * 2;
+                const bodyY = centerY + bounceOffset;
+                
+                // Draw ghost body
+                ctx.fillStyle = ghost.color;
+                ctx.beginPath();
+                
+                // Rounded top
+                ctx.arc(centerX, bodyY - 4, radius, Math.PI, 0, false);
+                
+                // Side walls
+                ctx.lineTo(centerX + radius, bodyY + radius - 2);
+                
+                // Wavy bottom with animation
+                const waveOffset = Math.sin(ghost.animationCounter * 0.3) * 2;
+                const numWaves = 6;
+                for (let i = 0; i <= numWaves; i++) {
+                    const waveX = centerX + radius - (radius * 2 / numWaves) * i;
+                    const waveY = bodyY + radius - 2 + ((i % 2 === 0 ? -4 : 0) + waveOffset);
+                    ctx.lineTo(waveX, waveY);
+                }
+                
+                ctx.lineTo(centerX - radius, bodyY + radius - 2);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Draw white eyes
+                ctx.fillStyle = '#fff';
+                const eyeWidth = 6;
+                const eyeHeight = 8;
+                ctx.fillRect(centerX - 10, bodyY - 8, eyeWidth, eyeHeight);
+                ctx.fillRect(centerX + 4, bodyY - 8, eyeWidth, eyeHeight);
+                
+                // Draw eye pupils (move based on direction)
+                ctx.fillStyle = '#000';
+                let pupilOffsetX = 0;
+                let pupilOffsetY = 0;
+                
+                switch (ghost.direction) {
+                    case 'left': pupilOffsetX = -1; break;
+                    case 'right': pupilOffsetX = 1; break;
+                    case 'up': pupilOffsetY = -1; break;
+                    case 'down': pupilOffsetY = 1; break;
+                }
+                
+                ctx.fillRect(centerX - 10 + 2 + pupilOffsetX, bodyY - 6 + pupilOffsetY, 3, 4);
+                ctx.fillRect(centerX + 4 + 2 + pupilOffsetX, bodyY - 6 + pupilOffsetY, 3, 4);
+            });
+            
+            // Draw player (FactMan)
+            const centerX = player.pixelX + CELL_SIZE / 2;
+            const centerY = player.pixelY + CELL_SIZE / 2;
+            const radius = CELL_SIZE / 2 - 3;
+            
+            // Pac-Man mouth animation - faster animation
+            let startAngle = 0;
+            let endAngle = 2 * Math.PI;
+            
+            // Animate mouth opening/closing every 8 frames
+            const mouthOpen = Math.floor(player.animationCounter / 8) % 2 === 0;
+            
+            if (mouthOpen) {
+                // Mouth open
+                switch (player.direction) {
+                    case 'right':
+                        startAngle = 0.2 * Math.PI;
+                        endAngle = 1.8 * Math.PI;
+                        break;
+                    case 'left':
+                        startAngle = 1.2 * Math.PI;
+                        endAngle = 0.8 * Math.PI;
+                        break;
+                    case 'up':
+                        startAngle = 1.7 * Math.PI;
+                        endAngle = 1.3 * Math.PI;
+                        break;
+                    case 'down':
+                        startAngle = 0.7 * Math.PI;
+                        endAngle = 0.3 * Math.PI;
+                        break;
+                }
+            }
+            
+            ctx.fillStyle = '#ffdd00';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+            if (mouthOpen) {
+                ctx.lineTo(centerX, centerY);
+            }
+            ctx.fill();
+            
+            // Add Pac-Man eye
+            ctx.fillStyle = '#000';
+            let eyeX = centerX;
+            let eyeY = centerY - 6;
+            
+            // Adjust eye position based on direction
+            switch (player.direction) {
+                case 'left': eyeX -= 4; break;
+                case 'right': eyeX += 4; break;
+                case 'up': eyeY -= 4; break;
+                case 'down': eyeY += 4; break;
+            }
+            
+            ctx.fillRect(eyeX - 2, eyeY - 2, 4, 4);
+        }
+        
+        // Variables for question navigation
+        let selectedAnswerIndex = 0;
+        
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            // Check if it's a game movement key
+            const isGameKey = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'w', 'W', 'a', 'A', 's', 'S', 'd', 'D'].includes(e.key);
+            
+            // If game isn't running and player presses a game key, start the game
+            if (!gameRunning && isGameKey) {
+                startGame();
+                return;
+            }
+            
+            // Handle question answering with keyboard when game is paused for questions
+            if (gamePaused && !document.getElementById('questionModal').classList.contains('hidden')) {
+                switch (e.key) {
+                    case 'ArrowUp':
+                        // Toggle between A/C (0↔2) or B/D (1↔3)
+                        selectedAnswerIndex = selectedAnswerIndex < 2 ? selectedAnswerIndex + 2 : selectedAnswerIndex - 2;
+                        updateAnswerFocus();
+                        break;
+                    case 'ArrowDown':
+                        // Toggle between A/C (0↔2) or B/D (1↔3)
+                        selectedAnswerIndex = selectedAnswerIndex < 2 ? selectedAnswerIndex + 2 : selectedAnswerIndex - 2;
+                        updateAnswerFocus();
+                        break;
+                    case 'ArrowLeft':
+                        // Toggle between A/B (top row) or C/D (bottom row)
+                        selectedAnswerIndex = selectedAnswerIndex % 2 === 0 ? selectedAnswerIndex + 1 : selectedAnswerIndex - 1;
+                        updateAnswerFocus();
+                        break;
+                    case 'ArrowRight':
+                        // Toggle between A/B (top row) or C/D (bottom row)
+                        selectedAnswerIndex = selectedAnswerIndex % 2 === 0 ? selectedAnswerIndex + 1 : selectedAnswerIndex - 1;
+                        updateAnswerFocus();
+                        break;
+                    case ' ':
+                    case 'Enter':
+                        selectAnswer(selectedAnswerIndex);
+                        break;
+                }
+                e.preventDefault();
+                return;
+            }
+            
+            if (!gameRunning || gamePaused) return;
+            
+            switch (e.key) {
+                case 'ArrowUp':
+                case 'w':
+                case 'W':
+                    player.nextDirection = 'up';
+                    break;
+                case 'ArrowDown':
+                case 's':
+                case 'S':
+                    player.nextDirection = 'down';
+                    break;
+                case 'ArrowLeft':
+                case 'a':
+                case 'A':
+                    player.nextDirection = 'left';
+                    break;
+                case 'ArrowRight':
+                case 'd':
+                case 'D':
+                    player.nextDirection = 'right';
+                    break;
+            }
+            e.preventDefault();
+        });
+        
+        // Initialize the game on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initGame();
+            draw();
+            // Preload game data
+            loadGameData().catch(error => {
+                console.error('Failed to preload game data:', error);
+            });
+        });
+        
+        // Initialize display
+        initGame();
+        draw();
+    </script>
+</body>
+</html>

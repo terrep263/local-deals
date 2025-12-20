@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Brain Wars</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #0d0f1c;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            font-size: 1rem;
+        }
+
+        #game-container {
+            position: relative;
+            border: 2px solid #fff;
+            box-shadow: 0 0 20px #00ff00, 0 0 10px #00ff00 inset;
+            border-radius: 10px;
+            background-color: #000;
+        }
+
+        canvas {
+            display: block;
+            background-color: #000;
+        }
+
+        #game-ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff; /* White background for the header */
+            color: #000000; /* Black text for the header */
+            text-shadow: none; /* Remove text shadow for better visibility on white */
+        }
+
+        #course-name {
+            color: #000000; /* Black color for course name */
+            text-shadow: none; /* Remove text shadow */
+            font-size: 0.8rem;
+        }
+
+        #score, #high-score {
+            color: #000000; /* Black color for score */
+            text-shadow: none; /* Remove text shadow */
+            font-size: 0.8rem;
+        }
+
+        #question-display {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            text-align: center;
+            color: #ffffff;
+            font-size: 0.7rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #00ff00;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        #message-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            color: #ffffff;
+            min-width: 300px;
+            font-size: 0.7rem;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            z-index: 1000;
+        }
+
+        #message-box button {
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.6rem;
+            cursor: pointer;
+            margin-top: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 255, 0, 0.3);
+            transition: background-color 0.2s ease;
+        }
+
+        #message-box button:hover {
+            background-color: #00cc00;
+        }
+
+        #message-box button:active {
+            background-color: #009900;
+            transform: translateY(1px);
+        }
+
+        #start-graphic {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 10px;
+        }
+
+        #start-graphic svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #loading-message {
+            color: #ffff00;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas" width="800" height="600"></canvas>
+        <div id="game-ui">
+            <div id="course-name">Loading Course...</div>
+            <div>
+                <div id="score">Score: 0</div>
+                <div id="high-score">High Score: 0</div>
+            </div>
+        </div>
+        <div id="question-display"></div>
+        <div id="message-box" class="hidden">
+            <div id="start-graphic">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Spaceship at the bottom -->
+                    <path d="M40 90 L50 70 L60 90 Z" fill="#00ff00" stroke="#000" stroke-width="2"/>
+                    <!-- Flying enemies with brain icons -->
+                    <circle cx="20" cy="30" r="8" fill="#ff0000"/>
+                    <text x="20" y="35" text-anchor="middle" fill="white" font-size="10">🧠</text>
+                    
+                    <circle cx="50" cy="20" r="8" fill="#ff0000"/>
+                    <text x="50" y="25" text-anchor="middle" fill="white" font-size="10">🧠</text>
+                    
+                    <circle cx="80" cy="35" r="8" fill="#ff0000"/>
+                    <text x="80" y="40" text-anchor="middle" fill="white" font-size="10">🧠</text>
+                    
+                    <!-- Stars in background -->
+                    <circle cx="10" cy="60" r="1" fill="#ffff00"/>
+                    <circle cx="30" cy="50" r="1" fill="#ffff00"/>
+                    <circle cx="70" cy="60" r="1" fill="#ffff00"/>
+                    <circle cx="90" cy="50" r="1" fill="#ffff00"/>
+                </svg>
+            </div>
+            <div id="message-title">Welcome to Space Brain Wars!</div>
+            <div id="message-text">Your mission: Shoot the correct answers to educational questions while avoiding the wrong ones!</div>
+            <div id="loading-message" style="display: none;">Loading course data...</div>
+            <button id="action-btn">Start Game</button>
+        </div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const canvas = document.getElementById('game-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            const GAME_WIDTH = canvas.width;
+            const GAME_HEIGHT = canvas.height;
+            
+            let gameStarted = false;
+            let gameOver = false;
+            let gameOverSoundPlayed = false;
+            let score = 0;
+            let highScore = localStorage.getItem('spaceBrainHighScore') || 0;
+            let bullets = [];
+            let enemies = [];
+            let particles = [];
+            let stars = [];
+            let quizzes = [];
+            let currentQuiz = null;
+            let currentQuizIndex = 0;
+            let enemyMovementFrame = 0;
+            let verticalSpeed = 1.2; // Start with faster vertical movement
+            
+            // Initialize audio context after user interaction
+            let audioContext;
+            let sounds = {};
+            
+            // Initialize stars for background
+            function initStars() {
+                stars = [];
+                for (let i = 0; i < 100; i++) {
+                    stars.push({
+                        x: Math.random() * GAME_WIDTH,
+                        y: Math.random() * GAME_HEIGHT,
+                        speed: Math.random() * 2 + 1,
+                        brightness: Math.random() * 0.8 + 0.2
+                    });
+                }
+            }
+
+            // Initialize audio context and sounds
+            function initAudio() {
+                try {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.warn('Audio not supported');
+                }
+            }
+
+            // Create sound effects
+            function createTone(frequency, duration, type = 'square', volume = 0.1) {
+                if (!audioContext) return;
+                
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+                oscillator.type = type;
+                
+                gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + duration);
+            }
+
+            function playShootSound() {
+                createTone(800, 0.1, 'square', 0.05);
+                setTimeout(() => createTone(1000, 0.05, 'square', 0.03), 50);
+            }
+
+            function playHitSound() {
+                createTone(150, 0.3, 'sawtooth', 0.15);
+                setTimeout(() => createTone(100, 0.2, 'sawtooth', 0.1), 100);
+            }
+
+            function playCorrectSound() {
+                createTone(523, 0.15, 'sine', 0.1); // C5
+                setTimeout(() => createTone(659, 0.15, 'sine', 0.1), 150); // E5
+                setTimeout(() => createTone(784, 0.3, 'sine', 0.1), 300); // G5
+            }
+
+            function playWrongSound() {
+                createTone(200, 0.5, 'sawtooth', 0.2);
+                setTimeout(() => createTone(150, 0.5, 'sawtooth', 0.15), 200);
+            }
+
+            function playFallingSound() {
+                if (gameOverSoundPlayed) return;
+                gameOverSoundPlayed = true;
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(() => {
+                        createTone(400 - i * 20, 0.1, 'sine', 0.05);
+                    }, i * 50);
+                }
+            }
+
+            function startSwooshSound() {
+                createTone(100, 0.3, 'sine', 0.08);
+                setTimeout(() => createTone(200, 0.2, 'sine', 0.06), 100);
+                setTimeout(() => createTone(300, 0.1, 'sine', 0.04), 200);
+            }
+
+            // Game objects
+            function createBullet(x, y) {
+                return {
+                    x: x,
+                    y: y,
+                    width: 3,
+                    height: 8,
+                    speed: 7,
+                    draw() {
+                        ctx.fillStyle = '#ffff00';
+                        ctx.fillRect(this.x, this.y, this.width, this.height);
+                    },
+                    update() {
+                        this.y -= this.speed;
+                    }
+                };
+            }
+
+            function createSpaceship() {
+                return {
+                    width: 50,
+                    height: 30,
+                    x: GAME_WIDTH / 2 - 25,
+                    y: GAME_HEIGHT - 120, // Adjusted Y position to be above the question
+                    speed: 5,
+                    draw() {
+                        ctx.save(); // Save the current context state
+                        
+                        // Move to the center of the spaceship
+                        const centerX = this.x + this.width / 2;
+                        const centerY = this.y + this.height / 2;
+                        ctx.translate(centerX, centerY);
+                        
+                        // Rotate 45 degrees counter-clockwise to point upward
+                        ctx.rotate(-Math.PI / 4);
+                        
+                        ctx.font = '36px "Press Start 2P"';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillStyle = '#00ff00';
+                        ctx.fillText('🚀', 0, 0);
+                        
+                        ctx.restore(); // Restore the context state
+                    },
+                    update() {
+                        // Movement handled by keyboard input
+                    }
+                };
+            }
+
+            function createHitbox(x, y, width, height) {
+                return {
+                    x: x,
+                    y: y,
+                    width: width,
+                    height: height,
+                    draw() {
+                        if (this.isCorrect) {
+                            ctx.fillStyle = 'rgba(0, 255, 0, 0.2)';
+                        } else {
+                            ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
+                        }
+                        ctx.fillRect(this.x, this.y, this.width, this.height);
+                        ctx.strokeStyle = this.isCorrect ? '#00ff00' : '#ff0000';
+                        ctx.strokeRect(this.x, this.y, this.width, this.height);
+                        ctx.font = '12px "Press Start 2P"';
+                        ctx.fillStyle = '#ffffff';
+                        ctx.textAlign = 'center';
+                        ctx.fillText('✅', this.x, this.y);
+                    }
+                };
+            }
+
+            const spaceship = createSpaceship();
+            
+            // Enemy movement patterns
+            const ENEMY_WIDTH = 150;
+            const ENEMY_HEIGHT = 50;
+            const ENEMY_GRID_START_Y = 50;
+
+            // Icons now come directly from JSON data - no local mapping needed
+            
+            function getEnemyText(answer) {
+                // Use the icon and text directly from the JSON answer object
+                return {
+                    icon: answer.icon || '❓',  // Use icon from JSON or fallback
+                    word: answer.text || 'Unknown'  // Use text from JSON or fallback
+                };
+            }
+
+            function createEnemies(answers) {
+                const newEnemies = [];
+                // Shuffle answers to randomize their position
+                const shuffledAnswers = answers.sort(() => Math.random() - 0.5);
+
+                // Ensure we only create enemies for up to 3 answers to fit the screen
+                for (let i = 0; i < Math.min(shuffledAnswers.length, 3); i++) {
+                    const answer = shuffledAnswers[i];
+                    const enemyText = getEnemyText(answer);
+                    newEnemies.push({
+                        // Initial positions for the S-shaped movement
+                        initialX: 50 + i * (ENEMY_WIDTH + 50),
+                        initialY: ENEMY_GRID_START_Y,
+                        x: 50 + i * (ENEMY_WIDTH + 50),
+                        y: ENEMY_GRID_START_Y,
+                        width: ENEMY_WIDTH,
+                        height: ENEMY_HEIGHT,
+                        text: enemyText.word,
+                        icon: enemyText.icon,
+                        isCorrect: answer.isCorrect
+                    });
+                }
+                return newEnemies;
+            }
+
+            function drawEnemies() {
+                enemies.forEach(enemy => {
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+                    
+                    // Same border for all answers
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(enemy.x, enemy.y, enemy.width, enemy.height);
+                    
+                    // Draw icon (larger)
+                    ctx.font = '24px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillStyle = '#000000';
+                    ctx.fillText(enemy.icon, enemy.x + enemy.width / 2, enemy.y + 20);
+                    
+                    // Draw text (smaller, below icon)
+                    ctx.font = '10px "Press Start 2P"';
+                    ctx.fillStyle = '#000000';
+                    ctx.fillText(enemy.text, enemy.x + enemy.width / 2, enemy.y + 40);
+                });
+            }
+
+            function updateEnemies() {
+                enemyMovementFrame++;
+                
+                enemies.forEach(enemy => {
+                    // S-shaped horizontal movement
+                    const horizontalOffset = Math.sin(enemyMovementFrame * 0.02) * 50;
+                    enemy.x = enemy.initialX + horizontalOffset;
+                    
+                    // Vertical movement (gradually increasing speed)
+                    enemy.y += verticalSpeed;
+                    enemy.initialY += verticalSpeed;
+                });
+                
+                // Check if any enemy reached the spaceship area
+                enemies.forEach(enemy => {
+                    if (enemy.y + enemy.height >= spaceship.y) {
+                        if (enemy.isCorrect) {
+                            // Player missed the correct answer - game over
+                            endGameWithWrongAnswer();
+                        } else {
+                            // Wrong answer hit the ship - game over
+                            endGameWithWrongAnswer();
+                        }
+                    }
+                });
+                
+                // Remove enemies that are off screen
+                enemies = enemies.filter(enemy => enemy.y < GAME_HEIGHT + 100);
+            }
+
+            // Game UI elements
+            const scoreDisplay = document.getElementById('score');
+            const highScoreDisplay = document.getElementById('high-score');
+            const questionDisplay = document.getElementById('question-display');
+            const messageBox = document.getElementById('message-box');
+            const loadingMessage = document.getElementById('loading-message');
+            const messageTitle = document.getElementById('message-title');
+            const courseNameDisplay = document.getElementById('course-name');
+            const messageText = document.getElementById('message-text');
+            const actionBtn = document.getElementById('action-btn');
+
+            function updateScore() {
+                scoreDisplay.textContent = `Score: ${score}`;
+                highScoreDisplay.textContent = `High Score: ${highScore}`;
+            }
+
+            // Visual feedback system
+            function showAnswerFeedback(isCorrect) {
+                const feedback = document.createElement('div');
+                feedback.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 120px;
+                    height: 120px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 60px;
+                    font-weight: bold;
+                    color: white;
+                    z-index: 10000;
+                    pointer-events: none;
+                    animation: feedbackFade 800ms ease-out forwards;
+                    ${isCorrect ? 'background: #4CAF50; box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);' : 'background: #F44336; box-shadow: 0 0 20px rgba(244, 67, 54, 0.6);'}
+                `;
+                feedback.textContent = isCorrect ? '✓' : '✗';
+
+                // Add CSS animation if not already present
+                if (!document.querySelector('#feedback-style')) {
+                    const style = document.createElement('style');
+                    style.id = 'feedback-style';
+                    style.textContent = `
+                        @keyframes feedbackFade {
+                            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+                            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+                            100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+
+                document.body.appendChild(feedback);
+                setTimeout(() => feedback.remove(), 800);
+            }
+
+            function endGameWithWrongAnswer() {
+                console.log('endGameWithWrongAnswer called');
+                gameOver = true;
+                
+                // Find the correct answer for display
+                const correctAnswer = currentQuiz ? currentQuiz.answers.find(answer => answer.isCorrect) : null;
+                
+                // Clear all game objects
+                bullets = [];
+                enemies = [];
+                
+                // Force show the message box
+                messageBox.classList.remove('hidden');
+                messageBox.style.display = 'block';
+                questionDisplay.style.display = 'none';
+                messageTitle.textContent = 'Game Over';
+                messageText.innerHTML = `Incorrect!<br>The question was:<br><strong>"${currentQuiz.question}"</strong><br><br>The correct answer was: <strong>${correctAnswer ? correctAnswer.text : 'N/A'}</strong><br><br>Your score: ${score}`;
+                actionBtn.textContent = 'Restart';
+            }
+
+            function endGame(isWin) {
+                console.log('endGame called, isWin:', isWin);
+                gameOver = true;
+                bullets = [];
+                enemies = [];
+                
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('spaceBrainHighScore', highScore);
+                }
+                
+                // Force show the message box
+                messageBox.classList.remove('hidden');
+                messageBox.style.display = 'block';
+                questionDisplay.style.display = 'none'; // Hide the question on game over
+                
+                // Play the falling sound only if the game ended by losing
+                if (!isWin) {
+                    playFallingSound();
+                }
+                
+                if (isWin) {
+                    messageTitle.textContent = 'You Won!';
+                    messageText.innerHTML = `Congratulations, you completed all questions! Your score: ${score}`;
+                    actionBtn.textContent = 'Play Again';
+                } else {
+                    messageTitle.textContent = 'Game Over';
+                    messageText.innerHTML = `Your score: ${score}<br>High Score: ${highScore}`;
+                    actionBtn.textContent = 'Restart';
+                }
+            }
+
+            // Load questions from JSON data
+            async function loadAndParseXml() {
+                loadingMessage.style.display = 'block';
+                messageBox.classList.add('hidden'); // Hide message box during loading
+
+                try {
+                    const response = await fetch('./data.json?'+Math.round(Math.random()*1000));
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const gameData = await response.json();
+                    
+                    // Set course name from JSON
+                    if (gameData.course_title) {
+                        courseNameDisplay.textContent = gameData.course_title;
+                    }
+                    
+                    // Convert game data to quizzes format
+                    const tempQuizzes = [];
+                    if (gameData.space_brain_data && gameData.space_brain_data.questions) {
+                        for (const questionData of gameData.space_brain_data.questions) {
+                            tempQuizzes.push({
+                                question: questionData.question,
+                                answers: questionData.answers.sort(() => Math.random() - 0.5) // Shuffle answers
+                            });
+                        }
+                    }
+
+                    if (tempQuizzes.length === 0) {
+                        throw new Error('No valid questions found in data');
+                    }
+
+                    // Shuffle the questions for random order
+                    quizzes = tempQuizzes.sort(() => Math.random() - 0.5);
+                    loadingMessage.style.display = 'none';
+                    
+                    // Show the message box and set up the start screen
+                    messageBox.classList.remove('hidden');
+                    messageBox.style.display = 'block';
+                    messageTitle.textContent = 'Space Brain';
+                    messageText.textContent = 'Shoot the correct answers to score points!';
+                    actionBtn.textContent = 'Start Game';
+                    
+                    console.log('Game data loaded successfully, questions:', quizzes.length);
+
+                } catch (error) {
+                    console.error('Error loading game data:', error);
+                    loadingMessage.textContent = 'Error loading game data: ' + error.message;
+                }
+            }
+
+            function loadNextQuestion() {
+                console.log('Loading next question...', {
+                    currentQuizIndex: currentQuizIndex,
+                    quizzesLength: quizzes.length,
+                    currentQuiz: quizzes[currentQuizIndex]
+                });
+                
+                if (currentQuizIndex < quizzes.length) {
+                    currentQuiz = quizzes[currentQuizIndex];
+                    questionDisplay.textContent = currentQuiz.question;
+                    
+                    verticalSpeed += 0.2;
+
+                    enemies = createEnemies(currentQuiz.answers);
+                    enemyMovementFrame = 0;
+                    
+                    console.log('Created enemies:', enemies.length, 'for question:', currentQuiz.question);
+                    
+                    currentQuizIndex++;
+                } else {
+                    // All questions answered, reset index to loop
+                    currentQuizIndex = 0; 
+                    endGame(true); // Show win screen before restarting
+                }
+            }
+
+            function startGame() {
+                console.log('Starting game...', {
+                    quizzesLength: quizzes.length,
+                    gameStarted: gameStarted,
+                    gameOver: gameOver
+                });
+                
+                if (!gameStarted) {
+                    initAudio();
+                }
+                gameStarted = true;
+                gameOver = false;
+                score = 0;
+                currentQuizIndex = 0;
+                bullets = [];
+                enemies = [];
+                particles = [];
+                verticalSpeed = 1.2; // Reset speed
+                spaceship.x = GAME_WIDTH / 2 - spaceship.width / 2;
+                spaceship.y = GAME_HEIGHT - 120;
+                
+                // Force hide the message box
+                messageBox.style.display = 'none';
+                messageBox.classList.add('hidden');
+                questionDisplay.style.display = 'block';
+                gameOverSoundPlayed = false;
+                
+                startSwooshSound();
+
+                updateScore();
+                loadNextQuestion();
+                
+                console.log('Game started, enemies created:', enemies.length);
+            }
+
+            // Input handling
+            const keys = {};
+            document.addEventListener('keydown', (e) => {
+                keys[e.code] = true;
+
+                // Handle Enter key for start/restart
+                if (e.code === 'Enter') {
+                    if (!gameStarted || gameOver) {
+                        if (quizzes.length === 0) {
+                            loadAndParseXml();
+                        } else {
+                            startGame();
+                        }
+                    }
+                }
+            });
+
+            document.addEventListener('keyup', (e) => {
+                keys[e.code] = false;
+            });
+
+            // Mouse/touch input for mobile - COMMENTED OUT FOR KEYBOARD-ONLY MODE
+            /*
+            let mouseDown = false;
+            let mouseX = 0;
+
+            canvas.addEventListener('mousedown', (e) => {
+                mouseDown = true;
+                updateMousePosition(e);
+            });
+
+            canvas.addEventListener('mouseup', () => {
+                mouseDown = false;
+            });
+
+            canvas.addEventListener('mousemove', (e) => {
+                updateMousePosition(e);
+            });
+
+            function updateMousePosition(e) {
+                const rect = canvas.getBoundingClientRect();
+                mouseX = e.clientX - rect.left;
+            }
+
+            // Touch events for mobile
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                mouseDown = true;
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                mouseX = touch.clientX - rect.left;
+            });
+
+            canvas.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                mouseDown = false;
+            });
+
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const rect = canvas.getBoundingClientRect();
+                mouseX = touch.clientX - rect.left;
+            });
+            */
+
+            // Handle action button click
+            actionBtn.addEventListener('click', () => {
+                // Remove the condition that prevents action when messageBox is hidden
+                // This was causing the game to become unresponsive
+                
+                if (!gameStarted || gameOver) {
+                    if (quizzes.length === 0) {
+                        loadAndParseXml();
+                    } else {
+                        startGame();
+                    }
+                }
+            });
+
+            // Collision detection
+            function checkCollisions() {
+                bullets.forEach((bullet, bulletIndex) => {
+                    enemies.forEach((enemy, enemyIndex) => {
+                        if (bullet.x < enemy.x + enemy.width &&
+                            bullet.x + bullet.width > enemy.x &&
+                            bullet.y < enemy.y + enemy.height &&
+                            bullet.y + bullet.height > enemy.y) {
+                            
+                            // Remove bullet and enemy
+                            bullets.splice(bulletIndex, 1);
+                            enemies.splice(enemyIndex, 1);
+                            
+                            if (enemy.isCorrect) {
+                                // Correct answer hit - proceed to next question
+                                showAnswerFeedback(true);
+                                score += 100;
+                                playCorrectSound();
+
+                                // Clear all remaining enemies and load next question
+                                enemies = [];
+                                bullets = [];
+
+                                setTimeout(() => {
+                                    loadNextQuestion();
+                                }, 500);
+                            } else {
+                                // Wrong answer hit - game over
+                                showAnswerFeedback(false);
+                                playWrongSound();
+                                setTimeout(() => {
+                                    endGameWithWrongAnswer();
+                                }, 350);
+                                return;
+                            }
+                            
+                            updateScore();
+                        }
+                    });
+                });
+            }
+
+            // Particle system for visual effects
+            function createParticle(x, y, color) {
+                return {
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 4,
+                    vy: (Math.random() - 0.5) * 4,
+                    color: color,
+                    life: 30,
+                    maxLife: 30,
+                    draw() {
+                        ctx.globalAlpha = this.life / this.maxLife;
+                        ctx.fillStyle = this.color;
+                        ctx.fillRect(this.x, this.y, 2, 2);
+                        ctx.globalAlpha = 1;
+                    },
+                    update() {
+                        this.x += this.vx;
+                        this.y += this.vy;
+                        this.life--;
+                    }
+                };
+            }
+
+            function updateParticles() {
+                particles.forEach((particle, index) => {
+                    particle.update();
+                    if (particle.life <= 0) {
+                        particles.splice(index, 1);
+                    }
+                });
+            }
+
+            function drawParticles() {
+                particles.forEach(particle => {
+                    particle.draw();
+                });
+            }
+
+            // Star field animation
+            function updateStars() {
+                stars.forEach(star => {
+                    star.y += star.speed;
+                    if (star.y > GAME_HEIGHT) {
+                        star.y = 0;
+                        star.x = Math.random() * GAME_WIDTH;
+                    }
+                });
+            }
+
+            function drawStars() {
+                stars.forEach(star => {
+                    ctx.globalAlpha = star.brightness;
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(star.x, star.y, 1, 1);
+                });
+                ctx.globalAlpha = 1;
+            }
+
+            // Main game loop
+            function gameLoop() {
+                // Clear canvas
+                ctx.fillStyle = '#0d0f1c';
+                ctx.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+
+                drawStars();
+                updateStars();
+
+                if (gameStarted && !gameOver) {
+                    // Handle input
+                    if (keys['ArrowLeft'] || keys['KeyA']) {
+                        spaceship.x = Math.max(0, spaceship.x - spaceship.speed);
+                    }
+                    if (keys['ArrowRight'] || keys['KeyD']) {
+                        spaceship.x = Math.min(GAME_WIDTH - spaceship.width, spaceship.x + spaceship.speed);
+                    }
+                    if (keys['Space'] || keys['ArrowUp'] || keys['KeyW']) {
+                        if (bullets.length < 3) { // Limit bullets on screen
+                            bullets.push(createBullet(spaceship.x + spaceship.width / 2 - 1, spaceship.y));
+                            playShootSound();
+                        }
+                    }
+
+                    // Handle mouse/touch input - COMMENTED OUT FOR KEYBOARD-ONLY MODE
+                    /*
+                    if (mouseDown) {
+                        const targetX = mouseX - spaceship.width / 2;
+                        spaceship.x = Math.max(0, Math.min(GAME_WIDTH - spaceship.width, targetX));
+
+                        if (bullets.length < 3) {
+                            bullets.push(createBullet(spaceship.x + spaceship.width / 2 - 1, spaceship.y));
+                            playShootSound();
+                        }
+                    }
+                    */
+
+                    // Update game objects
+                    bullets.forEach((bullet, index) => {
+                        bullet.update();
+                        if (bullet.y < 0) {
+                            bullets.splice(index, 1);
+                        }
+                    });
+
+                    updateEnemies();
+                    checkCollisions();
+                    updateParticles();
+
+                    // Draw game objects
+                    spaceship.draw();
+                    bullets.forEach(bullet => bullet.draw());
+                    drawEnemies();
+                    drawParticles();
+                }
+
+                requestAnimationFrame(gameLoop);
+            }
+            
+            // Initialize the game
+            initStars();
+            updateScore();
+            loadAndParseXml(); // Start loading and generating questions
+            gameLoop();
+        };
+    </script>
+</body>
+</html>

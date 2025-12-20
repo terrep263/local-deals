@@ -1,0 +1,500 @@
+{
+    "course_title": "Getting Started with Lake County Local Deals",
+    "space_brain_data": {
+        "questions": [
+            {
+                "question": "What county does it serve?",
+                "answers": [
+                    {
+                        "text": "Lake",
+                        "icon": "\ud83c\udfde\ufe0f",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Orange",
+                        "icon": "\ud83c\udf4a",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Miami",
+                        "icon": "\ud83c\udf34",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "question": "What type of platform is it?",
+                "answers": [
+                    {
+                        "text": "Marketplace",
+                        "icon": "\ud83d\udecd\ufe0f",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Social",
+                        "icon": "\ud83d\udcac",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Gaming",
+                        "icon": "\ud83c\udfae",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "question": "Who does it primarily support?",
+                "answers": [
+                    {
+                        "text": "Businesses",
+                        "icon": "\ud83c\udfe2",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Tourists",
+                        "icon": "\u2708\ufe0f",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Students",
+                        "icon": "\ud83e\uddd1\u200d\ud83c\udf93",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "question": "What fee model is used?",
+                "answers": [
+                    {
+                        "text": "Subscription",
+                        "icon": "\ud83d\udcb0",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Commission",
+                        "icon": "\ud83d\udcb8",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Royalty",
+                        "icon": "\ud83d\udc51",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "question": "What revenue percentage is kept?",
+                "answers": [
+                    {
+                        "text": "Hundred",
+                        "icon": "\ud83d\udcaf",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Fifty",
+                        "icon": "\ud83d\udd90\ufe0f",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Seventy",
+                        "icon": "7\ufe0f\u20e3",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "question": "What do merchants offer customers?",
+                "answers": [
+                    {
+                        "text": "Deals",
+                        "icon": "\ud83c\udff7\ufe0f",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Jobs",
+                        "icon": "\ud83d\udc77",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Advice",
+                        "icon": "\ud83d\udde3\ufe0f",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "question": "What economic goal is fostered?",
+                "answers": [
+                    {
+                        "text": "Growth",
+                        "icon": "\ud83c\udf31",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Decline",
+                        "icon": "\ud83d\udcc9",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Stagnation",
+                        "icon": "\ud83d\uded1",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "question": "Name a featured Lake County city?",
+                "answers": [
+                    {
+                        "text": "Clermont",
+                        "icon": "\ud83c\udfd9\ufe0f",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Orlando",
+                        "icon": "\ud83c\udfa2",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "Tampa",
+                        "icon": "\ud83c\udfd6\ufe0f",
+                        "isCorrect": false
+                    }
+                ]
+            },
+            {
+                "question": "What approach makes deals relevant?",
+                "answers": [
+                    {
+                        "text": "Hyperlocal",
+                        "icon": "\ud83c\udfaf",
+                        "isCorrect": true
+                    },
+                    {
+                        "text": "Broad",
+                        "icon": "\ud83d\uddfa\ufe0f",
+                        "isCorrect": false
+                    },
+                    {
+                        "text": "General",
+                        "icon": "\ud83d\udcdd",
+                        "isCorrect": false
+                    }
+                ]
+            }
+        ]
+    },
+    "memory_match_data": [
+        {
+            "question": "Where does Lake County Local Deals operate?",
+            "answer": "Lake County, Florida"
+        },
+        {
+            "question": "What is Lake County Local Deals?",
+            "answer": "Online marketplace"
+        },
+        {
+            "question": "What is a key platform goal?",
+            "answer": "Foster economic growth"
+        },
+        {
+            "question": "What kind of businesses use it?",
+            "answer": "Local merchants"
+        },
+        {
+            "question": "What does the platform help circulate?",
+            "answer": "Local money"
+        },
+        {
+            "question": "What kind of approach is used?",
+            "answer": "Hyper-local"
+        },
+        {
+            "question": "How does it support small businesses?",
+            "answer": "Dedicated support system"
+        },
+        {
+            "question": "What does it foster for businesses?",
+            "answer": "Empowerment, connection"
+        },
+        {
+            "question": "What is the payment model?",
+            "answer": "Flat subscription fee"
+        },
+        {
+            "question": "Does the platform charge commissions?",
+            "answer": "No"
+        }
+    ],
+    "questris_data": [
+        {
+            "question": "The platform lists deals from national chains.",
+            "answer": false
+        },
+        {
+            "question": "Miami businesses are featured on the platform.",
+            "answer": false
+        },
+        {
+            "question": "It aims to foster economic growth locally.",
+            "answer": true
+        },
+        {
+            "question": "Lake County Local Deals supports small businesses.",
+            "answer": true
+        },
+        {
+            "question": "Businesses keep 100% of their revenue.",
+            "answer": true
+        },
+        {
+            "question": "The platform connects local businesses with residents.",
+            "answer": true
+        },
+        {
+            "question": "The platform is an online marketplace.",
+            "answer": true
+        },
+        {
+            "question": "Lake County Local Deals serves Lake County, Florida.",
+            "answer": true
+        },
+        {
+            "question": "Businesses pay a flat subscription fee.",
+            "answer": true
+        },
+        {
+            "question": "The platform's main goal is national expansion.",
+            "answer": false
+        },
+        {
+            "question": "The platform is solely for consumer benefits.",
+            "answer": false
+        },
+        {
+            "question": "The platform is for businesses outside Lake County.",
+            "answer": false
+        },
+        {
+            "question": "Businesses keep only a percentage of revenue.",
+            "answer": false
+        },
+        {
+            "question": "Clermont is a spotlight city.",
+            "answer": true
+        },
+        {
+            "question": "Lake County Local Deals serves all of Florida.",
+            "answer": false
+        },
+        {
+            "question": "Lake County Local Deals is a broad, general platform.",
+            "answer": false
+        },
+        {
+            "question": "The platform focuses on hyper-local promotions.",
+            "answer": true
+        },
+        {
+            "question": "Mount Dora is served by the platform.",
+            "answer": true
+        },
+        {
+            "question": "Businesses pay per deal listed.",
+            "answer": false
+        },
+        {
+            "question": "The platform charges businesses a commission.",
+            "answer": false
+        }
+    ],
+    "fact_man_data": [
+        {
+            "question": "What is Lake County Local Deals?",
+            "options": [
+                "A global e-commerce site",
+                "A national job board",
+                "A local deal marketplace",
+                "A real estate agency"
+            ],
+            "correct": 2
+        },
+        {
+            "question": "Which Florida county does the platform serve?",
+            "options": [
+                "Orange County",
+                "Seminole County",
+                "Lake County",
+                "Polk County"
+            ],
+            "correct": 2
+        },
+        {
+            "question": "What is the main goal of Lake County Local Deals?",
+            "options": [
+                "Sell national products",
+                "Foster economic growth locally",
+                "Recruit employees globally",
+                "Provide government services"
+            ],
+            "correct": 1
+        },
+        {
+            "question": "What kind of businesses can list on the platform?",
+            "options": [
+                "Any business worldwide",
+                "Businesses in Florida only",
+                "Businesses within Lake County, FL",
+                "Large corporations only"
+            ],
+            "correct": 2
+        },
+        {
+            "question": "How does the platform help money stay local?",
+            "options": [
+                "By offering international shipping",
+                "By promoting national brands",
+                "By simplifying local business support",
+                "By charging high fees"
+            ],
+            "correct": 2
+        },
+        {
+            "question": "What approach does the platform use for deals?",
+            "options": [
+                "Global",
+                "National",
+                "Hyper-local",
+                "Regional"
+            ],
+            "correct": 2
+        },
+        {
+            "question": "What makes Lake County Local Deals unique?",
+            "options": [
+                "It lists all deals",
+                "It curates relevant local deals",
+                "It charges high commissions",
+                "It offers global shipping"
+            ],
+            "correct": 1
+        },
+        {
+            "question": "What does Lake County Local Deals provide beyond listings?",
+            "options": [
+                "Global advertising",
+                "Employee training",
+                "Support system for small businesses",
+                "Stock market advice"
+            ],
+            "correct": 2
+        },
+        {
+            "question": "What is the platform's operational model for businesses?",
+            "options": [
+                "Commission-based",
+                "Flat subscription fee",
+                "Revenue sharing",
+                "Per-sale charge"
+            ],
+            "correct": 1
+        },
+        {
+            "question": "What does the platform NOT charge businesses?",
+            "options": [
+                "Subscription fees",
+                "Annual fees",
+                "Commissions",
+                "Listing fees"
+            ],
+            "correct": 2
+        },
+        {
+            "question": "What key benefit do businesses get regarding revenue?",
+            "options": [
+                "Keep 50% of revenue",
+                "Keep 75% of revenue",
+                "Keep 100% of revenue",
+                "Pay extra for revenue"
+            ],
+            "correct": 2
+        },
+        {
+            "question": "What does the subscription model ensure for partners?",
+            "options": [
+                "High commissions",
+                "Hidden fees",
+                "Transparency and predictability",
+                "Complex billing"
+            ],
+            "correct": 2
+        },
+        {
+            "question": "Which city is NOT specifically spotlighted in Lake County?",
+            "options": [
+                "Clermont",
+                "Leesburg",
+                "Orlando",
+                "Eustis"
+            ],
+            "correct": 2
+        },
+        {
+            "question": "What is the platform's mission for businesses?",
+            "options": [
+                "To compete with them",
+                "To empower and connect them",
+                "To charge high fees",
+                "To limit their visibility"
+            ],
+            "correct": 1
+        },
+        {
+            "question": "What does the platform simplify for residents?",
+            "options": [
+                "International travel",
+                "Finding and supporting local businesses",
+                "Global investing",
+                "Learning new languages"
+            ],
+            "correct": 1
+        }
+    ],
+    "background_images": [
+        "..\/images\/main_wall15.jpg",
+        "..\/images\/ai-1766013779-691.jpg",
+        "..\/images\/ai-1766013772-156.jpg",
+        "..\/images\/ai-1766013793-706.jpg",
+        "..\/images\/ai-1766013786-407.jpg",
+        "..\/images\/ai-1766013806-58.jpg",
+        "..\/images\/ai-1766013800-207.jpg",
+        "..\/images\/ai-1766013821-977.jpg",
+        "..\/images\/ai-1766013815-964.jpg",
+        "..\/images\/kcheck-6.jpg",
+        "..\/images\/kcheck-6.jpg",
+        "..\/images\/kcheck-6.jpg",
+        "..\/images\/ai-1766013836-65.jpg",
+        "..\/images\/ai-1766013829-756.jpg",
+        "..\/images\/ai-1766013849-369.jpg",
+        "..\/images\/ai-1766013843-871.jpg",
+        "..\/images\/ai-1766013863-544.jpg",
+        "..\/images\/ai-1766013857-71.jpg",
+        "..\/images\/ai-1766013877-537.jpg",
+        "..\/images\/ai-1766013870-501.jpg",
+        "..\/images\/kcheck-4.jpg",
+        "..\/images\/kcheck-4.jpg",
+        "..\/images\/kcheck-4.jpg",
+        "..\/images\/ai-1766013890-886.jpg",
+        "..\/images\/ai-1766013883-762.jpg",
+        "..\/images\/ai-1766013905-453.jpg",
+        "..\/images\/ai-1766013897-906.jpg",
+        "..\/images\/ai-1766013920-922.jpg",
+        "..\/images\/ai-1766013913-538.jpg",
+        "..\/images\/ai-1766013934-28.jpg",
+        "..\/images\/ai-1766013927-652.jpg",
+        "..\/images\/kcheck-7.jpg",
+        "..\/images\/kcheck-7.jpg",
+        "..\/images\/kcheck-7.jpg",
+        "..\/images\/main_wall14.jpg"
+    ]
+}

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flipcard Matching Game</title>
+    <script>
+        // Audio system
+        let audioContext;
+        
+        function initAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.warn('Audio not supported');
+            }
+        }
+        
+        function createTone(frequency, duration, type = 'square', volume = 0.1) {
+            if (!audioContext) return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+        
+        function playFlipSound() {
+            createTone(600, 0.1, 'sine', 0.05);
+        }
+        
+        function playMatchSound() {
+            createTone(523, 0.15, 'sine', 0.1); // C5
+            setTimeout(() => createTone(659, 0.15, 'sine', 0.1), 150); // E5
+            setTimeout(() => createTone(784, 0.3, 'sine', 0.1), 300); // G5
+        }
+        
+        function playMismatchSound() {
+            createTone(200, 0.3, 'sawtooth', 0.1);
+        }
+        
+        function playWinSound() {
+            const notes = [523, 587, 659, 698, 784, 880, 988]; // C major scale
+            notes.forEach((note, i) => {
+                setTimeout(() => createTone(note, 0.3, 'sine', 0.1), i * 100);
+            });
+        }
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            color: white;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .card {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched {
+            transform: rotateY(180deg);
+            cursor: not-allowed;
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-front {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a6f);
+            color: white;
+            overflow: hidden;
+        }
+
+        .tiled-pattern {
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" width="20" height="20"><rect width="20" height="20" fill="%23ffffff" opacity="0.1"/><circle cx="5" cy="5" r="2" fill="%23ffffff" opacity="0.3"/><circle cx="15" cy="5" r="1.5" fill="%23ffffff" opacity="0.2"/><circle cx="10" cy="10" r="2.5" fill="%23ffffff" opacity="0.15"/><circle cx="5" cy="15" r="1.8" fill="%23ffffff" opacity="0.25"/><circle cx="15" cy="15" r="1.2" fill="%23ffffff" opacity="0.2"/><rect x="8" y="2" width="4" height="1" fill="%23ffffff" opacity="0.2"/><rect x="2" y="8" width="1" height="4" fill="%23ffffff" opacity="0.15"/><rect x="17" y="12" width="1" height="3" fill="%23ffffff" opacity="0.18"/></svg>');
+            background-repeat: repeat;
+        }
+
+        .card-back {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            transform: rotateY(180deg);
+            line-height: 1.2;
+        }
+
+        .card-back.answer {
+            background: linear-gradient(45deg, #ffeaa7, #fab1a0);
+            color: #2d3436;
+        }
+
+        .svg-pattern {
+            width: 100%;
+            height: 100%;
+        }
+
+
+        .win-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(45deg, #00b894, #00a085);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .game-grid {
+                grid-template-columns: repeat(4, 1fr);
+                grid-template-rows: repeat(5, 1fr);
+                gap: 10px;
+            }
+            
+            .card {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .card-face {
+                font-size: 10px;
+                padding: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>🧠 Memory Match Challenge</h1>
+        <div class="game-stats">
+            <span>Moves: <span id="moves">0</span></span>
+            <span>Matches: <span id="matches">0</span>/10</span>
+            <span>Time: <span id="timer">00:00</span></span>
+        </div>
+        <div class="game-grid" id="gameGrid"></div>
+    </div>
+    
+    <div class="win-message" id="winMessage">
+        🎉 Congratulations! 🎉<br>
+        You completed the game!<br>
+    </div>
+
+    <script>
+        // Global variables for game data
+        let cardPairs = [];
+        let gameDataLoaded = false;
+
+        // Random colors for matched pairs
+        const matchColors = [
+            'linear-gradient(45deg, #ff9a9e, #fad0c4)',
+            'linear-gradient(45deg, #a8edea, #fed6e3)',
+            'linear-gradient(45deg, #ffecd2, #fcb69f)',
+            'linear-gradient(45deg, #ff8a80, #ffab91)',
+            'linear-gradient(45deg, #81c784, #aed581)',
+            'linear-gradient(45deg, #64b5f6, #90caf9)',
+            'linear-gradient(45deg, #ba68c8, #ce93d8)',
+            'linear-gradient(45deg, #ffb74d, #ffcc02)',
+            'linear-gradient(45deg, #4db6ac, #80cbc4)',
+            'linear-gradient(45deg, #f48fb1, #f8bbd9)'
+        ];
+
+        let gameState = {
+            cards: [],
+            flippedCards: [],
+            matches: 0,
+            moves: 0,
+            gameStarted: false,
+            startTime: null,
+            timerInterval: null,
+            usedColors: []
+        };
+
+        function createCards() {
+            const cards = [];
+            
+            // Create pairs
+            cardPairs.forEach((pair, index) => {
+                cards.push({
+                    id: `q${index}`,
+                    type: 'question',
+                    content: pair.question,
+                    pairId: index,
+                    matched: false,
+                    matchColor: null
+                });
+                cards.push({
+                    id: `a${index}`,
+                    type: 'answer', 
+                    content: pair.answer,
+                    pairId: index,
+                    matched: false,
+                    matchColor: null
+                });
+            });
+            
+            // Shuffle cards
+            return cards.sort(() => Math.random() - 0.5);
+        }
+
+        function getNextUniqueColor() {
+            // Get available colors (not yet used)
+            const availableColors = matchColors.filter(color => !gameState.usedColors.includes(color));
+            
+            // If no colors available, return a default (shouldn't happen with 10 pairs and 10 colors)
+            if (availableColors.length === 0) {
+                return matchColors[0];
+            }
+            
+            // Select random color from available ones
+            const randomIndex = Math.floor(Math.random() * availableColors.length);
+            const selectedColor = availableColors[randomIndex];
+            
+            // Mark this color as used
+            gameState.usedColors.push(selectedColor);
+            
+            return selectedColor;
+        }
+
+        function renderGame() {
+            const grid = document.getElementById('gameGrid');
+            grid.innerHTML = '';
+            
+            gameState.cards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                cardElement.setAttribute('data-id', card.id);
+                
+                if (card.matched) {
+                    cardElement.classList.add('matched');
+                }
+                
+                const matchedStyle = card.matched && card.matchColor ? `style="background: ${card.matchColor};"` : '';
+                
+                cardElement.innerHTML = `
+                    <div class="card-face card-front">
+                        <div class="tiled-pattern"></div>
+                    </div>
+                    <div class="card-face card-back ${card.type}" ${matchedStyle}>
+                        ${card.content}
+                    </div>
+                `;
+                
+                cardElement.addEventListener('click', () => flipCard(card));
+                grid.appendChild(cardElement);
+            });
+        }
+
+        function flipCard(card) {
+            if (card.matched || gameState.flippedCards.length >= 2 || 
+                gameState.flippedCards.find(c => c.id === card.id)) {
+                return;
+            }
+            
+            if (!gameState.gameStarted) {
+                startTimer();
+                gameState.gameStarted = true;
+                initAudio(); // Initialize audio on first interaction
+            }
+            
+            const cardElement = document.querySelector(`[data-id="${card.id}"]`);
+            cardElement.classList.add('flipped');
+            gameState.flippedCards.push(card);
+            playFlipSound(); // Play flip sound when card is flipped
+            
+            if (gameState.flippedCards.length === 2) {
+                gameState.moves++;
+                document.getElementById('moves').textContent = gameState.moves;
+                
+                setTimeout(checkMatch, 800);
+            }
+        }
+
+        function checkMatch() {
+            const [card1, card2] = gameState.flippedCards;
+            
+            if (card1.pairId === card2.pairId) {
+                // Match found
+                playMatchSound(); // Play match sound
+                const matchColor = getNextUniqueColor();
+                card1.matched = true;
+                card2.matched = true;
+                card1.matchColor = matchColor;
+                card2.matchColor = matchColor;
+                gameState.matches++;
+                
+                const card1Element = document.querySelector(`[data-id="${card1.id}"]`);
+                const card2Element = document.querySelector(`[data-id="${card2.id}"]`);
+                card1Element.classList.add('matched');
+                card2Element.classList.add('matched');
+                
+                // Apply matching background color
+                const card1Back = card1Element.querySelector('.card-back');
+                const card2Back = card2Element.querySelector('.card-back');
+                card1Back.style.background = matchColor;
+                card2Back.style.background = matchColor;
+                
+                document.getElementById('matches').textContent = gameState.matches;
+                
+                if (gameState.matches === cardPairs.length) {
+                    setTimeout(showWinMessage, 500);
+                }
+            } else {
+                // No match - flip back
+                playMismatchSound(); // Play mismatch sound
+                const card1Element = document.querySelector(`[data-id="${card1.id}"]`);
+                const card2Element = document.querySelector(`[data-id="${card2.id}"]`);
+                card1Element.classList.remove('flipped');
+                card2Element.classList.remove('flipped');
+            }
+            
+            gameState.flippedCards = [];
+        }
+
+        function startTimer() {
+            gameState.startTime = Date.now();
+            gameState.timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - gameState.startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function showWinMessage() {
+            clearInterval(gameState.timerInterval);
+            playWinSound(); // Play win sound
+            document.getElementById('winMessage').style.display = 'block';
+        }
+
+
+        // Load game data and initialize
+        loadGameData().then(() => {
+            if (gameDataLoaded && cardPairs.length > 0) {
+                gameState.cards = createCards();
+                renderGame();
+            } else {
+                showError('Failed to load game data. Please try again later.');
+            }
+        }).catch(error => {
+            console.error('Error loading game data:', error);
+            showError('Failed to load game data. Please try again later.');
+        });
+        
+        // Function to load game data from data.json
+        async function loadGameData() {
+            try {
+                const response = await fetch('./data.json?'+Math.round(Math.random()*1000));
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const gameData = await response.json();
+                
+                if (gameData && gameData.memory_match_data && Array.isArray(gameData.memory_match_data)) {
+                    cardPairs = gameData.memory_match_data;
+                    gameDataLoaded = true;
+                    console.log(`Loaded ${cardPairs.length} flip card pairs from data.json`);
+                } else {
+                    console.warn('No memory_match_data found in data.json, using fallback data');
+                    // Fallback data if none found
+                    cardPairs = [
+                        { question: "What is the main topic?", answer: "Subject" },
+                        { question: "What did you learn?", answer: "Knowledge" },
+                        { question: "What is important?", answer: "Content" },
+                        { question: "What should you remember?", answer: "Facts" },
+                        { question: "What was discussed?", answer: "Ideas" },
+                        { question: "What was explained?", answer: "Concepts" },
+                        { question: "What was taught?", answer: "Lessons" },
+                        { question: "What was covered?", answer: "Material" },
+                        { question: "What was shared?", answer: "Information" },
+                        { question: "What was presented?", answer: "Data" }
+                    ];
+                    gameDataLoaded = true;
+                }
+                
+                // Update matches display to reflect actual number of pairs
+                document.getElementById('matches').parentElement.innerHTML = 
+                    `Matches: <span id="matches">0</span>/${cardPairs.length}`;
+                    
+            } catch (error) {
+                console.error('Error loading game data:', error);
+                throw error;
+            }
+        }
+        
+        // Function to show error message
+        function showError(message) {
+            const gameGrid = document.getElementById('gameGrid');
+            gameGrid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; color: white; font-size: 18px; padding: 40px;">${message}</div>`;
+        }
+    </script>
+</body>
+</html>

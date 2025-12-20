@@ -1,0 +1,188 @@
+:root {
+    /* Brand & surfaces */
+    --primary: #f97316;
+    --primary-hover: #ea580c;
+    --on-primary: #ffffff;
+    --secondary: #111827;
+    --on-secondary: #ffffff;
+    --body-bg: #ffffff;
+    --text: #0f172a;
+    --muted: #475569;
+    --border: #e2e8f0;
+
+    /* Layout */
+    --header-h: 80px;
+    --content-top: 0px;
+    --header-banner-height: 180px;
+    --nav-row-bg: transparent;
+    --nav-shadow: none;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --shadow-sm: 0 2px 6px rgba(0,0,0,0.08);
+    --shadow-md: 0 6px 20px rgba(0,0,0,0.12);
+}
+
+@media (max-width: 768px) {
+    :root {
+        --header-h: 100px;
+        --header-banner-height: 100px;
+    }
+}
+
+body:not(.admin) {
+    background: var(--body-bg);
+    color: var(--text);
+}
+
+/* Links */
+body:not(.admin) a,
+.with-header a {
+    color: var(--primary) !important;
+}
+body:not(.admin) a:hover,
+.with-header a:hover {
+    color: var(--primary-hover) !important;
+}
+body:not(.admin) a:active,
+body:not(.admin) a.active,
+body:not(.admin) a:focus,
+.with-header a:active,
+.with-header a.active,
+.with-header a:focus {
+    color: var(--secondary) !important;
+}
+
+/* Buttons - core variants */
+.btn,
+.primary_item_btn {
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    box-shadow: none;
+    transition: all 0.2s ease;
+}
+
+.btn-primary,
+.primary_item_btn {
+    background: var(--primary) !important;
+    color: var(--on-primary) !important;
+    border: 1px solid var(--primary) !important;
+}
+.btn-primary:hover,
+.primary_item_btn:hover,
+.btn-primary:focus,
+.primary_item_btn:focus {
+    background: var(--primary-hover) !important;
+    color: var(--on-primary) !important;
+    border-color: var(--primary-hover) !important;
+}
+
+.btn-outline,
+.btn-outline-primary {
+    background: transparent !important;
+    color: var(--primary) !important;
+    border: 1px solid var(--primary) !important;
+}
+.btn-outline:hover,
+.btn-outline-primary:hover,
+.btn-outline:focus,
+.btn-outline-primary:focus {
+    background: rgba(249, 115, 22, 0.08) !important;
+    color: var(--primary-hover) !important;
+    border-color: var(--primary-hover) !important;
+}
+
+.btn-secondary {
+    background: var(--secondary) !important;
+    color: var(--on-secondary) !important;
+    border: 1px solid var(--secondary) !important;
+}
+.btn-secondary:hover,
+.btn-secondary:focus {
+    background: #0b1220 !important;
+    border-color: #0b1220 !important;
+    color: var(--on-secondary) !important;
+}
+
+.btn-link {
+    background: transparent !important;
+    border: none !important;
+    color: var(--primary) !important;
+    padding-left: 0;
+    padding-right: 0;
+}
+.btn-link:hover,
+.btn-link:focus {
+    color: var(--primary-hover) !important;
+    text-decoration: underline;
+}
+
+/* Safeguard: any element using .btn-primary or primary background forces readable text */
+[class*="btn-primary"],
+[class*="primary_item_btn"],
+[style*="background: var(--primary)"],
+[style*="background:var(--primary)"] {
+    color: var(--on-primary) !important;
+}
+
+/* Headers & typography defaults */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text);
+    line-height: 1.2;
+}
+p, li, span {
+    color: var(--muted);
+}
+
+/* Utility surfaces */
+.card {
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Header stacking */
+#site-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1010;
+}
+.main-nav-header {
+    background: transparent;
+    transition: all 0.2s ease;
+}
+.main-nav-header.fixed-top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(17,24,39,0.9);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    z-index: 1020;
+}
+.nav-header-area nav a,
+.nav-header-area nav a:visited,
+.nav-header-area nav a:active {
+    color: #ffffff !important;
+}
+.nav-header-area nav a:hover,
+.nav-header-area nav a:focus {
+    color: #f1f5f9 !important;
+}
+.nav-header-area .primary_item_btn,
+.nav-header-area .btn-primary {
+    color: var(--on-primary) !important;
+}
+.nav-header-area .logo img {
+    max-width: 300px;
+    height: auto;
+}
+
+/* Breadcrumb / banner overlay */
+.breadcrumb-area .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 0;
+}
+
