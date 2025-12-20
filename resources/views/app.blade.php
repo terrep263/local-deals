@@ -113,6 +113,17 @@
 
 <script>
     (function() {
+        // Measure header height and apply to CSS variables to prevent overlap
+        const root = document.documentElement;
+        const header = document.getElementById('site-header');
+
+        const setHeaderVars = () => {
+            if (!header) return;
+            const h = header.offsetHeight || 0;
+            root.style.setProperty('--header-h', `${h}px`);
+            root.style.setProperty('--content-top', `${h}px`);
+        };
+
         // Toggle fixed-top on scroll for nav (Viavi behavior)
         const nav = document.querySelector('.main-nav-header');
         const onScroll = () => {
@@ -123,8 +134,13 @@
                 nav.classList.remove('fixed-top');
             }
         };
+
         document.addEventListener('scroll', onScroll, { passive: true });
-        document.addEventListener('DOMContentLoaded', onScroll);
+        document.addEventListener('DOMContentLoaded', () => {
+            setHeaderVars();
+            onScroll();
+        });
+        window.addEventListener('resize', setHeaderVars);
     })();
 </script>
 

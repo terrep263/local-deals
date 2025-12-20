@@ -17,9 +17,19 @@
     
     /* Hero Header */
     .vendor-hero {
-        background: linear-gradient(180deg, rgba(15,23,42,0.72) 0%, rgba(15,23,42,0.72) 100%), url('{{ asset('upload/'.(getcong('page_bg_image') ?? 'page_bg_image.png')) }}') center/cover no-repeat;
-        padding: 80px 0 50px;
+        position: relative;
+        background: linear-gradient(180deg, rgba(15,23,42,0.72) 0%, rgba(15,23,42,0.72) 100%), var(--header-banner-img, url('{{ asset('upload/'.(getcong('page_bg_image') ?? 'assets/images/hero-bg.jpg')) }}')) center/cover no-repeat;
+        padding: calc(var(--content-top, var(--header-h, 80px)) + 60px) 0 60px;
         margin-bottom: 30px;
+        overflow: hidden;
+    }
+
+    .vendor-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        pointer-events: none;
     }
     
     .vendor-hero-content {
@@ -30,7 +40,50 @@
         align-items: center;
         gap: 24px;
         flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
     }
+
+.vendor-breadcrumb {
+    max-width: 1200px;
+    margin: 0 auto 16px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+    color: #ffffff;
+}
+
+.vendor-breadcrumb ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.vendor-breadcrumb ul li {
+    color: #ffffff;
+    opacity: 0.85;
+}
+
+.vendor-breadcrumb ul li a {
+    color: #ffffff !important;
+    text-decoration: none;
+}
+
+.vendor-breadcrumb ul li::after {
+    content: "›";
+    margin: 0 6px;
+    opacity: 0.6;
+}
+
+.vendor-breadcrumb ul li:last-child::after {
+    display: none;
+}
     
     .vendor-logo {
         width: 100px;
@@ -911,6 +964,16 @@
          HERO HEADER
          ============================================ -->
     <div class="vendor-hero">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="vendor-breadcrumb">
+                <ul>
+                    <li><a href="{{ url('/') }}">Home</a></li>
+                    <li><a href="{{ url('listings') }}">Listings</a></li>
+                    <li>{{ $listing->title }}</li>
+                </ul>
+            </div>
+        </div>
         <div class="vendor-hero-content">
             <div class="vendor-logo">
                 @if($listing->featured_image)
@@ -1156,7 +1219,7 @@
                                                 @endfor
                                             </div>
                                         </div>
-                                        <span class="review-date">{{ $review->created_at->diffForHumans() }}</span>
+                                        <span class="review-date">{{ $review->created_at ? \Carbon\Carbon::parse($review->created_at)->diffForHumans() : '' }}</span>
                                     </div>
                                     <p class="review-text">{{ $review->comment }}</p>
                                 </div>

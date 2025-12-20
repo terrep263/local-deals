@@ -178,6 +178,17 @@ p, li, span {
     height: auto;
 }
 
+/* Prevent header overlap with content on non-home pages */
+body.with-header #page-content {
+    padding-top: calc(var(--content-top, var(--header-h, 80px)) + 20px);
+}
+
+/* Inner page banner spacing to clear header */
+.with-header .breadcrumb-area {
+    padding-top: calc(var(--content-top, var(--header-h, 80px)) + 60px);
+    padding-bottom: 60px;
+}
+
 /* Breadcrumb / banner overlay */
 .breadcrumb-area .overlay {
     position: absolute;
