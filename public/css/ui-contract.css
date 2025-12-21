@@ -163,11 +163,11 @@ p, li, span {
 .nav-header-area nav a,
 .nav-header-area nav a:visited,
 .nav-header-area nav a:active {
-    color: #ffffff !important;
+    color: #ff6b35 !important;
 }
 .nav-header-area nav a:hover,
 .nav-header-area nav a:focus {
-    color: #f1f5f9 !important;
+    color: #f7931e !important;
 }
 .nav-header-area .primary_item_btn,
 .nav-header-area .btn-primary {

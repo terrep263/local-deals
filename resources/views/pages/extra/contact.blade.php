@@ -3,28 +3,18 @@
 @section('head_title', getcong('contact_title').' | '.getcong('site_name') )
 
 @section('head_url', Request::url())
+@section('use_hero_header', true)
 
 @section("content")
 
- 
-<!-- ================================
-     Start Breadcrumb Area
-================================= -->
-<section class="breadcrumb-area" style="background-image:url({{URL::to('assets/images/about-hero.jpg')}})">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="breadcrumb-content">
-            <h2 class="item_sec_title text-white">{{getcong('contact_title')}}</h2>
-            <ul class="bread-list">
-                <li><a href="{{URL::to('/')}}" title="Home">{{trans('words.home')}}</a></li>
-                <li>{{getcong('contact_title')}}</li>
-            </ul>
-        </div>
-    </div>    
-</section>
-<!-- ================================
-     End Breadcrumb Area Area
-================================= --> 
+@include('common.page-hero-header', [
+    'title' => getcong('contact_title'),
+    'bgImage' => asset('assets/images/about-hero.jpg'),
+    'breadcrumbs' => [
+        trans('words.home') => url('/'),
+        getcong('contact_title') => ''
+    ]
+])
 
  <!-- ================================
     Start Contact Area

@@ -3,6 +3,9 @@
 @section('head_title',trans('words.payment_method').' | '.getcong('site_name') )
 
 @section('head_url', Request::url())
+@section('use_hero_header', true)
+@section('hero_title', trans('words.payment'))
+@section('hero_breadcrumbs', json_encode([['label' => trans('words.home'), 'url' => '/'], ['label' => trans('words.payment'), 'url' => '']]))
 
 @section("content")
 
@@ -24,20 +27,7 @@
 
 <div id="loading" style="display: none;"></div>
 
- 
-<!-- ================================
-     Start Breadcrumb Area
-================================= -->
-<section class="breadcrumb-area" style="background-image:url({{URL::to('assets/images/bread-bg.jpg')}})">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="breadcrumb-content">
-            <h2 class="item_sec_title text-white">{{trans('words.payment_method')}}</h2>
-            <ul class="bread-list">
-                <li><a href="{{URL::to('/')}}" title="Home">{{trans('words.home')}}</a></li>
-                <li>{{trans('words.payment_method')}}</li>
-            </ul>
-        </div>
+@include('common.page-hero-header')
     </div>    
 </section>
 <!-- ================================

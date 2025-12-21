@@ -3,28 +3,13 @@
 @section('head_title', 'User Listings | '.getcong('site_name') )
 
 @section('head_url', Request::url())
+@section('use_hero_header', true)
+@section('hero_title', trans('words.listings'))
+@section('hero_breadcrumbs', json_encode([['label' => trans('words.home'), 'url' => '/'], ['label' => trans('words.listings'), 'url' => '']]))
 
 @section("content")
 
- 
-<!-- ================================
-     Start Breadcrumb Area
-================================= -->
-<section class="breadcrumb-area" style="background-image:url({{URL::to('assets/images/bread-bg.jpg')}})">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="breadcrumb-content">
-            <h2 class="item_sec_title text-white">{{ \App\Models\User::getUserFullname($user_info->id) }} {{trans('words.listings')}}</h2>
-            <ul class="bread-list">
-                <li><a href="{{URL::to('/')}}" title="Home">{{trans('words.home')}}</a></li>
-                <li>{{ \App\Models\User::getUserFullname($user_info->id) }} {{trans('words.listings')}}</li>
-            </ul>
-        </div>
-    </div>    
-</section>
-<!-- ================================
-     End Breadcrumb Area Area
-================================= --> 
+@include('common.page-hero-header') 
 
 <!-- ================================
     Start Card Area

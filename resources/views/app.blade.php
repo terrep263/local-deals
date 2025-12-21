@@ -51,6 +51,8 @@
 <link rel="stylesheet" href="{{ asset('css/home.css') }}">
 <!-- UI Contract (design tokens & components) -->
 <link rel="stylesheet" href="{{ asset('css/ui-contract.css') }}">
+<!-- Page Hero Header (combined nav + title + breadcrumb) -->
+<link rel="stylesheet" href="{{ asset('css/page-hero-header.css') }}">
 
 @php
     // Prefer configured page_bg_image; fall back to legacy hero/overlay asset from theme
@@ -64,7 +66,7 @@
 }
 </style>
 </head> 
-<body class="{{ (View::hasSection('hide_header') || request()->is('/')) ? '' : 'with-header' }} {{ request()->is('/') ? 'is-home' : 'is-not-home' }}">
+<body class="{{ (View::hasSection('hide_header') || request()->is('/')) ? '' : 'with-header' }} {{ request()->is('/') ? 'is-home' : 'is-not-home' }} {{ View::hasSection('use_hero_header') ? 'has-hero-header' : '' }}">
 
 <!-- Start Per Loader -->
 <div class="loader-container">
@@ -76,7 +78,7 @@
 </div>
 <!-- End Per Loader -->
 
-  @if (!View::hasSection('hide_header') && !request()->is('/'))
+  @if (!View::hasSection('hide_header') && !request()->is('/') && !View::hasSection('use_hero_header'))
     @include("common.header")
   @endif
  
@@ -200,6 +202,9 @@ $(document).ready(function(e) {
       $('#amenities_tags').tagsInput({width:'auto'});
     });
 </script>
+
+<!-- Page Hero Header Mobile Menu Script -->
+<script src="{{ asset('js/page-hero-header.js') }}"></script>
  
 </body>
 </html>

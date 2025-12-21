@@ -2,21 +2,13 @@
 
 @section('head_title', 'Complete Business Profile | ' . getcong('site_name'))
 @section('head_url', Request::url())
+@section('use_hero_header', true)
+@section('hero_title', 'Complete Your Profile')
+@section('hero_breadcrumbs', json_encode([['label' => trans('words.home'), 'url' => '/'], ['label' => 'Profile', 'url' => '']]))
 
 @section('content')
-<section class="breadcrumb-area" style="background-image:url({{URL::to('assets/images/bread-bg.jpg')}})">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="breadcrumb-content">
-            <h2 class="item_sec_title text-white">Business Profile</h2>
-            <ul class="bread-list">
-                <li><a href="{{URL::to('/')}}">{{trans('words.home')}}</a></li>
-                <li><a href="{{ route('vendor.onboarding.index') }}">Onboarding</a></li>
-                <li>Profile</li>
-            </ul>
-        </div>
-    </div>    
-</section>
+
+@include('common.page-hero-header')
 
 <section class="dashboard-area pt-40 pb-60">
     <div class="container">

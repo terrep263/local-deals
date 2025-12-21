@@ -29,10 +29,10 @@
         <div class="hero-content">
             <div class="hero-badge">
                 <span class="hero-badge-dot"></span>
-                New Deals Added Daily
+                {{ getcong('hero_badge_text') ?: 'New Deals Added Daily' }}
             </div>
-            <h1>Shop Local Deals<br>& <span>Save Big!</span></h1>
-            <p class="hero-subtitle">Discover exclusive discounts from restaurants, spas, fitness centers, home services & more across Lake County, Florida.</p>
+            <h1>{{ getcong('hero_title') ?: 'Shop Local Deals' }}<br>& <span>{{ getcong('hero_title_highlight') ?: 'Save Big!' }}</span></h1>
+            <p class="hero-subtitle">{{ getcong('hero_subtitle') ?: 'Discover exclusive discounts from restaurants, spas, fitness centers, home services & more across Lake County, Florida.' }}</p>
             
             <form method="GET" action="{{ route('deals.index') }}" class="hero-search">
                 <input type="text" name="q" placeholder="Search for deals..." value="{{ request('q') }}">
@@ -45,21 +45,34 @@
                 <button type="submit">Search Deals</button>
             </form>
             
+            @php
+                $statsRaw = getcong('hero_stats');
+                $heroStats = [];
+                if (is_array($statsRaw)) {
+                    $heroStats = $statsRaw;
+                } elseif (is_string($statsRaw) && $statsRaw !== '') {
+                    $decoded = json_decode($statsRaw, true);
+                    if (is_array($decoded)) {
+                        $heroStats = $decoded;
+                    }
+                }
+                if (empty($heroStats)) {
+                    $heroStats = [
+                        ['number' => '500+*', 'label' => 'Local Businesses'],
+                        ['number' => '10K+*', 'label' => 'Happy Customers'],
+                        ['number' => '$2M+*', 'label' => 'Total Savings'],
+                    ];
+                }
+            @endphp
             <div class="hero-stats">
-                <div class="hero-stat">
-                    <div class="hero-stat-number">500+*</div>
-                    <div class="hero-stat-label">Local Businesses</div>
-                </div>
-                <div class="hero-stat">
-                    <div class="hero-stat-number">10K+*</div>
-                    <div class="hero-stat-label">Happy Customers</div>
-                </div>
-                <div class="hero-stat">
-                    <div class="hero-stat-number">$2M+*</div>
-                    <div class="hero-stat-label">Total Savings</div>
-                </div>
+                @foreach($heroStats as $stat)
+                    <div class="hero-stat">
+                        <div class="hero-stat-number">{{ $stat['number'] ?? '' }}</div>
+                        <div class="hero-stat-label">{{ $stat['label'] ?? '' }}</div>
+                    </div>
+                @endforeach
             </div>
-            <p style="font-size: 10px; color: #4a4a68; margin-top: 16px; opacity: 0.7;">*Projected goals for the next 24 months</p>
+            <p style="font-size: 10px; color: #4a4a68; margin-top: 16px; opacity: 0.7;">{{ getcong('hero_disclaimer') ?: '*Projected goals for the next 24 months' }}</p>
         </div>
         
         <div class="hero-cards">
@@ -115,12 +128,16 @@
 @php
     $promoRaw = getcong('promo_banner_items');
     $promoItems = [];
-    if ($promoRaw) {
+
+    if (is_array($promoRaw)) {
+        $promoItems = $promoRaw;
+    } elseif (is_string($promoRaw) && $promoRaw !== '') {
         $decoded = json_decode($promoRaw, true);
         if (is_array($decoded)) {
             $promoItems = $decoded;
         }
     }
+
     if (empty($promoItems)) {
         $promoItems = [
             ['emoji' => '⚡', 'text' => 'LIMITED TIME OFFERS'],

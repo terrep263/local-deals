@@ -4,6 +4,9 @@
 @section('head_description', 'Save $' . number_format($deal->savings_amount, 2) . ' on ' . $deal->title . '. Only ' . $inventoryRemaining . ' spots left! Expires ' . $deal->expires_at->format('M d, Y') . '.')
 @section('head_url', Request::url())
 @section('head_image', $deal->getFeaturedImageUrl())
+@section('use_hero_header', true)
+@section('hero_title', $deal->title)
+@section('hero_breadcrumbs', json_encode([['label' => trans('words.home'), 'url' => '/'], ['label' => $deal->category->name, 'url' => ''], ['label' => $deal->title, 'url' => '']]))
 
 @push('head')
 <script type="application/ld+json">
@@ -27,24 +30,7 @@
 
 @section("content")
 
-<!-- ================================
-     Start Breadcrumb Area
-================================= -->
-<section class="breadcrumb-area" style="background-image:url({{URL::to('assets/images/bread-bg.jpg')}})">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="breadcrumb-content">
-            <h2 class="item_sec_title text-white">{{ $deal->title }}</h2>
-            <ul class="bread-list">
-                <li><a href="{{URL::to('/')}}">{{trans('words.home')}}</a></li>
-                <li><a href="{{ route('deals.show', $deal->slug) }}">Deal</a></li>
-            </ul>
-        </div>
-    </div>    
-</section>
-<!-- ================================
-     End Breadcrumb Area
-================================= --> 
+@include('common.page-hero-header') 
 
 <!-- ================================
     Start Deal Detail Area

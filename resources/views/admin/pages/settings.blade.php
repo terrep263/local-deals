@@ -436,9 +436,17 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Hero Stats</label>
                     <div class="col-sm-9">
-                        @php
+                        <?php
                             $rawHeroStats = old('hero_stats', $settings->hero_stats ?? null);
-                            $heroStats = is_array($rawHeroStats) ? $rawHeroStats : (is_string($rawHeroStats) && !empty($rawHeroStats) ? json_decode($rawHeroStats, true) : null);
+                            
+                            if (is_array($rawHeroStats)) {
+                                $heroStats = $rawHeroStats;
+                            } elseif (is_string($rawHeroStats) && !empty($rawHeroStats)) {
+                                $heroStats = json_decode($rawHeroStats, true);
+                            } else {
+                                $heroStats = null;
+                            }
+
                             if (!is_array($heroStats) || empty($heroStats)) {
                                 $heroStats = [
                                     ['number' => '500+*', 'label' => 'Local Businesses'],
@@ -446,7 +454,7 @@
                                     ['number' => '$2M+*', 'label' => 'Total Savings'],
                                 ];
                             }
-                        @endphp
+                        ?>
                         @foreach($heroStats as $i => $stat)
                         <div class="row" style="margin-bottom:10px;">
                             <div class="col-xs-4">
@@ -466,9 +474,17 @@
         <div class="panel panel-default">
             <div class="panel-heading"><strong>📢 Promo Banner (Scrolling Text)</strong></div>
             <div class="panel-body">
-                @php
+                <?php
                     $rawPromoItems = old('promo_banner_items', $settings->promo_banner_items ?? null);
-                    $promoItems = is_array($rawPromoItems) ? $rawPromoItems : (is_string($rawPromoItems) && !empty($rawPromoItems) ? json_decode($rawPromoItems, true) : null);
+                    
+                    if (is_array($rawPromoItems)) {
+                        $promoItems = $rawPromoItems;
+                    } elseif (is_string($rawPromoItems) && !empty($rawPromoItems)) {
+                        $promoItems = json_decode($rawPromoItems, true);
+                    } else {
+                        $promoItems = null;
+                    }
+
                     if (!is_array($promoItems) || empty($promoItems)) {
                         $promoItems = [
                             ['emoji' => '⚡', 'text' => 'LIMITED TIME OFFERS'],
@@ -478,7 +494,7 @@
                             ['emoji' => '🔥', 'text' => 'NEW DEALS DAILY'],
                         ];
                     }
-                @endphp
+                ?>
                 @foreach($promoItems as $i => $item)
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Item {{ $i + 1 }}</label>
@@ -563,9 +579,17 @@
                 
                 <hr>
                 <p><strong>Steps:</strong></p>
-                @php
+                <?php
                     $rawSteps = old('how_it_works_steps', $settings->how_it_works_steps ?? null);
-                    $steps = is_array($rawSteps) ? $rawSteps : (is_string($rawSteps) && !empty($rawSteps) ? json_decode($rawSteps, true) : null);
+                    
+                    if (is_array($rawSteps)) {
+                        $steps = $rawSteps;
+                    } elseif (is_string($rawSteps) && !empty($rawSteps)) {
+                        $steps = json_decode($rawSteps, true);
+                    } else {
+                        $steps = null;
+                    }
+
                     if (!is_array($steps) || empty($steps)) {
                         $steps = [
                             ['emoji' => '🔍', 'title' => 'Browse Deals', 'description' => 'Explore hundreds of exclusive deals from restaurants, spas, fitness centers and more across Lake County.'],
@@ -573,7 +597,7 @@
                             ['emoji' => '🎉', 'title' => 'Redeem & Enjoy', 'description' => 'Show your voucher at the business to redeem. Enjoy amazing experiences while supporting local!'],
                         ];
                     }
-                @endphp
+                ?>
                 @foreach($steps as $i => $step)
                 <div style="background:#f9f9f9; padding:15px; margin-bottom:15px; border-radius:5px;">
                     <p><strong>Step {{ $i + 1 }}</strong></p>
@@ -625,9 +649,17 @@
                 
                 <hr>
                 <p><strong>Testimonials:</strong></p>
-                @php
+                <?php
                     $rawTestimonials = old('testimonials', $settings->testimonials ?? null);
-                    $testimonials = is_array($rawTestimonials) ? $rawTestimonials : (is_string($rawTestimonials) && !empty($rawTestimonials) ? json_decode($rawTestimonials, true) : null);
+                    
+                    if (is_array($rawTestimonials)) {
+                        $testimonials = $rawTestimonials;
+                    } elseif (is_string($rawTestimonials) && !empty($rawTestimonials)) {
+                        $testimonials = json_decode($rawTestimonials, true);
+                    } else {
+                        $testimonials = null;
+                    }
+
                     if (!is_array($testimonials) || empty($testimonials)) {
                         $testimonials = [
                             ['text' => 'Found an amazing spa deal in Clermont. Saved $120 on a massage package! This site is my go-to for local deals now.', 'name' => 'Jennifer Wilson', 'title' => 'Clermont Resident', 'initials' => 'JW'],
@@ -635,7 +667,7 @@
                             ['text' => 'As a small business owner, this platform helped me reach new customers. Easy to use and great support team!', 'name' => 'Sarah Thompson', 'title' => 'Business Owner', 'initials' => 'ST'],
                         ];
                     }
-                @endphp
+                ?>
                 @foreach($testimonials as $i => $t)
                 <div style="background:#f9f9f9; padding:15px; margin-bottom:15px; border-radius:5px;">
                     <p><strong>Testimonial {{ $i + 1 }}</strong></p>

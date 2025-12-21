@@ -3,28 +3,13 @@
 @section('head_title', $cat_info->category_name.' | '.getcong('site_name') )
 
 @section('head_url', Request::url())
+@section('use_hero_header', true)
+@section('hero_title', $cat_info->category_name)
+@section('hero_breadcrumbs', json_encode([['label' => trans('words.home'), 'url' => '/'], ['label' => $cat_info->category_name, 'url' => '']]))
 
 @section("content")
 
- 
-<!-- ================================
-     Start Breadcrumb Area
-================================= -->
-<section class="breadcrumb-area" style="background-image:url({{URL::to('assets/images/bread-bg.jpg')}})">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="breadcrumb-content">
-            <h2 class="item_sec_title text-white">{{$cat_info->category_name}} - {{trans('words.sub_categories')}}</h2>
-            <ul class="bread-list">
-                <li><a href="{{URL::to('/')}}" title="Home">{{trans('words.home')}}</a></li>
-                <li>{{$cat_info->category_name}} - {{trans('words.sub_categories')}}</li>
-            </ul>
-        </div>
-    </div>    
-</section>
-<!-- ================================
-     End Breadcrumb Area Area
-================================= --> 
+@include('common.page-hero-header') 
 
 <!-- ================================
      Start Sub Category Area

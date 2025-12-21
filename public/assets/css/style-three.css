@@ -1909,7 +1909,7 @@ textarea.form-control {
 	margin-right: 0
 }
 .main-menu>ul>li>a {
-	color: #fff;
+	color: #ff6b35;
 	font-size: 15px;
 	font-weight: 600;
 	display: block;
@@ -1927,7 +1927,7 @@ textarea.form-control {
 	font-size: 13px
 }
 .main-menu>ul>li>a:hover, .main-menu>ul>li>a.active {
-	color: #FD841F
+	color: #f7931e
 }
 .main-menu>ul>li .dropdown-menu-item {
 	position: absolute;

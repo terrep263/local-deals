@@ -2,28 +2,13 @@
 
 @section('head_title', 'Create Deal | ' . getcong('site_name'))
 @section('head_url', Request::url())
+@section('use_hero_header', true)
+@section('hero_title', 'Create Deal')
+@section('hero_breadcrumbs', json_encode([['label' => trans('words.home'), 'url' => '/'], ['label' => 'Create Deal', 'url' => '']]))
 
 @section("content")
 
-<!-- ================================
-     Start Breadcrumb Area
-================================= -->
-<section class="breadcrumb-area" style="background-image:url({{URL::to('assets/images/bread-bg.jpg')}})">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="breadcrumb-content">
-            <h2 class="item_sec_title text-white">Create New Deal</h2>
-            <ul class="bread-list">
-                <li><a href="{{URL::to('/')}}">{{trans('words.home')}}</a></li>
-                <li><a href="{{ route('vendor.deals.index') }}">My Deals</a></li>
-                <li>Create Deal</li>
-            </ul>
-        </div>
-    </div>    
-</section>
-<!-- ================================
-     End Breadcrumb Area
-================================= --> 
+@include('common.page-hero-header') 
 
 <!-- ================================
     Start Create Deal Area

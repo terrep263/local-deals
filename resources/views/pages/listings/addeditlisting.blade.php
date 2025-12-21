@@ -3,29 +3,13 @@
 @section('head_title', isset($listing->id) ? trans('words.edit_listing') : trans('words.add_listing').' | '.getcong('site_name') )
 
 @section('head_url', Request::url())
+@section('use_hero_header', true)
+@section('hero_title', isset($listing->id) ? trans('words.edit_listing') : trans('words.add_listing'))
+@section('hero_breadcrumbs', json_encode([['label' => trans('words.home'), 'url' => '/'], ['label' => isset($listing->id) ? trans('words.edit_listing') : trans('words.add_listing'), 'url' => '']]))
 
 @section("content")
- 
- 
 
- <!-- ================================
-     Start Breadcrumb Area
-================================= -->
-<section class="breadcrumb-area" style="background-image:url({{URL::to('assets/images/bread-bg.jpg')}})">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="breadcrumb-content">
-            <h2 class="item_sec_title text-white">{{isset($listing->id) ? trans('words.edit_listing') : trans('words.add_listing')}}</h2>
-            <ul class="bread-list">
-                <li><a href="{{URL::to('/')}}">{{trans('words.home')}}</a></li>
-                <li>{{isset($listing->id) ? trans('words.edit_listing') : trans('words.add_listing')}}</li>
-            </ul>
-        </div>
-    </div>    
-</section>
-<!-- ================================
-     End Breadcrumb Area Area
-================================= --> 
+@include('common.page-hero-header') 
 
 <!-- ================================
      Start Add Listing Area

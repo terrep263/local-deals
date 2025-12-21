@@ -2,29 +2,13 @@
 
 @section('head_title', $course['title'] . ' | ' . getcong('site_name'))
 @section('head_url', Request::url())
+@section('use_hero_header', true)
+@section('hero_title', $course['title'])
+@section('hero_breadcrumbs', json_encode([['label' => trans('words.home'), 'url' => '/'], ['label' => 'Training', 'url' => ''], ['label' => $course['title'], 'url' => '']]))
 
 @section("content")
 
-<!-- ================================
-     Start Breadcrumb Area
-================================= -->
-<section class="breadcrumb-area" style="background-image:url({{URL::to('assets/images/bread-bg.jpg')}})">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="breadcrumb-content">
-            <h2 class="item_sec_title text-white">{{ $course['title'] }}</h2>
-            <ul class="bread-list">
-                <li><a href="{{URL::to('/')}}">{{trans('words.home')}}</a></li>
-                <li><a href="{{URL::to('dashboard')}}">Dashboard</a></li>
-                <li><a href="{{route('vendor.training.index')}}">Training</a></li>
-                <li>Course {{ $course['number'] }}</li>
-            </ul>
-        </div>
-    </div>    
-</section>
-<!-- ================================
-     End Breadcrumb Area Area
-================================= --> 
+@include('common.page-hero-header') 
 
 <!-- ================================
     Start Course Area
