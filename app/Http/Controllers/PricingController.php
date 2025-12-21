@@ -9,16 +9,8 @@ class PricingController extends Controller
 {
     public function index()
     {
-        $features = PackageFeature::orderByRaw("FIELD(package_tier, 'starter', 'basic', 'pro', 'enterprise')")->get();
+        $features = PackageFeature::orderByRaw("FIELD(package_tier, 'starter', 'basic', 'pro')")->get();
         
         return view('pricing', compact('features'));
     }
 }
-
-
-
-
-
-
-
-
