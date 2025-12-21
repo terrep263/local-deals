@@ -77,25 +77,5 @@ class PackageFeaturesSeeder extends Seeder
             'monthly_voucher_limit' => 300,
             'monthly_deal_limit' => 15,
         ]);
-        
-        // ENTERPRISE - Maps to 'enterprise'
-        PackageFeature::create([
-            'package_tier' => 'enterprise',
-            'simultaneous_deals' => -1, // Unlimited
-            'inventory_cap_per_deal' => -1,
-            'ai_scoring_enabled' => true,
-            'analytics_access' => true,
-            'priority_placement' => true,
-            'featured_placement' => true,
-            'api_access' => true,
-            'white_label' => true,
-            'custom_branding' => true,
-            'auto_approval' => true,
-            'support_level' => 'dedicated',
-            'monthly_price' => 199.00,
-            'commission_rate' => 0.00,
-            'monthly_voucher_limit' => null, // Unlimited
-            'monthly_deal_limit' => null, // Unlimited
-        ]);
     }
 }
