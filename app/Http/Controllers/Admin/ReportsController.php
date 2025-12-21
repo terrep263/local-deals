@@ -7,11 +7,19 @@ use App\Models\User;
 use App\Models\Deal;
 use App\Models\DealPurchase;
 use App\Models\Subscription;
+use App\Services\ReportExportService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class ReportsController extends Controller
 {
+    protected $exportService;
+
+    public function __construct(ReportExportService $exportService)
+    {
+        $this->exportService = $exportService;
+    }
+
     public function index()
     {
         return view('admin.reports.index');
@@ -19,7 +27,7 @@ class ReportsController extends Controller
 
     public function vendorGrowth(Request $request)
     {
-        $period = $request->get('period', 'month'); // day, week, month
+        $period = $request->get('period', 'month');
         
         $startDate = $request->filled('start_date') 
             ? Carbon::parse($request->start_date)
@@ -65,8 +73,7 @@ class ReportsController extends Controller
                 category_id,
                 COUNT(*) as total_deals,
                 SUM(CASE WHEN status = "active" THEN 1 ELSE 0 END) as active_deals,
-                SUM(CASE WHEN status = "sold_out" THEN 1 ELSE 0 END) as sold_out_deals,
-                AVG(TIMESTAMPDIFF(DAY, created_at, updated_at)) as avg_days_to_sell_out
+                SUM(CASE WHEN status = "sold_out" THEN 1 ELSE 0 END) as sold_out_deals
             ')
             ->groupBy('category_id')
             ->get();
@@ -152,11 +159,16 @@ class ReportsController extends Controller
     {
         $type = $request->get('type', 'csv');
         $report = $request->get('report');
+        $startDate = $request->get('start_date', now()->subMonths(6)->format('Y-m-d'));
+        $endDate = $request->get('end_date', now()->format('Y-m-d'));
+        $period = $request->get('period', 'month');
 
-        // Implementation would use Maatwebsite Excel or similar
-        // For now, return a placeholder
-        return response()->json(['message' => 'Export functionality requires Maatwebsite Excel package']);
+        return match($report) {
+            'vendor-growth' => $this->exportService->exportVendorGrowth($startDate, $endDate, $period),
+            'deal-performance' => $this->exportService->exportDealPerformance(),
+            'revenue' => $this->exportService->exportRevenue($startDate, $endDate, $period),
+            'top-performers' => $this->exportService->exportTopPerformers(),
+            default => response()->json(['error' => 'Invalid report type'], 400)
+        };
     }
 }
-
-
