@@ -108,7 +108,7 @@ class ReportExportService
             $file = fopen('php://output', 'w');
             
             // Header row
-            fputcsv($file, ['Period', 'GMV (Gross Merchandise Value)', 'MRR (Monthly Recurring Revenue)']);
+            fputcsv($file, ['Period', 'GMV', 'MRR']);
             
             foreach ($data as $row) {
                 fputcsv($file, [
@@ -164,51 +164,6 @@ class ReportExportService
                     $vendor->email,
                     $vendor->deals_count,
                     '$' . number_format($vendor->revenue, 2)
-                ]);
-            }
-            
-            fclose($file);
-        };
-        
-        return Response::stream($callback, 200, $headers);
-    }
-
-    /**
-     * Export all vendors to CSV
-     */
-    public function exportAllVendors()
-    {
-        $vendors = User::where('usertype', '!=', 'admin')
-            ->withCount('deals')
-            ->with('subscription')
-            ->get();
-        
-        $filename = 'all-vendors-' . now()->format('Y-m-d') . '.csv';
-        
-        $headers = [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
-        ];
-        
-        $callback = function() use ($vendors) {
-            $file = fopen('php://output', 'w');
-            
-            // Header row
-            fputcsv($file, [
-                'ID', 'Name', 'Email', 'Phone', 'Subscription Tier', 
-                'Status', 'Total Deals', 'Joined Date'
-            ]);
-            
-            foreach ($vendors as $vendor) {
-                fputcsv($file, [
-                    $vendor->id,
-                    $vendor->name,
-                    $vendor->email,
-                    $vendor->phone ?? 'N/A',
-                    $vendor->subscription->package_tier ?? 'None',
-                    $vendor->account_status ?? 'active',
-                    $vendor->deals_count,
-                    $vendor->created_at->format('Y-m-d')
                 ]);
             }
             
@@ -275,7 +230,7 @@ class ReportExportService
             $data[] = [
                 'period' => $current->format($period === 'day' ? 'Y-m-d' : ($period === 'week' ? 'Y-W' : 'Y-m')),
                 'gmv' => $gmv,
-                'mrr' => 0, // Placeholder for MRR calculation
+                'mrr' => 0,
             ];
 
             $current = match($period) {
