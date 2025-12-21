@@ -5,9 +5,30 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\EmailTemplate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EmailTemplateController extends Controller
 {
+    // Default template content
+    private $defaultTemplates = [
+        'deal_created_confirmation' => [
+            'subject' => 'Your Deal Has Been Created',
+            'body' => '<p>Hi {{vendor_name}},</p><p>Your deal "{{deal_title}}" has been created successfully and is pending approval.</p><p>We will review it within 24 hours and notify you once it is approved.</p><p>Thank you for using {{site_name}}!</p>'
+        ],
+        'deal_approved' => [
+            'subject' => 'Your Deal Has Been Approved!',
+            'body' => '<p>Hi {{vendor_name}},</p><p>Great news! Your deal "{{deal_title}}" has been approved and is now live.</p><p><a href="{{deal_url}}">View Your Deal</a></p><p>Thank you for using {{site_name}}!</p>'
+        ],
+        'deal_rejected' => [
+            'subject' => 'Your Deal Needs Updates',
+            'body' => '<p>Hi {{vendor_name}},</p><p>Your deal "{{deal_title}}" requires some changes before it can be approved.</p><p><strong>Reason:</strong> {{rejection_reason}}</p><p>Please update your deal and resubmit.</p><p>Thank you for using {{site_name}}!</p>'
+        ],
+        'deal_expiring_soon' => [
+            'subject' => 'Your Deal is Expiring Soon',
+            'body' => '<p>Hi {{vendor_name}},</p><p>Your deal "{{deal_title}}" will expire in {{days_remaining}} days.</p><p>Consider creating a new deal to keep your presence on our platform.</p><p>Thank you for using {{site_name}}!</p>'
+        ],
+    ];
+
     public function index()
     {
         $templates = EmailTemplate::orderBy('category')->orderBy('name')->get();
@@ -49,6 +70,9 @@ class EmailTemplateController extends Controller
             'vendor_name' => 'John Doe',
             'deal_title' => 'Sample Deal Title',
             'deal_url' => url('/deals/sample-deal'),
+            'site_name' => 'Lake County Local Deals',
+            'rejection_reason' => 'Please provide more details about the deal.',
+            'days_remaining' => '3',
         ];
 
         $rendered = $template->render($variables);
@@ -73,6 +97,8 @@ class EmailTemplateController extends Controller
             'deal_title' => 'Test Deal',
             'deal_url' => url('/deals/test'),
             'site_name' => 'Lake County Local Deals',
+            'rejection_reason' => 'This is a test rejection reason.',
+            'days_remaining' => '7',
         ];
 
         $rendered = $template->render($variables);
@@ -93,9 +119,20 @@ class EmailTemplateController extends Controller
     {
         $template = EmailTemplate::findOrFail($id);
         
-        // Reset to default - you would load defaults from a config or seeder
-        // For now, just mark as needing reset
-        return redirect()->back()->with('info', 'Reset functionality requires default templates to be defined');
+        // Check if we have a default template for this
+        if (!isset($this->defaultTemplates[$template->name])) {
+            return redirect()->back()->with('error', 'No default template available for this template.');
+        }
+
+        $default = $this->defaultTemplates[$template->name];
+        
+        DB::transaction(function() use ($template, $default) {
+            $template->update([
+                'subject' => $default['subject'],
+                'body' => $default['body'],
+            ]);
+        });
+
+        return redirect()->back()->with('success', 'Template has been reset to default.');
     }
 }
-
