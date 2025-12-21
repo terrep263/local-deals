@@ -2,6 +2,22 @@
 
 @section("content")
 
+@php
+    // Helper function to safely get array data from potentially JSON-encoded strings
+    function safeJsonArray($value, $default = []) {
+        if (is_array($value)) {
+            return $value;
+        }
+        if (is_string($value) && !empty($value)) {
+            $decoded = json_decode($value, true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
+        return $default;
+    }
+@endphp
+
 <!-- Page Header -->
                 <div class="content bg-gray-lighter">
                     <div class="row items-push">
@@ -436,11 +452,14 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Hero Stats</label>
                     <div class="col-sm-9">
-                        @php($heroStats = old('hero_stats', $settings->hero_stats ?? [
-                            ['number' => '500+*', 'label' => 'Local Businesses'],
-                            ['number' => '10K+*', 'label' => 'Happy Customers'],
-                            ['number' => '$2M+*', 'label' => 'Total Savings'],
-                        ]))
+                        @php
+                            $defaultHeroStats = [
+                                ['number' => '500+*', 'label' => 'Local Businesses'],
+                                ['number' => '10K+*', 'label' => 'Happy Customers'],
+                                ['number' => '$2M+*', 'label' => 'Total Savings'],
+                            ];
+                            $heroStats = safeJsonArray(old('hero_stats', $settings->hero_stats ?? null), $defaultHeroStats);
+                        @endphp
                         @foreach($heroStats as $i => $stat)
                         <div class="row" style="margin-bottom:10px;">
                             <div class="col-xs-4">
@@ -460,13 +479,16 @@
         <div class="panel panel-default">
             <div class="panel-heading"><strong>📢 Promo Banner (Scrolling Text)</strong></div>
             <div class="panel-body">
-                @php($promoItems = old('promo_banner_items', $settings->promo_banner_items ?? [
-                    ['emoji' => '⚡', 'text' => 'LIMITED TIME OFFERS'],
-                    ['emoji' => '🎯', 'text' => 'UP TO 75% OFF'],
-                    ['emoji' => '🏆', 'text' => 'BEST LOCAL DEALS'],
-                    ['emoji' => '💰', 'text' => 'SAVE MORE TODAY'],
-                    ['emoji' => '🔥', 'text' => 'NEW DEALS DAILY'],
-                ]))
+                @php
+                    $defaultPromoItems = [
+                        ['emoji' => '⚡', 'text' => 'LIMITED TIME OFFERS'],
+                        ['emoji' => '🎯', 'text' => 'UP TO 75% OFF'],
+                        ['emoji' => '🏆', 'text' => 'BEST LOCAL DEALS'],
+                        ['emoji' => '💰', 'text' => 'SAVE MORE TODAY'],
+                        ['emoji' => '🔥', 'text' => 'NEW DEALS DAILY'],
+                    ];
+                    $promoItems = safeJsonArray(old('promo_banner_items', $settings->promo_banner_items ?? null), $defaultPromoItems);
+                @endphp
                 @foreach($promoItems as $i => $item)
                 <div class="form-group">
                     <label class="col-sm-2 control-label">Item {{ $i + 1 }}</label>
@@ -551,11 +573,14 @@
                 
                 <hr>
                 <p><strong>Steps:</strong></p>
-                @php($steps = old('how_it_works_steps', $settings->how_it_works_steps ?? [
-                    ['emoji' => '🔍', 'title' => 'Browse Deals', 'description' => 'Explore hundreds of exclusive deals from restaurants, spas, fitness centers and more across Lake County.'],
-                    ['emoji' => '🛒', 'title' => 'Purchase & Save', 'description' => 'Buy deals at huge discounts. Pay securely online and receive your voucher instantly via email.'],
-                    ['emoji' => '🎉', 'title' => 'Redeem & Enjoy', 'description' => 'Show your voucher at the business to redeem. Enjoy amazing experiences while supporting local!'],
-                ]))
+                @php
+                    $defaultSteps = [
+                        ['emoji' => '🔍', 'title' => 'Browse Deals', 'description' => 'Explore hundreds of exclusive deals from restaurants, spas, fitness centers and more across Lake County.'],
+                        ['emoji' => '🛒', 'title' => 'Purchase & Save', 'description' => 'Buy deals at huge discounts. Pay securely online and receive your voucher instantly via email.'],
+                        ['emoji' => '🎉', 'title' => 'Redeem & Enjoy', 'description' => 'Show your voucher at the business to redeem. Enjoy amazing experiences while supporting local!'],
+                    ];
+                    $steps = safeJsonArray(old('how_it_works_steps', $settings->how_it_works_steps ?? null), $defaultSteps);
+                @endphp
                 @foreach($steps as $i => $step)
                 <div style="background:#f9f9f9; padding:15px; margin-bottom:15px; border-radius:5px;">
                     <p><strong>Step {{ $i + 1 }}</strong></p>
@@ -607,11 +632,14 @@
                 
                 <hr>
                 <p><strong>Testimonials:</strong></p>
-                @php($testimonials = old('testimonials', $settings->testimonials ?? [
-                    ['text' => 'Found an amazing spa deal in Clermont. Saved $120 on a massage package! This site is my go-to for local deals now.', 'name' => 'Jennifer Wilson', 'title' => 'Clermont Resident', 'initials' => 'JW'],
-                    ['text' => "Great way to discover new restaurants in Lake County. We've tried 5 new places this month and saved over \$200!", 'name' => 'Michael Rodriguez', 'title' => 'Mount Dora Local', 'initials' => 'MR'],
-                    ['text' => 'As a small business owner, this platform helped me reach new customers. Easy to use and great support team!', 'name' => 'Sarah Thompson', 'title' => 'Business Owner', 'initials' => 'ST'],
-                ]))
+                @php
+                    $defaultTestimonials = [
+                        ['text' => 'Found an amazing spa deal in Clermont. Saved $120 on a massage package! This site is my go-to for local deals now.', 'name' => 'Jennifer Wilson', 'title' => 'Clermont Resident', 'initials' => 'JW'],
+                        ['text' => "Great way to discover new restaurants in Lake County. We've tried 5 new places this month and saved over \$200!", 'name' => 'Michael Rodriguez', 'title' => 'Mount Dora Local', 'initials' => 'MR'],
+                        ['text' => 'As a small business owner, this platform helped me reach new customers. Easy to use and great support team!', 'name' => 'Sarah Thompson', 'title' => 'Business Owner', 'initials' => 'ST'],
+                    ];
+                    $testimonials = safeJsonArray(old('testimonials', $settings->testimonials ?? null), $defaultTestimonials);
+                @endphp
                 @foreach($testimonials as $i => $t)
                 <div style="background:#f9f9f9; padding:15px; margin-bottom:15px; border-radius:5px;">
                     <p><strong>Testimonial {{ $i + 1 }}</strong></p>
@@ -875,4 +903,3 @@
                 
 
 @endsection
-
