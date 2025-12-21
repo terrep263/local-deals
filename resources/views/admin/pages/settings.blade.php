@@ -2,22 +2,6 @@
 
 @section("content")
 
-@php
-    // Helper function to safely get array data from potentially JSON-encoded strings
-    function safeJsonArray($value, $default = []) {
-        if (is_array($value)) {
-            return $value;
-        }
-        if (is_string($value) && !empty($value)) {
-            $decoded = json_decode($value, true);
-            if (is_array($decoded)) {
-                return $decoded;
-            }
-        }
-        return $default;
-    }
-@endphp
-
 <!-- Page Header -->
                 <div class="content bg-gray-lighter">
                     <div class="row items-push">
@@ -420,31 +404,31 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Badge Text</label>
                     <div class="col-sm-9">
-                        <input type="text" name="hero_badge_text" value="{{ old('hero_badge_text', $settings->hero_badge_text) }}" class="form-control" placeholder="New Deals Added Daily">
+                        <input type="text" name="hero_badge_text" value="{{ old('hero_badge_text', $settings->hero_badge_text ?? '') }}" class="form-control" placeholder="New Deals Added Daily">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Title</label>
                     <div class="col-sm-9">
-                        <input type="text" name="hero_title" value="{{ old('hero_title', $settings->hero_title) }}" class="form-control" placeholder="Shop Local Deals & ">
+                        <input type="text" name="hero_title" value="{{ old('hero_title', $settings->hero_title ?? '') }}" class="form-control" placeholder="Shop Local Deals & ">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Title Highlight (colored)</label>
                     <div class="col-sm-9">
-                        <input type="text" name="hero_title_highlight" value="{{ old('hero_title_highlight', $settings->hero_title_highlight) }}" class="form-control" placeholder="Save Big!">
+                        <input type="text" name="hero_title_highlight" value="{{ old('hero_title_highlight', $settings->hero_title_highlight ?? '') }}" class="form-control" placeholder="Save Big!">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Subtitle</label>
                     <div class="col-sm-9">
-                        <textarea name="hero_subtitle" class="form-control" rows="2">{{ old('hero_subtitle', $settings->hero_subtitle) }}</textarea>
+                        <textarea name="hero_subtitle" class="form-control" rows="2">{{ old('hero_subtitle', $settings->hero_subtitle ?? '') }}</textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Disclaimer</label>
                     <div class="col-sm-9">
-                        <input type="text" name="hero_disclaimer" value="{{ old('hero_disclaimer', $settings->hero_disclaimer) }}" class="form-control" placeholder="*Projected goals...">
+                        <input type="text" name="hero_disclaimer" value="{{ old('hero_disclaimer', $settings->hero_disclaimer ?? '') }}" class="form-control" placeholder="*Projected goals...">
                     </div>
                 </div>
                 
@@ -453,12 +437,15 @@
                     <label class="col-sm-3 control-label">Hero Stats</label>
                     <div class="col-sm-9">
                         @php
-                            $defaultHeroStats = [
-                                ['number' => '500+*', 'label' => 'Local Businesses'],
-                                ['number' => '10K+*', 'label' => 'Happy Customers'],
-                                ['number' => '$2M+*', 'label' => 'Total Savings'],
-                            ];
-                            $heroStats = safeJsonArray(old('hero_stats', $settings->hero_stats ?? null), $defaultHeroStats);
+                            $rawHeroStats = old('hero_stats', $settings->hero_stats ?? null);
+                            $heroStats = is_array($rawHeroStats) ? $rawHeroStats : (is_string($rawHeroStats) && !empty($rawHeroStats) ? json_decode($rawHeroStats, true) : null);
+                            if (!is_array($heroStats) || empty($heroStats)) {
+                                $heroStats = [
+                                    ['number' => '500+*', 'label' => 'Local Businesses'],
+                                    ['number' => '10K+*', 'label' => 'Happy Customers'],
+                                    ['number' => '$2M+*', 'label' => 'Total Savings'],
+                                ];
+                            }
                         @endphp
                         @foreach($heroStats as $i => $stat)
                         <div class="row" style="margin-bottom:10px;">
@@ -480,14 +467,17 @@
             <div class="panel-heading"><strong>📢 Promo Banner (Scrolling Text)</strong></div>
             <div class="panel-body">
                 @php
-                    $defaultPromoItems = [
-                        ['emoji' => '⚡', 'text' => 'LIMITED TIME OFFERS'],
-                        ['emoji' => '🎯', 'text' => 'UP TO 75% OFF'],
-                        ['emoji' => '🏆', 'text' => 'BEST LOCAL DEALS'],
-                        ['emoji' => '💰', 'text' => 'SAVE MORE TODAY'],
-                        ['emoji' => '🔥', 'text' => 'NEW DEALS DAILY'],
-                    ];
-                    $promoItems = safeJsonArray(old('promo_banner_items', $settings->promo_banner_items ?? null), $defaultPromoItems);
+                    $rawPromoItems = old('promo_banner_items', $settings->promo_banner_items ?? null);
+                    $promoItems = is_array($rawPromoItems) ? $rawPromoItems : (is_string($rawPromoItems) && !empty($rawPromoItems) ? json_decode($rawPromoItems, true) : null);
+                    if (!is_array($promoItems) || empty($promoItems)) {
+                        $promoItems = [
+                            ['emoji' => '⚡', 'text' => 'LIMITED TIME OFFERS'],
+                            ['emoji' => '🎯', 'text' => 'UP TO 75% OFF'],
+                            ['emoji' => '🏆', 'text' => 'BEST LOCAL DEALS'],
+                            ['emoji' => '💰', 'text' => 'SAVE MORE TODAY'],
+                            ['emoji' => '🔥', 'text' => 'NEW DEALS DAILY'],
+                        ];
+                    }
                 @endphp
                 @foreach($promoItems as $i => $item)
                 <div class="form-group">
@@ -518,31 +508,31 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Label</label>
                     <div class="col-sm-9">
-                        <input type="text" name="sale_banner_label" value="{{ old('sale_banner_label', $settings->sale_banner_label) }}" class="form-control" placeholder="🎉 LIMITED TIME">
+                        <input type="text" name="sale_banner_label" value="{{ old('sale_banner_label', $settings->sale_banner_label ?? '') }}" class="form-control" placeholder="🎉 LIMITED TIME">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Title</label>
                     <div class="col-sm-9">
-                        <input type="text" name="sale_banner_title" value="{{ old('sale_banner_title', $settings->sale_banner_title) }}" class="form-control" placeholder="Holiday Deals Event">
+                        <input type="text" name="sale_banner_title" value="{{ old('sale_banner_title', $settings->sale_banner_title ?? '') }}" class="form-control" placeholder="Holiday Deals Event">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Subtitle</label>
                     <div class="col-sm-9">
-                        <input type="text" name="sale_banner_subtitle" value="{{ old('sale_banner_subtitle', $settings->sale_banner_subtitle) }}" class="form-control" placeholder="Exclusive savings from local businesses">
+                        <input type="text" name="sale_banner_subtitle" value="{{ old('sale_banner_subtitle', $settings->sale_banner_subtitle ?? '') }}" class="form-control" placeholder="Exclusive savings from local businesses">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Discount %</label>
                     <div class="col-sm-9">
-                        <input type="text" name="sale_banner_discount" value="{{ old('sale_banner_discount', $settings->sale_banner_discount) }}" class="form-control" placeholder="75%">
+                        <input type="text" name="sale_banner_discount" value="{{ old('sale_banner_discount', $settings->sale_banner_discount ?? '') }}" class="form-control" placeholder="75%">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Button Text</label>
                     <div class="col-sm-9">
-                        <input type="text" name="sale_banner_button_text" value="{{ old('sale_banner_button_text', $settings->sale_banner_button_text) }}" class="form-control" placeholder="Shop All Deals →">
+                        <input type="text" name="sale_banner_button_text" value="{{ old('sale_banner_button_text', $settings->sale_banner_button_text ?? '') }}" class="form-control" placeholder="Shop All Deals →">
                     </div>
                 </div>
             </div>
@@ -555,31 +545,34 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Section Label</label>
                     <div class="col-sm-9">
-                        <input type="text" name="how_it_works_label" value="{{ old('how_it_works_label', $settings->how_it_works_label) }}" class="form-control" placeholder="Simple Process">
+                        <input type="text" name="how_it_works_label" value="{{ old('how_it_works_label', $settings->how_it_works_label ?? '') }}" class="form-control" placeholder="Simple Process">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Section Title</label>
                     <div class="col-sm-9">
-                        <input type="text" name="how_it_works_title" value="{{ old('how_it_works_title', $settings->how_it_works_title) }}" class="form-control" placeholder="How It Works">
+                        <input type="text" name="how_it_works_title" value="{{ old('how_it_works_title', $settings->how_it_works_title ?? '') }}" class="form-control" placeholder="How It Works">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Section Subtitle</label>
                     <div class="col-sm-9">
-                        <input type="text" name="how_it_works_subtitle" value="{{ old('how_it_works_subtitle', $settings->how_it_works_subtitle) }}" class="form-control">
+                        <input type="text" name="how_it_works_subtitle" value="{{ old('how_it_works_subtitle', $settings->how_it_works_subtitle ?? '') }}" class="form-control">
                     </div>
                 </div>
                 
                 <hr>
                 <p><strong>Steps:</strong></p>
                 @php
-                    $defaultSteps = [
-                        ['emoji' => '🔍', 'title' => 'Browse Deals', 'description' => 'Explore hundreds of exclusive deals from restaurants, spas, fitness centers and more across Lake County.'],
-                        ['emoji' => '🛒', 'title' => 'Purchase & Save', 'description' => 'Buy deals at huge discounts. Pay securely online and receive your voucher instantly via email.'],
-                        ['emoji' => '🎉', 'title' => 'Redeem & Enjoy', 'description' => 'Show your voucher at the business to redeem. Enjoy amazing experiences while supporting local!'],
-                    ];
-                    $steps = safeJsonArray(old('how_it_works_steps', $settings->how_it_works_steps ?? null), $defaultSteps);
+                    $rawSteps = old('how_it_works_steps', $settings->how_it_works_steps ?? null);
+                    $steps = is_array($rawSteps) ? $rawSteps : (is_string($rawSteps) && !empty($rawSteps) ? json_decode($rawSteps, true) : null);
+                    if (!is_array($steps) || empty($steps)) {
+                        $steps = [
+                            ['emoji' => '🔍', 'title' => 'Browse Deals', 'description' => 'Explore hundreds of exclusive deals from restaurants, spas, fitness centers and more across Lake County.'],
+                            ['emoji' => '🛒', 'title' => 'Purchase & Save', 'description' => 'Buy deals at huge discounts. Pay securely online and receive your voucher instantly via email.'],
+                            ['emoji' => '🎉', 'title' => 'Redeem & Enjoy', 'description' => 'Show your voucher at the business to redeem. Enjoy amazing experiences while supporting local!'],
+                        ];
+                    }
                 @endphp
                 @foreach($steps as $i => $step)
                 <div style="background:#f9f9f9; padding:15px; margin-bottom:15px; border-radius:5px;">
@@ -614,31 +607,34 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Section Label</label>
                     <div class="col-sm-9">
-                        <input type="text" name="testimonials_label" value="{{ old('testimonials_label', $settings->testimonials_label) }}" class="form-control" placeholder="Customer Love">
+                        <input type="text" name="testimonials_label" value="{{ old('testimonials_label', $settings->testimonials_label ?? '') }}" class="form-control" placeholder="Customer Love">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Section Title</label>
                     <div class="col-sm-9">
-                        <input type="text" name="testimonials_title" value="{{ old('testimonials_title', $settings->testimonials_title) }}" class="form-control" placeholder="What People Say">
+                        <input type="text" name="testimonials_title" value="{{ old('testimonials_title', $settings->testimonials_title ?? '') }}" class="form-control" placeholder="What People Say">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Section Subtitle</label>
                     <div class="col-sm-9">
-                        <input type="text" name="testimonials_subtitle" value="{{ old('testimonials_subtitle', $settings->testimonials_subtitle) }}" class="form-control">
+                        <input type="text" name="testimonials_subtitle" value="{{ old('testimonials_subtitle', $settings->testimonials_subtitle ?? '') }}" class="form-control">
                     </div>
                 </div>
                 
                 <hr>
                 <p><strong>Testimonials:</strong></p>
                 @php
-                    $defaultTestimonials = [
-                        ['text' => 'Found an amazing spa deal in Clermont. Saved $120 on a massage package! This site is my go-to for local deals now.', 'name' => 'Jennifer Wilson', 'title' => 'Clermont Resident', 'initials' => 'JW'],
-                        ['text' => "Great way to discover new restaurants in Lake County. We've tried 5 new places this month and saved over \$200!", 'name' => 'Michael Rodriguez', 'title' => 'Mount Dora Local', 'initials' => 'MR'],
-                        ['text' => 'As a small business owner, this platform helped me reach new customers. Easy to use and great support team!', 'name' => 'Sarah Thompson', 'title' => 'Business Owner', 'initials' => 'ST'],
-                    ];
-                    $testimonials = safeJsonArray(old('testimonials', $settings->testimonials ?? null), $defaultTestimonials);
+                    $rawTestimonials = old('testimonials', $settings->testimonials ?? null);
+                    $testimonials = is_array($rawTestimonials) ? $rawTestimonials : (is_string($rawTestimonials) && !empty($rawTestimonials) ? json_decode($rawTestimonials, true) : null);
+                    if (!is_array($testimonials) || empty($testimonials)) {
+                        $testimonials = [
+                            ['text' => 'Found an amazing spa deal in Clermont. Saved $120 on a massage package! This site is my go-to for local deals now.', 'name' => 'Jennifer Wilson', 'title' => 'Clermont Resident', 'initials' => 'JW'],
+                            ['text' => "Great way to discover new restaurants in Lake County. We've tried 5 new places this month and saved over \$200!", 'name' => 'Michael Rodriguez', 'title' => 'Mount Dora Local', 'initials' => 'MR'],
+                            ['text' => 'As a small business owner, this platform helped me reach new customers. Easy to use and great support team!', 'name' => 'Sarah Thompson', 'title' => 'Business Owner', 'initials' => 'ST'],
+                        ];
+                    }
                 @endphp
                 @foreach($testimonials as $i => $t)
                 <div style="background:#f9f9f9; padding:15px; margin-bottom:15px; border-radius:5px;">
@@ -677,19 +673,19 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Title</label>
                     <div class="col-sm-9">
-                        <input type="text" name="cta_title" value="{{ old('cta_title', $settings->cta_title) }}" class="form-control" placeholder="Own a Local Business?">
+                        <input type="text" name="cta_title" value="{{ old('cta_title', $settings->cta_title ?? '') }}" class="form-control" placeholder="Own a Local Business?">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Subtitle</label>
                     <div class="col-sm-9">
-                        <input type="text" name="cta_subtitle" value="{{ old('cta_subtitle', $settings->cta_subtitle) }}" class="form-control" placeholder="List your deals and reach thousands of Lake County customers today">
+                        <input type="text" name="cta_subtitle" value="{{ old('cta_subtitle', $settings->cta_subtitle ?? '') }}" class="form-control" placeholder="List your deals and reach thousands of Lake County customers today">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Button Text</label>
                     <div class="col-sm-9">
-                        <input type="text" name="cta_button_text" value="{{ old('cta_button_text', $settings->cta_button_text) }}" class="form-control" placeholder="List Your Business Free →">
+                        <input type="text" name="cta_button_text" value="{{ old('cta_button_text', $settings->cta_button_text ?? '') }}" class="form-control" placeholder="List Your Business Free →">
                     </div>
                 </div>
             </div>
@@ -702,13 +698,13 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Footer Description</label>
                     <div class="col-sm-9">
-                        <textarea name="footer_description" class="form-control" rows="2">{{ old('footer_description', $settings->footer_description) }}</textarea>
+                        <textarea name="footer_description" class="form-control" rows="2">{{ old('footer_description', $settings->footer_description ?? '') }}</textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">Copyright Text</label>
                     <div class="col-sm-9">
-                        <input type="text" name="footer_copyright" value="{{ old('footer_copyright', $settings->footer_copyright) }}" class="form-control" placeholder="© 2025 Lake County Local Deals. All rights reserved.">
+                        <input type="text" name="footer_copyright" value="{{ old('footer_copyright', $settings->footer_copyright ?? '') }}" class="form-control" placeholder="© 2025 Lake County Local Deals. All rights reserved.">
                     </div>
                 </div>
             </div>
