@@ -2,72 +2,79 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DealPurchase;
+use App\Services\VoucherService;
 use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 class VoucherController extends Controller
 {
-    /**
-     * Show voucher page
-     */
-    public function show($confirmationCode)
+    protected $voucherService;
+
+    public function __construct(VoucherService $voucherService)
     {
-        $purchase = DealPurchase::where('confirmation_code', $confirmationCode)
-            ->with(['deal.vendor', 'deal.category'])
-            ->firstOrFail();
-        
-        return view('vouchers.show', compact('purchase'));
+        $this->voucherService = $voucherService;
     }
-    
+
     /**
-     * Download voucher as PDF
+     * Show voucher verification page
      */
-    public function downloadPdf($confirmationCode)
+    public function verify()
     {
-        $purchase = DealPurchase::where('confirmation_code', $confirmationCode)
-            ->with(['deal.vendor', 'deal.category'])
-            ->firstOrFail();
-        
-        $pdf = Pdf::loadView('vouchers.pdf', compact('purchase'));
-        
-        return $pdf->download('voucher-' . $confirmationCode . '.pdf');
+        return view('vouchers.verify');
     }
-    
+
     /**
-     * Email voucher to consumer
+     * Check voucher status
      */
-    public function emailVoucher(Request $request, $confirmationCode)
+    public function check(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'code' => 'required|string',
         ]);
-        
-        $purchase = DealPurchase::where('confirmation_code', $confirmationCode)
-            ->with(['deal.vendor', 'deal.category'])
-            ->firstOrFail();
-        
-        try {
-            \Mail::send('emails.voucher_email', [
-                'purchase' => $purchase,
-                'deal' => $purchase->deal,
-            ], function ($message) use ($request, $purchase) {
-                $message->from(env('MAIL_FROM_ADDRESS'), getcong('site_name'));
-                $message->to($request->email)->subject('Your Deal Voucher - ' . $purchase->deal->title);
-                
-                // Attach PDF
-                $pdf = Pdf::loadView('vouchers.pdf', ['purchase' => $purchase]);
-                $message->attachData($pdf->output(), 'voucher-' . $purchase->confirmation_code . '.pdf');
-            });
-            
-            \Session::flash('flash_message', 'Voucher sent to ' . $request->email);
-        } catch (\Exception $e) {
-            \Log::error('Failed to email voucher: ' . $e->getMessage());
-            \Session::flash('error_flash_message', 'Failed to send email. Please try again.');
+
+        $result = $this->voucherService->checkVoucher($request->code);
+
+        if (!$result['found']) {
+            return back()->with('error', $result['message']);
         }
-        
-        return redirect()->back();
+
+        return view('vouchers.status', [
+            'voucher' => $result['voucher'],
+            'is_valid' => $result['is_valid'],
+        ]);
+    }
+
+    /**
+     * Show redemption page (vendor only)
+     */
+    public function showRedemption()
+    {
+        $this->middleware(['auth', 'vendor']);
+        return view('vendor.vouchers.redeem');
+    }
+
+    /**
+     * Redeem voucher (vendor only)
+     */
+    public function redeem(Request $request)
+    {
+        $this->middleware(['auth', 'vendor']);
+
+        $request->validate([
+            'code' => 'required|string',
+            'notes' => 'nullable|string|max:500',
+        ]);
+
+        $result = $this->voucherService->redeemVoucher(
+            $request->code,
+            Auth::user(),
+            $request->notes
+        );
+
+        if ($result['success']) {
+            return back()->with('success', $result['message']);
+        }
+
+        return back()->with('error', $result['message']);
     }
 }
-
-
