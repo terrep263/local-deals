@@ -22,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
             \App\Http\Middleware\TrimStrings::class,
             \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+            \App\Http\Middleware\SecurityHeaders::class,
         ]);
 
         $middleware->group('web', [
@@ -31,6 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\SessionTimeout::class . ':30',
         ]);
 
         $middleware->group('api', [
@@ -55,6 +57,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'vendor' => \App\Http\Middleware\EnsureVendor::class,
             'vendor.onboarded' => \App\Http\Middleware\EnsureVendorOnboarded::class,
             'vendor.capacity' => \App\Http\Middleware\CheckVoucherCapacity::class,
+            '2fa' => \App\Http\Middleware\TwoFactorAuth::class,
+            'session.timeout' => \App\Http\Middleware\SessionTimeout::class,
         ]);
     })
     ->withSchedule(function (Schedule $schedule) {
@@ -66,5 +70,3 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
-
-
