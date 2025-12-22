@@ -16,7 +16,11 @@ class VendorProfile extends Model
         'stripe_account_id', 'stripe_connected_at', 'subscription_tier',
         'monthly_voucher_limit', 'vouchers_used_this_month',
         'billing_period_start', 'is_founder', 'onboarding_completed',
-        'profile_completed'
+        'profile_completed', 'monthly_price', 'active_deals_limit',
+        'active_deals_count', 'founder_number', 'founder_claimed_at',
+        'consecutive_inactive_months', 'last_voucher_redeemed_at',
+        'stripe_subscription_id', 'stripe_customer_id', 'stripe_payment_method_id',
+        'subscription_started_at', 'subscription_ends_at'
     ];
     
     protected $casts = [
@@ -26,6 +30,11 @@ class VendorProfile extends Model
         'is_founder' => 'boolean',
         'onboarding_completed' => 'boolean',
         'profile_completed' => 'boolean',
+        'monthly_price' => 'decimal:2',
+        'founder_claimed_at' => 'datetime',
+        'last_voucher_redeemed_at' => 'datetime',
+        'subscription_started_at' => 'datetime',
+        'subscription_ends_at' => 'datetime',
     ];
     
     // Relationships
@@ -43,6 +52,36 @@ class VendorProfile extends Model
     public function isFounder(): bool
     {
         return $this->is_founder;
+    }
+    
+    public function hasFounderUpgrade(): bool
+    {
+        return $this->subscription_tier === 'founder_upgrade';
+    }
+    
+    public function canClaimFounder(): bool
+    {
+        // Check if there are less than 25 founders
+        return self::where('is_founder', true)->count() < 25;
+    }
+    
+    public function hasUnlimitedVouchers(): bool
+    {
+        return in_array($this->subscription_tier, ['pro', 'enterprise']);
+    }
+    
+    public function hasUnlimitedDeals(): bool
+    {
+        return $this->subscription_tier === 'enterprise';
+    }
+    
+    public function hasReachedDealLimit(): bool
+    {
+        if ($this->hasUnlimitedDeals()) {
+            return false;
+        }
+        
+        return $this->active_deals_count >= $this->active_deals_limit;
     }
     
     public function canCreateDeals(): bool

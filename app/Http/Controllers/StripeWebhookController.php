@@ -77,12 +77,22 @@ class StripeWebhookController extends Controller
                     $this->handlePaymentFailed($event);
                     break;
 
-                // Subscription events (existing)
+                // Subscription events (new pricing system)
                 case 'customer.subscription.created':
-                case 'customer.subscription.updated':
+                    $this->handleSubscriptionCreated($event);
+                    break;
+
                 case 'customer.subscription.deleted':
-                case 'invoice.payment_succeeded':
+                    $this->handleSubscriptionDeleted($event);
+                    break;
+
                 case 'invoice.payment_failed':
+                    $this->handleInvoicePaymentFailed($event);
+                    break;
+
+                // Legacy subscription handling (keep for backward compatibility)
+                case 'customer.subscription.updated':
+                case 'invoice.payment_succeeded':
                     $this->subscriptionService->handleWebhook($event->toArray());
                     break;
 
@@ -214,6 +224,121 @@ class StripeWebhookController extends Controller
             Log::info('Purchase marked as failed', [
                 'purchase_id' => $purchase->id
             ]);
+        }
+    }
+
+    /**
+     * Handle customer.subscription.created event
+     */
+    protected function handleSubscriptionCreated($event)
+    {
+        $subscription = $event->data->object;
+        
+        Log::info('Subscription created', [
+            'subscription_id' => $subscription->id,
+            'customer_id' => $subscription->customer
+        ]);
+        
+        // Find vendor by customer ID
+        $vendor = VendorProfile::where('stripe_customer_id', $subscription->customer)
+            ->first();
+            
+        if (!$vendor) {
+            Log::error('Vendor not found for subscription', [
+                'customer_id' => $subscription->customer
+            ]);
+            return;
+        }
+        
+        // Get plan from subscription metadata
+        $planSlug = $subscription->metadata['plan'] ?? null;
+        
+        if (!$planSlug) {
+            Log::error('No plan in subscription metadata', [
+                'subscription_id' => $subscription->id
+            ]);
+            return;
+        }
+        
+        // Apply plan limits
+        $pricingService = app(\App\Services\PricingService::class);
+        $pricingService->applyPlanLimits($vendor, $planSlug);
+        
+        // Update vendor
+        $vendor->update([
+            'stripe_subscription_id' => $subscription->id,
+            'subscription_started_at' => now(),
+            'subscription_ends_at' => null,
+        ]);
+        
+        // If upgrading from founder, revoke founder status
+        if ($vendor->isFounder() && $planSlug !== 'founder_upgrade') {
+            $vendor->update(['is_founder' => false]);
+        }
+        
+        Log::info('Subscription activated', [
+            'vendor_id' => $vendor->id,
+            'plan' => $planSlug
+        ]);
+    }
+
+    /**
+     * Handle customer.subscription.deleted event
+     */
+    protected function handleSubscriptionDeleted($event)
+    {
+        $subscription = $event->data->object;
+        
+        Log::warning('Subscription cancelled', [
+            'subscription_id' => $subscription->id
+        ]);
+        
+        $vendor = VendorProfile::where('stripe_subscription_id', $subscription->id)
+            ->first();
+            
+        if (!$vendor) {
+            Log::error('Vendor not found for cancelled subscription', [
+                'subscription_id' => $subscription->id
+            ]);
+            return;
+        }
+        
+        // Downgrade to free tier
+        $pricingService = app(\App\Services\PricingService::class);
+        $pricingService->applyPlanLimits($vendor, 'founder');
+        
+        $vendor->update([
+            'stripe_subscription_id' => null,
+            'subscription_ends_at' => now(),
+        ]);
+        
+        Log::info('Vendor downgraded to free tier', [
+            'vendor_id' => $vendor->id
+        ]);
+    }
+
+    /**
+     * Handle invoice.payment_failed event (for subscriptions)
+     */
+    protected function handleInvoicePaymentFailed($event)
+    {
+        $invoice = $event->data->object;
+        
+        Log::warning('Invoice payment failed', [
+            'invoice_id' => $invoice->id,
+            'customer_id' => $invoice->customer
+        ]);
+        
+        $vendor = VendorProfile::where('stripe_customer_id', $invoice->customer)
+            ->first();
+            
+        if ($vendor) {
+            Log::info('Payment failure notification sent', [
+                'vendor_id' => $vendor->id
+            ]);
+            
+            // TODO: Send payment failed email to vendor
+            // \Mail::to($vendor->user)->send(new \App\Mail\PaymentFailedEmail($vendor));
         }
     }
 }

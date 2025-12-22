@@ -43,6 +43,7 @@ use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Vendor\AnalyticsController as VendorAnalyticsController;
 use App\Http\Controllers\Vendor\AIDealAnalyzerController;
+use App\Http\Controllers\Vendor\BillingController as VendorBillingController;
 use App\Http\Controllers\Vendor\DealController as VendorDealController;
 use App\Http\Controllers\Vendor\MarketingController;
 use App\Http\Controllers\Vendor\SubscriptionController as VendorSubscriptionController;
@@ -360,6 +361,12 @@ Route::middleware(['auth', 'vendor', 'vendor.onboarded'])->prefix('vendor')->nam
     Route::get('/upgrade', [UpgradeController::class, 'index'])->name('upgrade.index');
     Route::post('/upgrade', [UpgradeController::class, 'upgrade'])->name('upgrade.process');
     Route::post('/upgrade/dismiss/{suggestion}', [UpgradeController::class, 'dismissSuggestion'])->name('upgrade.dismiss');
+
+    // Vendor Billing & Subscriptions
+    Route::get('/billing', [VendorBillingController::class, 'index'])->name('billing.index');
+    Route::get('/billing/upgrade/{plan}', [VendorBillingController::class, 'upgrade'])->name('billing.upgrade');
+    Route::post('/billing/process-upgrade', [VendorBillingController::class, 'processUpgrade'])->name('billing.process-upgrade');
+
     Route::get('/stats/monthly', function () {
         $commissionService = app(\App\Services\CommissionService::class);
         $stats = $commissionService->getMonthlyStats(Auth::id());

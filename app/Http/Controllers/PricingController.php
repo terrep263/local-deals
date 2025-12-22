@@ -2,15 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PackageFeature;
+use App\Services\PricingService;
 use Illuminate\Http\Request;
 
 class PricingController extends Controller
 {
+    private PricingService $pricingService;
+    
+    public function __construct(PricingService $pricingService)
+    {
+        $this->pricingService = $pricingService;
+    }
+    
     public function index()
     {
-        $features = PackageFeature::orderByRaw("FIELD(package_tier, 'free', 'starter', 'basic', 'pro')")->get();
+        $plans = $this->pricingService->getPlanComparison();
+        $founderSlotsLeft = $this->pricingService->founderSlotsAvailable();
         
-        return view('pricing', compact('features'));
+        return view('pricing', compact('plans', 'founderSlotsLeft'));
     }
 }
