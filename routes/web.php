@@ -47,6 +47,7 @@ use App\Http\Controllers\Vendor\DealController as VendorDealController;
 use App\Http\Controllers\Vendor\MarketingController;
 use App\Http\Controllers\Vendor\SubscriptionController as VendorSubscriptionController;
 use App\Http\Controllers\Vendor\SupportController as VendorSupportController;
+use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\Vendor\UpgradeController;
 use App\Http\Controllers\Customer\PurchaseController;
 use App\Http\Controllers\Vendor\OnboardingController;
@@ -152,6 +153,9 @@ Route::prefix('admin')->group(function () {
     Route::post('payment_gateway/razorpay', [AdminPaymentGatewayController::class, 'razorpay']);
     Route::post('payment_gateway/paystack', [AdminPaymentGatewayController::class, 'paystack']);
 });
+
+// Stripe Webhook - Must be accessible without authentication
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])->name('stripe.webhook');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 

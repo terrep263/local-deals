@@ -86,7 +86,9 @@ class PurchaseController extends Controller
                 'vendor_profile_id' => $vendor->id,
                 'purchase_amount' => $deal->deal_price,
                 'stripe_checkout_session_id' => $session->id,
-                'status' => 'pending'
+                'status' => 'pending',
+                'consumer_email' => auth()->user()->email,
+                'consumer_name' => auth()->user()->name
             ]);
             
             Log::info('Purchase initiated', [
