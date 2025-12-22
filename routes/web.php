@@ -48,6 +48,7 @@ use App\Http\Controllers\Vendor\MarketingController;
 use App\Http\Controllers\Vendor\SubscriptionController as VendorSubscriptionController;
 use App\Http\Controllers\Vendor\SupportController as VendorSupportController;
 use App\Http\Controllers\Vendor\UpgradeController;
+use App\Http\Controllers\Customer\PurchaseController;
 use App\Http\Controllers\Vendor\OnboardingController;
 use App\Http\Controllers\Vendor\VendorTrainingController;
 use App\Http\Controllers\Vendor\VoucherRedemptionController;
@@ -217,6 +218,13 @@ Route::post('subscription/checkout', [SubscriptionController::class, 'checkout']
 Route::get('subscription/success', [SubscriptionController::class, 'success'])->middleware('auth')->name('subscription.success');
 Route::get('subscription/cancel', [SubscriptionController::class, 'cancel'])->middleware('auth')->name('subscription.cancel');
 Route::get('subscription/portal', [SubscriptionController::class, 'portal'])->middleware('auth')->name('subscription.portal');
+
+// Customer Purchase Routes
+Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(function () {
+    Route::post('/purchase/checkout/{deal}', [PurchaseController::class, 'checkout'])->name('purchase.checkout');
+    Route::get('/purchase/success', [PurchaseController::class, 'success'])->name('purchase.success');
+    Route::get('/purchase/cancel', [PurchaseController::class, 'cancel'])->name('purchase.cancel');
+});
 
 // Admin Subscription Management
 Route::prefix('admin')->middleware(['auth'])->group(function () {

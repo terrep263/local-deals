@@ -1113,7 +1113,28 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                        
+                        <!-- PURCHASE SECTION -->
+                        <div class="card-footer" style="background-color: #f1f5f9; padding: 16px; border-top: 1px solid #e2e8f0; margin-top: 16px;">
+                            @auth
+                                @if($isDealActive)
+                                    <form action="{{ route('customer.purchase.checkout', ['deal' => $listing->id]) }}" method="POST" class="w-100">
+                                        @csrf
+                                        <button type="submit" class="btn btn-success btn-lg btn-block">
+                                            <i class="fas fa-shopping-cart"></i> Buy Now
+                                        </button>
+                                    </form>
+                                @else
+                                    <button class="btn btn-secondary btn-lg btn-block" disabled>
+                                        <i class="fas fa-ban"></i> Not Available
+                                    </button>
+                                @endif
+                            @else
+                                <a href="{{ route('login') }}" class="btn btn-primary btn-lg btn-block">
+                                    <i class="fas fa-sign-in-alt"></i> Login to Buy
+                                </a>
+                            @endauth
+                        </div>
                 @else
                     <!-- NO ACTIVE DEAL -->
                     <div class="card">
