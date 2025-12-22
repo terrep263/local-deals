@@ -22,8 +22,8 @@ class SecurityHeaders
         $response->headers->set('Content-Security-Policy', 
             "default-src 'self'; " .
             "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://js.stripe.com https://www.google.com https://www.gstatic.com; " .
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " .
-            "font-src 'self' https://fonts.gstatic.com; " .
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; " .
+            "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; " .
             "img-src 'self' data: https: blob:; " .
             "connect-src 'self' https://api.stripe.com; " .
             "frame-src 'self' https://js.stripe.com https://www.google.com;"
