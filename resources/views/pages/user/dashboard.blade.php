@@ -9,7 +9,7 @@
 
 @section("content")
 
-@include('common.page-hero-header') 
+@include('common.page-hero-header', ['title' => trans('words.dashboard')]) 
 
 <!-- ================================
     Start Dashboard Area

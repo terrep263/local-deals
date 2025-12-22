@@ -8,7 +8,7 @@
 
 @section('content')
 
-@include('common.page-hero-header')
+@include('common.page-hero-header', ['title' => 'Complete Your Profile'])
 
 <section class="dashboard-area pt-40 pb-60">
     <div class="container">

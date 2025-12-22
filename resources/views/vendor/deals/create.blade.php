@@ -8,7 +8,7 @@
 
 @section("content")
 
-@include('common.page-hero-header') 
+@include('common.page-hero-header', ['title' => 'Create Deal']) 
 
 <!-- ================================
     Start Create Deal Area

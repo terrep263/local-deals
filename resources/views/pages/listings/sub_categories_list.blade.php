@@ -9,7 +9,7 @@
 
 @section("content")
 
-@include('common.page-hero-header') 
+@include('common.page-hero-header', ['title' => $cat_info->category_name]) 
 
 <!-- ================================
      Start Sub Category Area

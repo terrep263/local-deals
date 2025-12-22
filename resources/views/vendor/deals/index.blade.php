@@ -8,7 +8,7 @@
 
 @section("content")
 
-@include('common.page-hero-header') 
+@include('common.page-hero-header', ['title' => 'My Deals']) 
 
 <!-- ================================
     Start Deals Dashboard Area
