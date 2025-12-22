@@ -44,6 +44,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Vendor\AnalyticsController as VendorAnalyticsController;
 use App\Http\Controllers\Vendor\AIDealAnalyzerController;
 use App\Http\Controllers\Vendor\DealController as VendorDealController;
+use App\Http\Controllers\Vendor\MarketingController;
 use App\Http\Controllers\Vendor\SubscriptionController as VendorSubscriptionController;
 use App\Http\Controllers\Vendor\SupportController as VendorSupportController;
 use App\Http\Controllers\Vendor\UpgradeController;
@@ -306,6 +307,15 @@ Route::middleware(['auth', 'vendor', 'vendor.onboarded'])->prefix('vendor')->nam
     Route::post('/ai/analyze-deal', [AIDealAnalyzerController::class, 'analyze'])->name('ai.analyze');
     Route::get('/ai/remaining', [AIDealAnalyzerController::class, 'remaining'])->name('ai.remaining');
     Route::post('/ai/analysis/{analysis}/accept', [AIDealAnalyzerController::class, 'accept'])->name('ai.accept');
+
+    // Marketing Assistant
+    Route::get('/marketing', [MarketingController::class, 'index'])->name('marketing.index');
+    Route::post('/marketing/generate-email', [MarketingController::class, 'generateEmail'])->name('marketing.generate-email');
+    Route::post('/marketing/generate-social', [MarketingController::class, 'generateSocial'])->name('marketing.generate-social');
+    Route::post('/marketing/generate-ads', [MarketingController::class, 'generateAds'])->name('marketing.generate-ads');
+    Route::post('/marketing/generate-signage', [MarketingController::class, 'generateSignage'])->name('marketing.generate-signage');
+    Route::post('/marketing/mark-used', [MarketingController::class, 'markAsUsed'])->name('marketing.mark-used');
+    Route::post('/marketing/rate', [MarketingController::class, 'rateContent'])->name('marketing.rate');
 
     // AI Insights (Pro/Enterprise only)
     Route::middleware(['subscription.feature:ai_scoring_enabled'])->group(function () {
