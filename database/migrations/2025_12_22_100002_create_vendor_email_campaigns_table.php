@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('vendor_email_campaigns', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('ai_marketing_content_id')->nullable()->constrained('ai_marketing_content')->onDelete('set null');
+            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('ai_marketing_content_id')->nullable();
+            
+            // Foreign keys
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('ai_marketing_content_id')->references('id')->on('ai_marketing_content')->onDelete('set null');
             
             // Email content
             $table->string('subject');

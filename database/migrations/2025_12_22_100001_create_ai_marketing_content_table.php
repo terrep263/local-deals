@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('ai_marketing_content', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('deal_id')->nullable()->constrained()->onDelete('cascade');
+            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('deal_id')->nullable();
+            
+            // Foreign keys
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('deal_id')->references('id')->on('deals')->onDelete('cascade');
             
             // Content type and platform
             $table->enum('content_type', ['email', 'social', 'ads', 'signage']);
