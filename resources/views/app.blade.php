@@ -45,7 +45,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <!-- Font Awesome CDN (new homepage) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-1zyA1kGg8uZUXadkHwVDqveufqdpypu32n7Z1xXHrp+UMtO4Zwzp1KimG++HjMATkUMlzUxr87PQqeK8HVH+Rw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <!-- Homepage CSS fallback (no Vite build needed) -->
 <link rel="stylesheet" href="{{ asset('css/home.css') }}">
