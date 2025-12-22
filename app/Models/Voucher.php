@@ -5,161 +5,86 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Str;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class Voucher extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'deal_purchase_id',
         'deal_id',
-        'code',
+        'user_id',
+        'deal_purchase_id',
+        'voucher_code',
         'qr_code_path',
+        'pdf_path',
+        'purchase_date',
+        'expiration_date',
         'status',
-        'valid_until',
         'redeemed_at',
-        'redeemed_by',
-        'redemption_notes',
+        'redeemed_by_vendor_user_id'
     ];
-
+    
     protected $casts = [
-        'valid_until' => 'datetime',
-        'redeemed_at' => 'datetime',
+        'purchase_date' => 'datetime',
+        'expiration_date' => 'datetime',
+        'redeemed_at' => 'datetime'
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($voucher) {
-            if (empty($voucher->code)) {
-                $voucher->code = static::generateVoucherCode();
-            }
-        });
-
-        static::created(function ($voucher) {
-            $voucher->generateQRCode();
-        });
-    }
-
-    public function dealPurchase(): BelongsTo
-    {
-        return $this->belongsTo(DealPurchase::class);
-    }
-
+    
+    // Relationships
     public function deal(): BelongsTo
     {
         return $this->belongsTo(Deal::class);
     }
-
+    
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    
+    public function purchase(): BelongsTo
+    {
+        return $this->belongsTo(DealPurchase::class, 'deal_purchase_id');
+    }
+    
     public function redeemedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'redeemed_by');
+        return $this->belongsTo(User::class, 'redeemed_by_vendor_user_id');
     }
-
-    /**
-     * Generate unique voucher code
-     */
-    public static function generateVoucherCode(): string
+    
+    // Status Checks
+    public function isActive(): bool
     {
-        do {
-            // Format: AAAA-BBBB-CCCC (12 chars + 2 dashes)
-            $code = strtoupper(substr(str_shuffle('ABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 4) . '-' .
-                              substr(str_shuffle('ABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 4) . '-' .
-                              substr(str_shuffle('ABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 4));
-        } while (static::where('code', $code)->exists());
-
-        return $code;
+        return $this->status === 'active' && !$this->isExpired();
     }
-
-    /**
-     * Generate QR code for voucher
-     */
-    public function generateQRCode(): void
+    
+    public function isExpired(): bool
     {
-        if ($this->qr_code_path) {
-            return; // Already generated
-        }
-
-        $qrCodeData = json_encode([
-            'voucher_code' => $this->code,
-            'deal_id' => $this->deal_id,
-            'deal_title' => $this->deal->title ?? 'Deal',
-            'valid_until' => $this->valid_until?->toDateTimeString(),
-        ]);
-
-        $filename = 'voucher-' . $this->code . '.png';
-        $path = 'vouchers/qr-codes/' . $filename;
-
-        // Generate QR code (you'll need simplesoftwareio/simple-qrcode package)
-        // For now, we'll just store the path
-        // QrCode::format('png')->size(300)->generate($qrCodeData, storage_path('app/public/' . $path));
-        
-        $this->update(['qr_code_path' => $path]);
+        return $this->expiration_date->isPast();
     }
-
-    /**
-     * Check if voucher is valid
-     */
-    public function isValid(): bool
+    
+    public function isRedeemed(): bool
     {
-        if ($this->status !== 'active') {
-            return false;
-        }
-
-        if ($this->valid_until && $this->valid_until->isPast()) {
-            $this->markAsExpired();
-            return false;
-        }
-
-        return true;
+        return $this->status === 'redeemed';
     }
-
-    /**
-     * Redeem voucher
-     */
-    public function redeem(User $user = null, string $notes = null): bool
+    
+    public function canRedeem(): bool
     {
-        if (!$this->isValid()) {
-            return false;
-        }
-
-        $this->update([
-            'status' => 'redeemed',
-            'redeemed_at' => now(),
-            'redeemed_by' => $user?->id,
-            'redemption_notes' => $notes,
-        ]);
-
-        return true;
+        return $this->isActive() && !$this->isExpired() && !$this->isRedeemed();
     }
-
-    /**
-     * Mark voucher as expired
-     */
-    public function markAsExpired(): void
+    
+    // Getters
+    public function getQrCodeUrl(): string
     {
-        if ($this->status === 'active') {
-            $this->update(['status' => 'expired']);
-        }
+        return $this->qr_code_path ? asset('storage/' . $this->qr_code_path) : '';
     }
-
-    /**
-     * Cancel voucher
-     */
-    public function cancel(): void
+    
+    public function getPdfUrl(): string
     {
-        $this->update(['status' => 'cancelled']);
+        return $this->pdf_path ? asset('storage/' . $this->pdf_path) : '';
     }
-
-    /**
-     * Get QR code URL
-     */
-    public function getQrCodeUrlAttribute(): ?string
+    
+    public function getFormattedCode(): string
     {
-        return $this->qr_code_path ? Storage::url($this->qr_code_path) : null;
-    }
-}
+        // Format: ABCD-1234-EFGH-5678
+        return chunk_split($this->voucher_code, 4, '-');

@@ -179,12 +179,49 @@ class StripeWebhookController extends Controller
         // Increment vendor's voucher counter
         $this->incrementVendorVoucherCount($purchase->vendor_profile_id);
 
-        // TODO: Trigger voucher generation
-        // This will be handled by the Voucher Generation system
+        // Generate voucher and send email
+        $this->generateAndEmailVoucher($purchase);
 
         Log::info('Payment processing completed', [
             'purchase_id' => $purchase->id
         ]);
+    }
+
+    /**
+     * Generate voucher and send email
+     */
+    protected function generateAndEmailVoucher(DealPurchase $purchase)
+    {
+        try {
+            // Generate voucher
+            $voucherService = app(\App\Services\VoucherGenerationService::class);
+            $voucher = $voucherService->generate($purchase);
+            
+            Log::info('Voucher generated successfully', [
+                'voucher_id' => $voucher->id,
+                'purchase_id' => $purchase->id
+            ]);
+            
+            // Send email with voucher
+            \Mail::to($purchase->user)->send(
+                new \App\Mail\VoucherPurchasedEmail($voucher)
+            );
+            
+            Log::info('Voucher email sent', [
+                'voucher_id' => $voucher->id,
+                'email' => $purchase->user->email
+            ]);
+            
+        } catch (\Exception $e) {
+            Log::error('Error generating voucher', [
+                'purchase_id' => $purchase->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            // Don't throw - log error but allow webhook to complete
+            // Admin can manually regenerate voucher if needed
+        }
     }
 
     /**

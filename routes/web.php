@@ -440,3 +440,32 @@ Route::get('/test-reset', function () {
     Artisan::call('vendors:reset-monthly-counters');
     return 'Reset command executed. Check logs.';
 });
+// TEMP: Voucher Code Generation Test
+Route::get('/test-voucher-code', function () {
+    $service = new \App\Services\VoucherCodeService();
+    
+    $codes = [];
+    for ($i = 0; $i < 5; $i++) {
+        $code = $service->generate();
+        $codes[] = [
+            'raw' => $code,
+            'formatted' => $service->format($code)
+        ];
+    }
+    
+    return response()->json($codes);
+});
+
+// TEMP: QR Code Generation Test
+Route::get('/test-qr-code', function () {
+    $qrService = new \App\Services\QRCodeService();
+    
+    $code = 'TEST1234ABCD5678';
+    $path = $qrService->generate($code);
+    
+    return response()->json([
+        'code' => $code,
+        'path' => $path,
+        'url' => asset('storage/' . $path)
+    ]);
+});
