@@ -42,6 +42,7 @@ use App\Http\Controllers\StripeController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Vendor\AnalyticsController as VendorAnalyticsController;
+use App\Http\Controllers\Vendor\AIDealAnalyzerController;
 use App\Http\Controllers\Vendor\DealController as VendorDealController;
 use App\Http\Controllers\Vendor\SubscriptionController as VendorSubscriptionController;
 use App\Http\Controllers\Vendor\SupportController as VendorSupportController;
@@ -300,6 +301,11 @@ Route::middleware(['auth', 'vendor', 'vendor.onboarded'])->prefix('vendor')->nam
     Route::post('/vouchers/{id}/mark-redeemed', [VoucherRedemptionController::class, 'markRedeemed'])->name('vouchers.mark-redeemed');
     Route::get('/vouchers/{id}', [VoucherRedemptionController::class, 'show'])->name('vouchers.show-single');
     Route::post('/vouchers/ajax-lookup', [VoucherRedemptionController::class, 'ajaxLookup'])->name('vouchers.ajax-lookup');
+
+    // AI Deal Analyzer
+    Route::post('/ai/analyze-deal', [AIDealAnalyzerController::class, 'analyze'])->name('ai.analyze');
+    Route::get('/ai/remaining', [AIDealAnalyzerController::class, 'remaining'])->name('ai.remaining');
+    Route::post('/ai/analysis/{analysis}/accept', [AIDealAnalyzerController::class, 'accept'])->name('ai.accept');
 
     // AI Insights (Pro/Enterprise only)
     Route::middleware(['subscription.feature:ai_scoring_enabled'])->group(function () {

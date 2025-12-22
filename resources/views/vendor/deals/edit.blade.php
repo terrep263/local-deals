@@ -272,6 +272,14 @@
                 </div>
             </div>
 
+            <!-- AI Deal Quality Analyzer -->
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <input type="hidden" id="deal_id" value="{{ $deal->id }}">
+                    @include('vendor.deals.partials.ai-analyzer-widget')
+                </div>
+            </div>
+
             <!-- Submit -->
             <div class="text-center mb-4">
                 <button type="submit" class="btn btn-primary btn-lg">
